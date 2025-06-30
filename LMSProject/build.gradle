@@ -25,31 +25,27 @@ repositories {
 }
 
 eclipse.wtp.facet {
-    //Change the version of the Dynamic Web Module facet
     facet name: 'jst.web', version: '5.0'
 }
 
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4' // Mybatis Starter
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-    // JSP 서블릿 컨테이너 (Tomcat Embed Jasper) 및 JSTL 관련 의존성
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat' // WAR 배포 시 필요
-	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper' // JSP 컴파일 및 실행용
-	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' // JSTL 구현체
-	implementation 'org.springframework.security:spring-security-taglibs' // Spring Security JSTL 통합
-    // 데이터베이스 드라이버 (Oracle)
-    implementation 'com.oracle.database.jdbc:ojdbc11' 
-    // 테스트 관련 의존성
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	 implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper' 
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api' // JSTL API
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1' // JSTL 구현체 (Spring Boot 3.x에서 권장)
+    implementation 'org.springframework.security:spring-security-taglibs'
+    implementation 'com.oracle.database.jdbc:ojdbc11'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

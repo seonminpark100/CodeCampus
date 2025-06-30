@@ -2,20 +2,20 @@ package com.lms.springboot.auth;
 
 import java.io.IOException;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//자동으로 생성되는 빈 임을 명시하는 어노테이션 
-@Configuration
+
+@Component
 public class MyAuthFailureHandler implements AuthenticationFailureHandler
 {	//핸들러 제작을 위해 인터페이스를 구현한 후 클래스 정의한다.
 	

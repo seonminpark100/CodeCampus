@@ -1,0 +1,232 @@
+@charset "UTF-8";
+ body {
+	font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f8f8f8; /* 전체 배경색 */
+	color: #333;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh; /* 뷰포트 높이만큼 최소 높이 설정 */
+}
+
+header {
+	background-color: #ffffff; /* 헤더 배경 */
+	border-bottom: 1px solid #ddd;
+	padding: 15px 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.header-left {
+	display: flex;
+	align-items: center;
+}
+
+.logo {
+	width: 200px; /* 로고 이미지 크기 */
+	height: auto;
+	margin-right: 30px;
+}
+
+.main-nav a, .login-btn a {
+	text-decoration: none;
+	color: #555;
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 5px 0;
+	transition: color 0.3s;
+}
+
+.main-nav a:hover, .login-btn a:hover {
+	color: #007bff; /* 호버 색상 */
+}
+
+.login-btn a {
+	border: 1px solid #ccc;
+	padding: 8px 15px;
+	border-radius: 5px;
+	background-color: #f0f0f0;
+}
+
+.container {
+	flex: 1; /* 남은 공간을 채우도록 설정 */
+	width: 100%;
+	max-width: 1100px; /* 최대 너비 설정 */
+	margin: 30px auto;
+	display: flex;
+	gap: 50px; /* 주요 섹션 간 간격 */
+}
+
+.left-section {
+	flex: 7; /* 왼쪽 영역이 더 넓게 */
+	display: flex; /* 내부 컨테이너들을 정렬하기 위해 flexbox 적용 */
+	flex-direction: column; /* 세로로 쌓이도록 */
+	gap: 25px; /* left-section 내의 컨테이너들 간 간격 */
+}
+
+.schedule-container {
+	background-color: #fff; /* 배경색 추가 */
+	padding: 35px; /* Quick Menu와 유사하게 패딩 설정 */
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	/* 필요하다면 여기에 width를 고정하거나 max-width를 줄일 수 있습니다. */
+	/* 예: max-width: 400px; (Quick Menu 너비에 맞춰) */
+}
+
+.right-section {
+	flex: 3; /* 오른쪽 영역 */
+	display: flex;
+	flex-direction: column;
+	gap: 25px; /* 오른쪽 섹션 내 요소 간 간격 */
+}
+
+.right-section>div {
+	background-color: #fff;
+	padding: 35px;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+	color: #444;
+	font-size: 1.6em;
+	margin-top: 0;
+	border-bottom: 2px solid #eee;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+h3 {
+	color: #555;
+	font-size: 1.3em;
+	margin-top: 0;
+	margin-bottom: 15px;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul li {
+	padding: 4px 0;
+	border-bottom: 1px dashed #eee;
+	line-height: 1.5;
+}
+
+ul li:last-child {
+	border-bottom: none;
+}
+
+ul li a {
+	text-decoration: none;
+	color: #666;
+	transition: color 0.2s;
+}
+
+ul li a:hover {
+	color: #007bff;
+}
+
+.quick-menu-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr; /* 2열 */
+	gap: 15px; /* 버튼 간 간격 */
+	margin-top: 20px;
+}
+
+.quick-menu-grid a {
+	display: block;
+	text-align: center;
+	background-color: #e9f0f9; /* 버튼 배경색 */
+	color: #007bff;
+	padding: 15px 10px;
+	border-radius: 5px;
+	text-decoration: none;
+	font-weight: bold;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.quick-menu-grid a:hover {
+	background-color: #007bff;
+	color: white;
+}
+
+footer {
+	background-color: #333;
+	color: white;
+	text-align: center;
+	padding: 10px 0;
+	margin-top: 30px;
+}
+
+.main-nav {
+	display: flex;
+	gap: 25px; /* 메뉴 간격 */
+	position: relative; /* 서브메뉴의 absolute 포지셔닝 기준 */
+}
+
+.main-nav a, .login-btn a {
+	text-decoration: none;
+	color: #555;
+	font-weight: bold;
+	font-size: 1.1em;
+	padding: 5px 0;
+	transition: color 0.3s;
+	/* cursor: pointer; // 클릭 가능한 것처럼 보이게 */
+}
+
+.main-nav a:hover, .login-btn a:hover {
+	color: #007bff; /* 호버 색상 */
+}
+
+.menu-item {
+	position: relative; /* 서브메뉴의 absolute 포지셔닝 기준 */
+}
+
+.sub-menu {
+	display: none; /* 기본적으로 숨김 */
+	position: absolute;
+	background-color: #f9f9f9; /* 서브메뉴 배경색 */
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1000; /* 다른 요소 위에 표시 */
+	top: 35px; /* 상위 메뉴 아래로 내려오게 조정 */
+	left: 0; /* 상위 메뉴와 왼쪽 정렬 */
+	border-radius: 5px;
+	overflow: hidden; /* 내부 링크의 둥근 모서리 처리 */
+}
+
+.sub-menu {
+	display: none;
+	position: absolute;
+	background-color: white;
+	padding: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+.sub-menu.show {
+	display: block;
+}
+
+.sub-menu a {
+	color: #333;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	font-size: 1em; /* 서브 메뉴 폰트 크기 조정 */
+	font-weight: normal; /* 서브 메뉴 폰트 굵기 조정 */
+	transition: background-color 0.2s;
+}
+
+.sub-menu a:hover {
+	background-color: #ddd; /* 서브 메뉴 호버 색상 */
+	color: #007bff;
+}
+
+.sub-menu.show {
+	display: block;}
