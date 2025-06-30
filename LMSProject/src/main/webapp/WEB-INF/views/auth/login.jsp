@@ -11,7 +11,7 @@
 			rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" 
 			crossorigin="anonymous">
 		
-		<style>
+		<!-- <style>
 	      .img-concert {
 	        width: 100px;
 	        height: 100px;
@@ -23,7 +23,7 @@
 	      .login {
 	      	float: right;
 	      }
-	    </style>
+	    </style> -->
 	    
 	    
 	    <script type="text/javascript">
@@ -53,9 +53,9 @@
 				    </c:otherwise>
 			    </c:choose>
 			</div>
-			<a href="/">
+			<!-- <a href="/">
 			 	<img class="img-concert" src="images/logo.jpeg" />
-			</a>
+			</a> -->
 			<br/><br/>
 			<div class="btn-group">
 				   <button class="btn btn-success" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
@@ -65,7 +65,7 @@
 			<br/><br/><br/>
 		</div>
 		<!-- div의 테두리에 두께, 라운딩, 색깔 등을 지정 -->
-		<div style="width:600px;" class="border border-2 border-success rounded p-5" align="center">
+		<div style="width:600px;" class="border border-2 border-primary rounded p-5" align="center">
 		<!-- 로그인 아이디가 없는경우 로그인 폼을 출력한다. -->
 		<c:if test="${empty user_id }" var="loginResult">
 			<!-- 

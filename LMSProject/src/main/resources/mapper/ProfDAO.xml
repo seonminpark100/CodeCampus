@@ -6,16 +6,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.lms.springboot.jdbc.IProfService">
-	<select id="getTotalCount" resultType="int" 
+	<!-- 강의실 -->
+	<select id="getLectureTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT COUNT(*) FROM LECTURE
+		<if test="searchKeyword!=null and !searchKeyword.equals('')">
+			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	<select id="lectureBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM LECTURE
+				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+					WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY lecture_id DESC
+			) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>	
+	
+	<!-- 내 강의 목록 가져오기 -->
+	<select id="myLectureList" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM USER_INFO WHERE user_id = #{user_id}
+	</select>	
+	
+	
+	<!-- 공지사항 -->
+	<select id="getNoticeBoardTotalCount" resultType="int" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
 		SELECT COUNT(*) FROM myboard
 		<if test="searchKeyword!=null and !searchKeyword.equals('')">
 			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
 		</if>
 	</select>
-	
-	
-	<select id="listPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+	<select id="noticeBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
@@ -28,5 +56,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
+	
+	
+	<!-- 출석부 -->
+	<select id="getAbsentBoardTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT COUNT(*) FROM ABSENTS
+		<if test="searchKeyword!=null and !searchKeyword.equals('')">
+			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	<select id="absentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM ABSENTS
+				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+					WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY USER_ID ASC
+			) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+
 	
 </mapper>

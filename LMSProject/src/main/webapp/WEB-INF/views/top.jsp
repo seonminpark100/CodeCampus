@@ -7,11 +7,11 @@
 	<sec:authentication property="principal" var="principal"/>
 </sec:authorize>
 <!-- CDN 방식: Bootstrap, jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-<style>
+<!-- <style>
  .img-concert {
    width: 100px;
    height: 100px;
@@ -23,7 +23,7 @@
  .login {
  	float: right;
  }
-</style>
+</style> -->
 
 <script type="text/javascript">
 function disableOtherButtons(clickedId) {
@@ -53,7 +53,7 @@ function disableOtherButtons(clickedId) {
 	    </c:choose>
 	</div>
 	<a href="#">
-	 	<img class="img-concert" src="images/logo.jpeg" />
+	 	<!-- <img class="img-concert" src="images/logo.jpeg" /> -->
 	</a>
 	<br/><br/>
 	<div class="btn-group">

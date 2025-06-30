@@ -7,7 +7,7 @@
 		<title>OO대학교 eCampus</title><title>home 화면</title>
 		<!-- 정적 리소스인 js와 css파일이 링크 -->
 		<script src="./js/commons.js"></script>
-		<link rel="stylesheet" href="./css/main.css" />
+		<!-- <link rel="stylesheet" href="./css/main.css" /> -->
 		<!-- FULL CALENDAR -->
 		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 		<script>

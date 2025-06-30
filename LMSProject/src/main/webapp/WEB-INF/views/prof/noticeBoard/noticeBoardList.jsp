@@ -5,10 +5,10 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Insert title here</title>
+		<title>대학교 eCampus</title>
 	</head>
 	<body>
-	<%@ include file = "top.jsp" %>
+	<%@ include file = "../top.jsp" %>
 		<div class="container">
 		<h2>공지사항 목록 </h2>
 		<!-- 검색 폼 -->
@@ -73,7 +73,8 @@
 	                ${ pagingImg }
 	            </td>
 	            <td width="100"><button type="button"
-	                onclick="location.href='./write.do';">글쓰기</button></td>
+	                onclick="location.href='./write.do';">글쓰기</button>
+	            </td>
 	        </tr>
 	    </table>
 		</div>
