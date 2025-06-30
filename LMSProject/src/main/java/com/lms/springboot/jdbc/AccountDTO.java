@@ -1,6 +1,6 @@
 package com.lms.springboot.jdbc;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,8 @@ public class AccountDTO {
 	private String userid; 
     private String userpw; 
     private String username; 
-    private LocalDateTime userbirthdate; 
-    private LocalDateTime joindate; 
+    private Date userbirthdate; 
+    private Date joindate; 
     private String authority; 
                                
 

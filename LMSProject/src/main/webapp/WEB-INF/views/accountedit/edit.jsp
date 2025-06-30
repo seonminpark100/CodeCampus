@@ -13,15 +13,15 @@
 			<table border="1">
 				<tr>
 					<th>아이디(수정불가)</th>
-					<td><input type="text" name="id" value="${dto.id }" readonly /></td>
+					<td><input type="text" name="userid" value="${dto.userid }" readonly /></td>
 				</tr>
 				<tr>
 					<th>패스워드</th>
-					<td><input type="text" name="pass" value="${dto.pass }" /></td>
+					<td><input type="text" name="userpw" value="${dto.userpw }" /></td>
 				</tr>
 				<tr>
 					<th>이름</th>
-					<td><input type="text" name="name" value="${dto.name }" /></td>
+					<td><input type="text" name="username" value="${dto.username }" /></td>
 				</tr>
 			</table>
 			<input type="submit" value="전송하기" />

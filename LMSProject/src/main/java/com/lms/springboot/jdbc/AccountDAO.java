@@ -23,35 +23,49 @@ public class AccountDAO implements IMemberService{
 	
 	@Override
 	public List<AccountDTO> select() {
-		String sql = "select * from USER_INFO order by joindate desc";
+		String sql = "SELECT * FROM USER_INFO ORDER BY joindate desc";
 		return jdbcTemplate.query(sql, new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class));
 	}
 
 	@Override
 	public int insert(AccountDTO AccountDTO) {
 		if (AccountDTO.getJoindate() == null) {
-			AccountDTO.setJoindate(LocalDateTime.now());
+		    AccountDTO.setJoindate(java.sql.Date.valueOf(LocalDateTime.now().toLocalDate()));
 		}
 
 		int result = jdbcTemplate.update(new PreparedStatementCreator() {
 			
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				String sql = "insert into USER_INFO (userid,userpw,username,userbirthdate,joindate,authority,SAVEFILE,ORIGINALFILE) values(?,?,?,?,?,?,EMPTY_BLOB(), EMPTY_BLOB())";
+				String sql = "insert into USER_INFO (userid, userpw, username, userbirthdate, joindate, authority, class1, class2, class3, SAVEFILE, ORIGINALFILE) values(?,?,?,?,?,?,?,?,?,?,?)";
 				
 				PreparedStatement psmt = con.prepareStatement(sql);
 				
 				psmt.setString(1, AccountDTO.getUserid());
-				psmt.setString(2, AccountDTO.getUserpw());
-				psmt.setString(3, AccountDTO.getUsername());
-				psmt.setObject(4, AccountDTO.getUserbirthdate());
-				psmt.setObject(5, AccountDTO.getJoindate());
-				psmt.setObject(6, AccountDTO.getAuthority());
-				psmt.setObject(7, AccountDTO.getClass1());
-				psmt.setObject(8, AccountDTO.getClass2());
-				psmt.setObject(9, AccountDTO.getClass3());
-				psmt.setObject(10, AccountDTO.getSavefile());
-				psmt.setObject(11, AccountDTO.getOriginalfile());
+	            psmt.setString(2, AccountDTO.getUserpw());
+	            psmt.setString(3, AccountDTO.getUsername());
+	            psmt.setObject(4, AccountDTO.getUserbirthdate()); // java.sql.Date
+	            psmt.setObject(5, AccountDTO.getJoindate());     // java.sql.Date
+	            psmt.setString(6, AccountDTO.getAuthority()); // String 타입에 맞춰 setString
+	            psmt.setString(7, AccountDTO.getClass1());
+	            psmt.setString(8, AccountDTO.getClass2());
+	            psmt.setString(9, AccountDTO.getClass3());
+
+	            // --- BLOB 데이터 처리 로직 적용 (필수) ---
+	            // SAVEFILE (10번째 파라미터)
+	            if (AccountDTO.getSavefile() != null) {
+	                psmt.setBytes(10, AccountDTO.getSavefile());
+	            } else {
+	                psmt.setNull(10, java.sql.Types.BLOB);
+	            }
+
+	            // ORIGINALFILE (11번째 파라미터)
+	            if (AccountDTO.getOriginalfile() != null) {
+	                psmt.setBytes(11, AccountDTO.getOriginalfile());
+	            } else {
+	                psmt.setNull(11, java.sql.Types.BLOB);
+	            }
+	          
 				return psmt;
 			}
 		});
@@ -60,14 +74,14 @@ public class AccountDAO implements IMemberService{
 
 	@Override
 	public AccountDTO selectOne(AccountDTO AccountDTO) {
-		String sql = "SELECT userid, userpw, username, userbirthdate ,joindate, authority,  from USER_INFO where userid=?";
-		try {
-			return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class),
-					AccountDTO.getUserid());
-		} catch (EmptyResultDataAccessException e) {
-			System.out.println("No USER_INFO found with ID: " + AccountDTO.getUserid());
-			return null;
-		}
+		String sql = "SELECT userid, userpw, username, userbirthdate, joindate, authority, class1, class2, class3, SAVEFILE, ORIGINALFILE FROM USER_INFO WHERE userid=?";
+	    try {
+	        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class),
+	                AccountDTO.getUserid());
+	    } catch (EmptyResultDataAccessException e) {
+	        System.out.println("No USER_INFO found with ID: " + AccountDTO.getUserid());
+	        return null;
+	    }
 	}
 
 
@@ -94,41 +108,34 @@ public class AccountDAO implements IMemberService{
 
 	@Override
 	public List<AccountDTO> searchMembers(AccountDTO AccountDTO) {
-		StringBuilder sqlBuilder = new StringBuilder("SELECT userid, userpw, username, joindate FROM USER_INFO");
-		List<Object> params = new ArrayList<>(); // PreparedStatement에 바인딩할 파라미터들을 저장할 리스트
+		 // 모든 컬럼을 조회하도록 SQL 변경
+		StringBuilder sqlBuilder = new StringBuilder("SELECT userid, userpw, username, userbirthdate, joindate, authority, CLASS1, CLASS2, CLASS3, SAVEFILE, ORIGINALFILE FROM USER_INFO");
+	    List<Object> params = new ArrayList<>();
 
-		String searchField = AccountDTO.getSearchField();
-		String searchKeyword = AccountDTO.getSearchKeyword();
+	    String searchField = AccountDTO.getSearchField();
+	    String searchKeyword = AccountDTO.getSearchKeyword();
 
-		// 검색어가 유효할 경우에만 WHERE 절 추가
-		if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-			sqlBuilder.append(" WHERE ");
-
-			// 검색 필드에 따라 조건 동적 추가
-			switch (searchField) {
-			case "id":
-				sqlBuilder.append("userid LIKE ?");
-				params.add("%" + searchKeyword + "%");
-				break;
-			case "name":
-				sqlBuilder.append("username LIKE ?");
-				params.add("%" + searchKeyword + "%");
-				break;
-			
-			default:
-				// searchField가 유효하지 않거나 명시되지 않은 경우, id와 name 모두 검색
-				sqlBuilder.append("userid LIKE ? OR username LIKE ?");
-				params.add("%" + searchKeyword + "%");
-				params.add("%" + searchKeyword + "%");
-				break;
-			}
-		}
-
-		// 결과 정렬 (선택 사항)
-		sqlBuilder.append(" ORDER BY joindate DESC");
-
-		// 최종 SQL 쿼리 실행. params.toArray()는 List를 Object[]로 변환하여 PreparedStatement에 바인딩
-		return jdbcTemplate.query(sqlBuilder.toString(), new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class),
-				params.toArray());
+	    if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+	        sqlBuilder.append(" WHERE ");
+	        switch (searchField) {
+	            case "userid":
+	                sqlBuilder.append("userid LIKE ?");
+	                params.add("%" + searchKeyword + "%");
+	                break;
+	            case "username":
+	                sqlBuilder.append("username LIKE ?");
+	                params.add("%" + searchKeyword + "%");
+	                break;
+	            default:
+	                sqlBuilder.append("userid LIKE ? OR username LIKE ?");
+	                params.add("%" + searchKeyword + "%");
+	                params.add("%" + searchKeyword + "%");
+	                break;
+	        }
+	    }
+	    sqlBuilder.append(" ORDER BY joindate DESC");
+	    return jdbcTemplate.query(sqlBuilder.toString(), new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class),
+	            params.toArray());
 	}
+		
 }
