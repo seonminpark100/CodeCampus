@@ -15,22 +15,27 @@ import jakarta.servlet.DispatcherType;
 @Configuration
 public class WebSecurityConfig
 {
+	/*
+		인증 핸들러를 제작했다면 사용을 위해 빈을 자동주입 받는다. 
+		그리고 시큐리티 설정 부분의 failureHandler() 메서드에 추가한다. 
+	 */
 	@Autowired
     public MyAuthFailureHandler myAuthFailureHandler;
+	
+	@Autowired
+	private MyAuthSuccessHandler myAuthSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
-		http.csrf((csrf)->csrf.disable())
-			.cors((cors)-> cors.disable())
+		http.csrf((csrf)->csrf.disable()) 
+			.cors((cors)-> cors.disable()) 
 			.authorizeHttpRequests((request) -> request	// http 요청에 대한 인가 설정 처리
-				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/").permitAll()
+				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
+				.requestMatchers("/").permitAll() 
 				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-				.requestMatchers("/guest/**").permitAll()	// 모두에게 허용.
-				.requestMatchers("/myLogin.do").permitAll() // 로그인 페이지 접근 허용
-				.requestMatchers("/myLoginAction.do").permitAll() // 로그인 처리 URL 허용
-				.requestMatchers("/member/**").hasAnyRole("USER", "ADMIN", "INSTRUCTOR")	 // 세 가지 권한 허용 (INSTRUCTOR 추가)
+				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
+				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
 				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
 				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
 			);
@@ -38,12 +43,13 @@ public class WebSecurityConfig
 		http.formLogin((formLogin) -> formLogin
 				.loginPage("/myLogin.do")		// default : /login
 				.loginProcessingUrl("/myLoginAction.do")
+				.successHandler(myAuthSuccessHandler)
 //				.failureUrl("/myError.do") 		// default : /login?error
 				.failureHandler(myAuthFailureHandler)
 				.usernameParameter("my_id") 	// default : username
 				.passwordParameter("my_pass")	// default : password
 				.permitAll());
-
+		
 		http.logout((logout) -> logout			// default : /logout
 				.logoutUrl("/myLogout.do")
 				.logoutSuccessUrl("/")
@@ -51,9 +57,14 @@ public class WebSecurityConfig
 
 		http.exceptionHandling((expHandling) -> expHandling
 				.accessDeniedPage("/denied.do"));
-
+		
+		http.sessionManagement((auth) -> auth
+                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
+                .maxSessionsPreventsLogin(true)); 
+		
 		return http.build();
 	}
+	
 
 	@Autowired
 	private DataSource dataSource;
@@ -62,10 +73,17 @@ public class WebSecurityConfig
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
 		auth.jdbcAuthentication()
+			// 데이터베이스 접속 정보를 먼저 이용
 			.dataSource(dataSource)
-			
-			.usersByUsernameQuery("SELECT user_id, user_pw, enabled FROM security_admin WHERE user_id = ?")
-            .authoritiesByUsernameQuery("SELECT user_id, authority FROM USER_INFO WHERE user_id =?")
+			// 쿼리로 해당 사용자가 있는지를 먼저 조회한다
+			.usersByUsernameQuery("SELECT user_id, user_pw, enabled "
+					+ " FROM security_admin WHERE user_id = ?")
+			// 사용자의 역할을 구해온다
+			.authoritiesByUsernameQuery("SELECT user_id, authority "
+					+ " FROM security_admin WHERE user_id =?")
+			// 입력한 비밀번호를 암호화해서 데이터베이스의 암호와 비교를 해서 
+			// 올바른 값인지 검증
 			.passwordEncoder(new BCryptPasswordEncoder());
+			// enabled 의 값이 0이면 비활성, 1이면 활성
 	}
 }
