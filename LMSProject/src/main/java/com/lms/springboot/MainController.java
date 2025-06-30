@@ -37,4 +37,9 @@ public class MainController
 	public String lectureView() {
 		return "guest/lectureView";
 	}
+	
+	@GetMapping("/lectureResource.do")
+	public String lectureResource() {
+		return "guest/lectureResource";
+	}
 }

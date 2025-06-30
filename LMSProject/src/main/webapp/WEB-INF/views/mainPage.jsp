@@ -30,6 +30,7 @@
 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button>
 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lecture.do'">강의</button>
 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lectureView.do'">강의 영상 페이지</button>
+		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lectureResource.do'">자료실 리스트</button>
 		            </div>
 		    	</div>
 		  	</div>
