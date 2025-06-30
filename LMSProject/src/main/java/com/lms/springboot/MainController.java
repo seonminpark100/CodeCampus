@@ -1,7 +1,12 @@
 package com.lms.springboot;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController
@@ -9,83 +14,94 @@ public class MainController
 	@GetMapping("/")
 	public String home()
 	{
-		return "mainPage";
+		return "auth/myLogin";
 	}	
-	
-	@GetMapping("/loginPage.do")
-	public String loginPage() {
-		return "auth/loginPage";
-	}
-	
-	@GetMapping("/loginAction.do")
-	public String loginAction() {
 		
-		return "mainPage";
+	@RequestMapping("/myLogin.do")
+	public String login1(Principal principal, Model model) {
+		try
+		{
+			String user_id = principal.getName();
+			model.addAttribute("user_id", user_id);
+			
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "auth/login";
 	}
 	
+	@RequestMapping("/user/index.do")
+	public String welcome(Principal principal, Model model)
+	{
+		String user_id = principal.getName();
+		model.addAttribute("user_id", user_id);
+		return "user/index";
+	}
+		
 	// 여기부터는 화면 확인용
-	@GetMapping("/myLectureList.do")
+	@GetMapping("user/myLectureList.do")
 	public String myLectureList() {
-		return "guest/myLectureList";
+		return "user/myLectureList";
 	}
 	
-	@GetMapping("/lecture.do")
+	@GetMapping("user/lecture.do")
 	public String lecture() {
-		return "guest/lecture";
+		return "user/lecture";
 	}
 	
-	@GetMapping("/lectureList.do")
+	@GetMapping("user/lectureList.do")
 	public String lectureList() {
-		return "guest/lectureList";
+		return "user/lectureList";
 	}
-	@GetMapping("/lectureView.do")
+	@GetMapping("user/lectureView.do")
 	public String lectureView() {
-		return "guest/lectureView";
+		return "user/lectureView";
 	}
 	
-	@GetMapping("/lectureResource.do")
+	@GetMapping("user/lectureResource.do")
 	public String lectureResource() {
-		return "guest/lectureResource";
+		return "user/lectureResource";
 	}
 	
-	@GetMapping("/lectureResourceView.do")
+	@GetMapping("user/lectureResourceView.do")
 	public String lectureResourceView() {
-		return "guest/lectureResourceView";
+		return "user/lectureResourceView";
 	}
 	
-	@GetMapping("/lectureBoard.do")
+	@GetMapping("user/lectureBoard.do")
 	public String lectureBoard() {
-		return "guest/lectureBoard";
+		return "user/lectureBoard";
 	}
 	
-	@GetMapping("/lectureBoardView.do")
+	@GetMapping("user/lectureBoardView.do")
 	public String lectureBoardView() {
-		return "guest/lectureBoardView";
+		return "user/lectureBoardView";
 	}
 	
-	@GetMapping("/lectureBoardWrite.do")
+	@GetMapping("user/lectureBoardWrite.do")
 	public String lectureBoardWrite() {
-		return "guest/lectureBoardWrite";
+		return "user/lectureBoardWrite";
 	}
 	
-	@GetMapping("/lectureBoardEdit.do")
+	@GetMapping("user/lectureBoardEdit.do")
 	public String lectureBoardEdit() {
-		return "guest/lectureBoardEdit";
+		return "user/lectureBoardEdit";
 	}
 	
-	@GetMapping("/myPage.do")
+	@GetMapping("user/myPage.do")
 	public String myPage() {
-		return "guest/myPage";
+		return "user/myPage";
 	}
 	
-	@GetMapping("/surveyList.do")
+	@GetMapping("user/surveyList.do")
 	public String surveyList() {
-		return "guest/surveyList";
+		return "user/surveyList";
 	}
 	
-	@GetMapping("/surveyView.do")
+	@GetMapping("user/surveyView.do")
 	public String surveyView() {
-		return "guest/surveyView";
+		return "user/surveyView";
 	}
 	
 	@GetMapping("/passCheck.do")
@@ -93,8 +109,8 @@ public class MainController
 		return "auth/passCheck";
 	}
 	
-	@GetMapping("/infoEdit.do")
+	@GetMapping("user/infoEdit.do")
 	public String infoEdit() {
-		return "guest/infoEdit";
+		return "user/infoEdit";
 	}
 }

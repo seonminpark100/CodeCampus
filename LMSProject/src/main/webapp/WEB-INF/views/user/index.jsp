@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -12,7 +14,7 @@
 		<div class="container" style="text-align: center; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 border border-3 border-warning rounded" style="height: 540px">
 		        <div class="col border border-3 border-primary m-3 rounded">			       		
@@ -44,7 +46,7 @@
 		  	</div>
 		</div>
 		<footer style="height: 50px">
-			<%@ include file="footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

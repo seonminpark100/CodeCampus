@@ -22,6 +22,9 @@ public class WebSecurityConfig
 	@Autowired
     public MyAuthFailureHandler myAuthFailureHandler;
 	
+	@Autowired
+	private MyAuthSuccessHandler myAuthSuccessHandler;
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
@@ -31,16 +34,16 @@ public class WebSecurityConfig
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
 				.requestMatchers("/").permitAll() 
 				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-				.requestMatchers("/guest/**").permitAll()	// 모두에게 허용.
-				.requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")	 // 두권한 허용
+				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
+				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
 				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
-//				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
-				.anyRequest().anonymous()
+				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
 			);
 
 		http.formLogin((formLogin) -> formLogin
-				.loginPage("/loginPage.do")		// default : /login
-				.loginProcessingUrl("/loginAction.do")
+				.loginPage("/myLogin.do")		// default : /login
+				.loginProcessingUrl("/myLoginAction.do")
+				.successHandler(myAuthSuccessHandler)
 //				.failureUrl("/myError.do") 		// default : /login?error
 				.failureHandler(myAuthFailureHandler)
 				.usernameParameter("my_id") 	// default : username
@@ -48,12 +51,16 @@ public class WebSecurityConfig
 				.permitAll());
 		
 		http.logout((logout) -> logout			// default : /logout
-				.logoutUrl("/logout.do")
+				.logoutUrl("/myLogout.do")
 				.logoutSuccessUrl("/")
 				.permitAll());
 
 		http.exceptionHandling((expHandling) -> expHandling
 				.accessDeniedPage("/denied.do"));
+		
+		http.sessionManagement((auth) -> auth
+                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
+                .maxSessionsPreventsLogin(true)); 
 		
 		return http.build();
 	}

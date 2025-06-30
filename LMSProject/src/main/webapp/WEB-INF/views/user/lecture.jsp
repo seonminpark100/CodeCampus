@@ -18,9 +18,9 @@
 			    <h3>강의명 & 강사명</h3>	    	
 		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: center;">
 			    	<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureList.do'" style="width: 20%">강의 목록</button>
-					<button class="btn btn-outline-primary m-1" type="button" onclick="" style="width: 20%">자료실</button>	    	
-					<button class="btn btn-outline-primary m-1" type="button" onclick="" style="width: 20%">과제</button>	    	
-					<button class="btn btn-outline-primary m-1" type="button" onclick="" style="width: 20%">커뮤니티</button>	    	
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do'" style="width: 20%">자료실</button>	    	
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do'" style="width: 20%">과제</button>	    	
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureBoard.do'" style="width: 20%">커뮤니티</button>	    	
 		    	</div>
 		  	</div>
 		</div>
