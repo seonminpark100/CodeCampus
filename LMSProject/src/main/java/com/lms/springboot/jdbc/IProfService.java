@@ -7,11 +7,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface IProfService
 {
-//	내 강의 목록 가져오기
-	public ArrayList<ProfDTO> myLectureList(ProfDTO profDTO);
+//	강의 리스트
+	public ArrayList<ProfDTO> userList(ProfDTO profDTO, String user_id);
 	
-//	사용자
-	public ArrayList<ProfDTO> userList(ProfDTO profDTO);
+// 	수강생 리스트
+	public int getStudentTotalCount(ProfDTO profDTO, String lectureId);
+	public ArrayList<ProfDTO> studentBoardListPage(ProfDTO profDTO, String lectureId);
+	
 //	강의실
 	public int getLectureTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> lectureBoardListPage(ProfDTO profDTO);
@@ -24,5 +26,4 @@ public interface IProfService
 	public int getAbsentBoardTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> absentBoardListPage(ProfDTO profDTO);
 
-	public int writeAbsentBoard(ProfDTO profDTO);
 }

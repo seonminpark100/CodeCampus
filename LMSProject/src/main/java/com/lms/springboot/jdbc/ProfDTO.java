@@ -13,6 +13,12 @@ public class ProfDTO
 	private String content;
 	private java.sql.Date postdate;
 	private int visitcount;
+
+//	USER_INTO 테이블
+	private String CLASS_1;
+	private String CLASS_2;
+	private String CLASS_3;
+	private java.sql.Date JOINDATE;
 	
 //	Lecture 테이블
 	private String LECTURE_ID;

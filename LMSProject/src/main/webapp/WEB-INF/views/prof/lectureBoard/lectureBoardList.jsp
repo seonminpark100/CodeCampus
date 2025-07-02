@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,7 +9,8 @@
 	<body>
 	<%@ include file = "../top.jsp" %>
 		<div class="container">
-		<h2>공지사항 목록 </h2>
+		<h2>강의 목록 </h2>
+
 		<!-- 검색 폼 -->
 		<form method="get">
 		<table border="1" width="90%">

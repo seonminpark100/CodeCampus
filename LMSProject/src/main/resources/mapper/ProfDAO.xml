@@ -6,7 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="com.lms.springboot.jdbc.IProfService">
+
 	<!-- 강의실 -->
+	<select id="userList" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM USER_INFO u
+		JOIN LECTURE l ON u.user_id = l.prof_id
+		WHERE u.user_id = #{user_id}
+	</select>
+	
 	<select id="getLectureTotalCount" resultType="int" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
 		SELECT COUNT(*) FROM LECTURE
@@ -26,14 +34,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			) Tb
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
-	</select>	
+	</select>
 	
-	<!-- 내 강의 목록 가져오기 -->
-	<select id="myLectureList" resultType="com.lms.springboot.jdbc.ProfDTO" 
+	
+	<!-- 수강생 리스트 -->
+	<select id="getStudentTotalCount" resultType="int" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT * FROM USER_INFO WHERE user_id = #{user_id}
-	</select>	
-	
+		SELECT COUNT(*) FROM user_info
+		  WHERE class_1 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId}) 
+		  OR class_2 = (SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
+		  OR class_3 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
+	</select>
+	<select id="studentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM user_info
+		  WHERE class_1 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId}) 
+		  OR class_2 = (SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
+		  OR class_3 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
+		 ORDER BY user_id ASC
+	</select>
 	
 	<!-- 공지사항 -->
 	<select id="getNoticeBoardTotalCount" resultType="int" 

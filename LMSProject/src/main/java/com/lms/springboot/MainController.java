@@ -1,15 +1,27 @@
 package com.lms.springboot;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lms.springboot.jdbc.IProfService;
+import com.lms.springboot.jdbc.ProfDTO;
+
 @Controller
 public class MainController
 {
+	
+	@Autowired
+	IProfService dao;
+	
 	@GetMapping("/")
 	public String home()
 	{
@@ -22,7 +34,12 @@ public class MainController
 	}
 	
 	@RequestMapping("/prof/index.do")
-	public String welcome2() {
+	public String welcome2(@AuthenticationPrincipal UserDetails user, Model model, ProfDTO profDTO) {
+		String user_id = user.getUsername();
+		ArrayList<ProfDTO> lists = dao.userList(profDTO, user_id);
+		model.addAttribute("lists", lists);
+		model.addAttribute("user_id", user_id);
+
 		return "prof/prof";
 	}
 
