@@ -15,18 +15,11 @@
 				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>강의명 & 강사명</h3>	    	
+			    <h3>${ lecture.lecture_name }</h3>	    	
 		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: center;">
 					<div class="border border-3 border-primary rounded" style="height: 90%; position: relative;">
 						동영상이 들어갈 자리
 					</div>
-<!-- 					<div id="qna" class="border border-3 border-primary rounded" style="z-index: 2; display: block;"> -->
-					
-<!-- 						<button id="toggleQnA">Q&A닫기 버튼</button> -->
-<!-- 						<div id="QnA" class="border border-3 border-primary rounded" style="height: 20%;"> -->
-<!-- 							Q&A게시판 -->
-<!-- 						</div> -->
-<!-- 					</div> -->
 		    	</div>
 		  	</div>
 		</div>

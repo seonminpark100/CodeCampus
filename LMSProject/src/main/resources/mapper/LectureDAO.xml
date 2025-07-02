@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.jdbc.ILectureService">
+	<select id="list" resultType="com.lms.springboot.jdbc.LectureDTO">
+		SELECT * FROM lecture
+	</select>
+	
+	<select id="view" resultType="com.lms.springboot.jdbc.LectureDTO"
+		parameterType="int">
+		SELECT * FROM lecture WHERE lecture_id=#{lecture_id}
+	</select>
+</mapper>

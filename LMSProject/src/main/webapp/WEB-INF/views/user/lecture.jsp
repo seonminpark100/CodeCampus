@@ -15,12 +15,12 @@
 				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>강의명 & 강사명</h3>	    	
+			    <h3>${ lecture.lecture_name }</h3>	    	
 		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: center;">
-			    	<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureList.do'" style="width: 20%">강의 목록</button>
-					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do'" style="width: 20%">자료실</button>	    	
-					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do'" style="width: 20%">과제</button>	    	
-					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureBoard.do'" style="width: 20%">커뮤니티</button>	    	
+			    	<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureList.do?lecture_id=${ lecture.lecture_id }'" style="width: 20%">강의 목록</button>
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do?lecture_id=${ lecture.lecture_id }'" style="width: 20%">자료실</button>	    	
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureResource.do?lecture_id=${ lecture.lecture_id }'" style="width: 20%">과제</button>	    	
+					<button class="btn btn-outline-primary m-1" type="button" onclick="location.href='lectureBoard.do?lecture_id=${ lecture.lecture_id }'" style="width: 20%">커뮤니티</button>	    	
 		    	</div>
 		  	</div>
 		</div>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -17,10 +18,11 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="row row-cols-3">
 <!-- 					값 받으면 foreach문으로 대체		    	 -->
-		    		<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">1</div>
-		    		<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">1</div>
-		    		<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">1</div>
-		    		<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">1</div>
+					<c:forEach items="${ lists }" var="row">						
+		    			<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">
+							<a href="lecture.do?lecture_id=${ row.lecture_id }">${ row.lecture_name }</a>
+			    		</div>
+		    		</c:forEach>
 		    	</div>
 		  	</div>
 		</div>

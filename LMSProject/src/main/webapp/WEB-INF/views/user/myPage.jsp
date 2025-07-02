@@ -21,7 +21,6 @@
 					<button class="btn btn-outline-primary" onclick="location.href='infoEdit.do'">정보 수정</button>
 		    	</div>
 		    	<div class="border border-3 border-primary rounded p-3" style="height: 55%; text-align: left;">
-		    		<button class="btn btn-outline-primary" onclick="location.href='surveyList.do'">설문 조사</button>
 		    	</div>
 		  	</div>
 		</div>

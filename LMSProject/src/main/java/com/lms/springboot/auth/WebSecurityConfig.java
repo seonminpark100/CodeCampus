@@ -1,5 +1,7 @@
 package com.lms.springboot.auth;
 
+import java.beans.Customizer;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -52,15 +55,17 @@ public class WebSecurityConfig
 		
 		http.logout((logout) -> logout			// default : /logout
 				.logoutUrl("/myLogout.do")
-				.logoutSuccessUrl("/")
+				.logoutSuccessUrl("/myLogin.do")
+				.invalidateHttpSession(true) // 세션 무효화
+                .deleteCookies("JSESSIONID") // 쿠키 삭제
 				.permitAll());
 
 		http.exceptionHandling((expHandling) -> expHandling
 				.accessDeniedPage("/denied.do"));
 		
-		http.sessionManagement((auth) -> auth
-                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
-                .maxSessionsPreventsLogin(true)); 
+//		http.sessionManagement((auth) -> auth
+//                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
+//                .maxSessionsPreventsLogin(true)); 
 		
 		return http.build();
 	}
@@ -86,11 +91,11 @@ public class WebSecurityConfig
 			// 데이터베이스 접속 정보를 먼저 이용
 			.dataSource(dataSource)
 			// 쿼리로 해당 사용자가 있는지를 먼저 조회한다
-			.usersByUsernameQuery("SELECT user_id, user_pw, enabled "
-					+ " FROM security_admin WHERE user_id = ?")
+			.usersByUsernameQuery("SELECT user_id, user_pw, enable "
+					+ " FROM user_info WHERE user_id = ?")
 			// 사용자의 역할을 구해온다
 			.authoritiesByUsernameQuery("SELECT user_id, authority "
-					+ " FROM security_admin WHERE user_id =?")
+					+ " FROM user_info WHERE user_id =?")
 			// 입력한 비밀번호를 암호화해서 데이터베이스의 암호와 비교를 해서 
 			// 올바른 값인지 검증
 			.passwordEncoder(new BCryptPasswordEncoder());

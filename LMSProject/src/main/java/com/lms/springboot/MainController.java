@@ -7,9 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class MainController
 {
+//	@Autowired
+//	ILectureService dao;
+	
 	@GetMapping("/")
 	public String home()
 	{
@@ -17,7 +22,7 @@ public class MainController
 	}	
 		
 	@RequestMapping("/myLogin.do")
-	public String login1(Principal principal, Model model) {
+	public String login1(Principal principal, Model model, HttpSession session) {
 		try
 		{
 			String user_id = principal.getName();
@@ -25,91 +30,27 @@ public class MainController
 			
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("로그인 전입니다.");
 		}
-		return "auth/login";
-	}
-	
-	@RequestMapping("/user/index.do")
-	public String welcome(Principal principal, Model model)
-	{
-		String user_id = principal.getName();
-		model.addAttribute("user_id", user_id);
-		return "user/index";
+		return "auth/myLogin";
 	}
 		
-	// 여기부터는 화면 확인용
-	@GetMapping("user/myLectureList.do")
-	public String myLectureList() {
-		return "user/myLectureList";
+	// 로그인 오류 관련
+	@RequestMapping("/myError.do")
+	public String login2()
+	{
+		return "auth/error";
 	}
 	
-	@GetMapping("user/lecture.do")
-	public String lecture() {
-		return "user/lecture";
-	}
-	
-	@GetMapping("user/lectureList.do")
-	public String lectureList() {
-		return "user/lectureList";
-	}
-	@GetMapping("user/lectureView.do")
-	public String lectureView() {
-		return "user/lectureView";
-	}
-	
-	@GetMapping("user/lectureResource.do")
-	public String lectureResource() {
-		return "user/lectureResource";
-	}
-	
-	@GetMapping("user/lectureResourceView.do")
-	public String lectureResourceView() {
-		return "user/lectureResourceView";
-	}
-	
-	@GetMapping("user/lectureBoard.do")
-	public String lectureBoard() {
-		return "user/lectureBoard";
-	}
-	
-	@GetMapping("user/lectureBoardView.do")
-	public String lectureBoardView() {
-		return "user/lectureBoardView";
-	}
-	
-	@GetMapping("user/lectureBoardWrite.do")
-	public String lectureBoardWrite() {
-		return "user/lectureBoardWrite";
-	}
-	
-	@GetMapping("user/lectureBoardEdit.do")
-	public String lectureBoardEdit() {
-		return "user/lectureBoardEdit";
-	}
-	
-	@GetMapping("user/myPage.do")
-	public String myPage() {
-		return "user/myPage";
-	}
-	
-	@GetMapping("user/surveyList.do")
-	public String surveyList() {
-		return "user/surveyList";
-	}
-	
-	@GetMapping("user/surveyView.do")
-	public String surveyView() {
-		return "user/surveyView";
+	//권한이 부족한 경우 
+	@RequestMapping("/denied.do")
+	public String login3()
+	{
+		return "auth/denied";
 	}
 	
 	@GetMapping("/passCheck.do")
 	public String passCheck() {
 		return "auth/passCheck";
-	}
-	
-	@GetMapping("user/infoEdit.do")
-	public String infoEdit() {
-		return "user/infoEdit";
 	}
 }
