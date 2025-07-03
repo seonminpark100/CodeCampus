@@ -1,32 +1,32 @@
 package com.lms.springboot.jdbc;
 
-import java.sql.Date;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data 
 @NoArgsConstructor 
-@AllArgsConstructor 
-@Builder 
+@AllArgsConstructor
 public class AccountDTO {
-	private String userid; 
-    private String userpw; 
-    private String username; 
-    private Date userbirthdate; 
-    private Date joindate; 
-    private String authority; 
-                               
 
-    private String class1; 
-    private String class2; 
-    private String class3; 
+    private String userId;          
+    private String userPw;          
+    private String userName;        
+    private String userGender;      
+    private String userEmail;       
+    private String userPhoneNum;    
+    private String userAddr;        
+    private LocalDate userBirthdate; 
+    private LocalDate joindate;    
+    private String authority;      
+    private byte[] savefile;       
+    private byte[] originalfile;    
+    private String majorId;         
+    private int enable;            
 
-    private byte[] savefile; 
-    private byte[] originalfile; 
-    
+    // 검색 필드 및 키워드 (데이터베이스 컬럼과 직접 매핑되지 않음)
     private String searchField;
-	private String searchKeyword;
+    private String searchKeyword;
 }

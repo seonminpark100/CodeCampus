@@ -34,10 +34,11 @@ public class WebSecurityConfig
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
 				.requestMatchers("/").permitAll() 
 				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+				.requestMatchers("/admin/create").permitAll() // ★★★ 추가: 계정 생성 페이지 허용 ★★★
 				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
-				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
-				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
-				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
+				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")
+				.requestMatchers("/admin/**").hasRole("ADMIN")
+				.anyRequest().authenticated()
 			);
 
 		http.formLogin((formLogin) -> formLogin
@@ -53,14 +54,17 @@ public class WebSecurityConfig
 		http.logout((logout) -> logout			// default : /logout
 				.logoutUrl("/myLogout.do")
 				.logoutSuccessUrl("/")
+				.invalidateHttpSession(true) // 세션 무효화
+                .deleteCookies("JSESSIONID")
 				.permitAll());
 
 		http.exceptionHandling((expHandling) -> expHandling
 				.accessDeniedPage("/denied.do"));
 		
-		http.sessionManagement((auth) -> auth
-                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
-                .maxSessionsPreventsLogin(true)); 
+		//http.sessionManagement((auth) -> auth
+                //.maximumSessions(1) // 최대 다중 로그인 허용자 설정
+                //.maxSessionsPreventsLogin(true)); 
+		
 		
 		return http.build();
 	}
@@ -76,14 +80,18 @@ public class WebSecurityConfig
 			// 데이터베이스 접속 정보를 먼저 이용
 			.dataSource(dataSource)
 			// 쿼리로 해당 사용자가 있는지를 먼저 조회한다
-			.usersByUsernameQuery("SELECT user_id, user_pw, enabled "
-					+ " FROM security_admin WHERE user_id = ?")
+			.usersByUsernameQuery("SELECT user_id, user_pw, enable "
+					+ " FROM USER_INFO WHERE user_id = ?")
 			// 사용자의 역할을 구해온다
 			.authoritiesByUsernameQuery("SELECT user_id, authority "
-					+ " FROM security_admin WHERE user_id =?")
+					+ " FROM USER_INFO WHERE user_id =?")
 			// 입력한 비밀번호를 암호화해서 데이터베이스의 암호와 비교를 해서 
 			// 올바른 값인지 검증
 			.passwordEncoder(new BCryptPasswordEncoder());
 			// enabled 의 값이 0이면 비활성, 1이면 활성
 	}
+	@Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -2,10 +2,7 @@ package com.lms.springboot.jdbc;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
 
-
-@Repository
 public interface IMemberService {
 	public List<AccountDTO> select();
 	public int insert(AccountDTO accountDTO);
@@ -15,4 +12,5 @@ public interface IMemberService {
 
     
     public List<AccountDTO> searchMembers(AccountDTO accountDTO);
+    int updateEnableStatus(String userId, int enable);
 }
