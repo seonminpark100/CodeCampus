@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lecture</title>
+		<title>registLecture</title>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
@@ -15,7 +16,7 @@
 				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>강의명 & 강사명</h3>	    	
+			    <h3>수강신청</h3>	    	
 		    	<div class="row d-flex justify-content-center border border-3 border-primary rounded" style="height: 90%; text-align: center;">
 			    	<div class="row-4 input-group border border-3 border-primary rounded w-50" style="height: 50px;">
 						<button class="btn btn-outline-secondary dropdown-toggle"
@@ -35,57 +36,22 @@
 						<table class="table table-striped table-bordered border-3 border-warning rounded p-1">
 							<thead>
 								<tr>
-									<th style="width: 10%">카테고리</th>
-									<th style="width: 60%;">제목</th>
-									<th>날짜</th>
-									<th>조회수</th>
-									<th>다운로드</th>
+									<th style="width: 10%">구분</th>
+									<th style="width: 60%;">강의명</th>
+									<th>교수명</th>
+									<th>신청하기</th>
 								</tr>
 							</thead>
 							<tbody>
 <!-- 			    		실제 값을 받을땐 foreach문을 사용 -->
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료1</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료2</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료3</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료4</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료5</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
-								<tr>
-									<td>자료실</td>
-									<td>그림 자료6</td>
-									<td>2025-06-30</td>
-									<td>0</td>
-									<td><button class="btn btn-outline-primary">Download</button></td>
-								</tr>
+								<c:forEach items="${ list }" var="row">																			
+									<tr>
+										<td>${ category }</td>
+										<td>${ lecture_name }</td>
+										<td>${ user_name }</td>
+										<td><button class="btn btn-success">신청하기</button></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 			    	</div>

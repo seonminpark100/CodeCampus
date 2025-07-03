@@ -30,11 +30,11 @@
 					<c:if test="${empty user_id }" var="loginResult">
 		    		<form class="row" action="/myLoginAction.do" method="post">
 						<div class="col-m-3 form-floating w-50">
-							<input type="text" class="form-control" id="user_id" name="my_id"  placeholder="ID" required>
+							<input type="text" class="form-control" id="user_id" name="my_id"  placeholder="ID" value="20251038" required>
 							<label for="user_id">아이디</label> 
 						</div>
 						<div class="col-m-3 form-floating w-50">
-							<input type="password" class="form-control" id="user_pwd" name="my_pass" placeholder="PASSWORD" required>
+							<input type="password" class="form-control" id="user_pwd" name="my_pass" placeholder="PASSWORD" value="1234" required>
 							<label for="user_pwd">패스워드</label> 
 						</div>
 						<div class="col mt-5">

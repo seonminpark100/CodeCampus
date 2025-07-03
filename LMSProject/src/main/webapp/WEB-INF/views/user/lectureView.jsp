@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!-- 만료된 페이지를 안나오게 하기 위해 캐시를 지운다? -->
+<%    
+response.setHeader("Cache-Control","no-store");    
+response.setHeader("Pragma","no-cache");    
+response.setDateHeader("Expires",0);    
+if (request.getProtocol().equals("HTTP/1.1"))  
+        response.setHeader("Cache-Control", "no-cache");  
+%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -15,10 +23,12 @@
 				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>${ lecture.lecture_name }</h3>	    	
-		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: center;">
+			    <h3>${ lecture_name } | ${ user_name }</h3>	    	
+		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: left: ;">
+		    		<h3>${ dto.board_title } | ${ dto.board_postdate } | 조회수 : ${ dto.visitCount }</h3>
+<!-- 		    		<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button> -->
 					<div class="border border-3 border-primary rounded" style="height: 90%; position: relative;">
-						동영상이 들어갈 자리
+						${ dto.board_content }
 					</div>
 		    	</div>
 		  	</div>
