@@ -32,10 +32,10 @@
 		<div>
 			<h3>관리자 시스템</h3>
 			<ul>
-				<li><a href="<c:url value='/accountedit/list.do'/>"
+				<li><a href="<c:url value='/admin/accountedit/list.do'/>"
 					class="btn btn-primary btn-block mb-2 active" style="width: 100%;">회원
 						관리 화면</a></li>
-				<li><a href="<c:url value='/create/index.do'/>"
+				<li><a href="<c:url value='/admin/create'/>"
 					class="btn btn-primary btn-block mb-2 active" style="width: 100%;">계정
 						생성</a></li>
 				<li><a href="#" class="btn btn-secondary btn-block mb-2"

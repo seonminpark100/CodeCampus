@@ -1,16 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>  
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<sec:authorize access="isAuthenticated()">
-	<sec:authentication property="principal" var="principal"/>
-</sec:authorize>
+
+<s:authorize access="isAuthenticated()">
+	<s:authentication property="principal" var="principal"/>
+</s:authorize>
+
 <!-- CDN 방식: Bootstrap, jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
- <style>
+<!-- <style>
  .img-concert {
     width: 100px;
     height: 100px;
@@ -22,7 +24,7 @@
   .login {
   	float: right;
   }
-</style>
+</style> -->
 
 <script type="text/javascript">
 function disableOtherButtons(clickedId) {
@@ -35,7 +37,7 @@ function disableOtherButtons(clickedId) {
 </script>
 
 <div class="container" align="center">
-	<div class="login">
+	<div class="login" >
 		<c:choose>
 		    <c:when test="${empty principal}">
 		        <ul class="navbar-nav">
@@ -43,15 +45,16 @@ function disableOtherButtons(clickedId) {
 		        </ul>
 		    </c:when>
 		    <c:otherwise>
-		        <ul class="navbar-nav">
-		            <li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
-		            <li class="nav-item"><a class="nav-link" href="/myLogout.do">로그아웃</a></li>
+		        <ul class="navbar-nav" >
+		        	<s:authorize access="isAuthenticated()"><s:authentication property="name"/>님 반갑습니다.</s:authorize>
+		            <a class="nav-link" href="#"> 마이페이지 </a>
+		            <a class="nav-link" href="/myLogout.do"> 로그아웃 </a>
 		        </ul>
 		    </c:otherwise>
 	    </c:choose>
 	</div>
 	<a href="#">
-	 	<img class="img-concert" src="../images/logo.jpeg" />
+	 	<!-- <img class="img-concert" src="../images/logo.jpeg" /> -->
 	</a>
 	<br/><br/>
 	<div class="btn-group">

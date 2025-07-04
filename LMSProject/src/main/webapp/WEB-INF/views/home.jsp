@@ -1,16 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<sec:authorize access="isAuthenticated()">
-	<sec:authentication property="principal" var="principal"/>
-</sec:authorize>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>OO대학교 eCampus</title><title>home 화면</title>
+		<!-- 정적 리소스인 js와 css파일이 링크 -->
 		<script src="./js/commons.js"></script>
-		<link rel="stylesheet" href="./css/style.css" />
+		<!-- <link rel="stylesheet" href="./css/main.css" /> -->
 		<!-- FULL CALENDAR -->
 		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 		<script>

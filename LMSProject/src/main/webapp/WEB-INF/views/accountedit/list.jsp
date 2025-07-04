@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%-- ★ 만약 Spring Security 태그를 사용할 예정이라면 이 줄을 추가하세요. --%>
+<%-- <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -149,45 +151,13 @@
         text-align: center;
     }
 </style>
-<script>
-    function validateSearch() {
-        var searchKeyword = document.getElementById("searchKeyword").value;
-        if (searchKeyword.trim() === "") {
-            alert("검색어를 입력하세요.");
-            return false;
-        }
-        return true;
-    }
-    function toggleEnable(userId, currentEnable) {
-        if (confirm('정말 상태를 변경하시겠습니까?')) {
-            var form = document.createElement('form');
-            form.setAttribute('method', 'post');
-            // ★★★ action 경로 수정: /toggleEnable.do -> /accountedit/toggleEnable.do
-            form.setAttribute('action', '/accountedit/toggleEnable.do');
-            var userIdField = document.createElement('input');
-            userIdField.setAttribute('type', 'hidden');
-            userIdField.setAttribute('name', 'userId');
-            userIdField.setAttribute('value', userId);
-            form.appendChild(userIdField);
 
-            var newEnableValue = (currentEnable == 1) ? 0 : 1;
-            var enableField = document.createElement('input');
-            enableField.setAttribute('type', 'hidden');
-            enableField.setAttribute('name', 'enable');
-            enableField.setAttribute('value', newEnableValue);
-            form.appendChild(enableField);
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
-</script>
 </head>
 <body>
     <h2>회원목록</h2>
     <p>회원 목록 크기: ${fn:length(memberList)}</p>
 
-    <form action="list.do" method="get" onsubmit="return validateSearch();">
+    <form action="/admin/accountedit/list.do" method="get" onsubmit="return validateSearch();">
         <select name="searchField">
     		<option value="userId">아이디</option>
     		<option value="userName">이름</option>
@@ -215,18 +185,20 @@
             </tr>
         </thead>
         <tbody>
-            <c:choose><c:when test="${empty memberList}"> <%-- 이 부분과 아래 <c:otherwise> 닫는 부분 주의! --%>
+            <c:choose>
+                <c:when test="${empty memberList}">
                     <tr>
-                        <td colspan="12">등록된 회원이 없습니다.</td>
+                        <td colspan="13">등록된 회원이 없습니다.</td> <%-- 컬럼 개수에 맞춰 colspan 수정 (12 -> 13) --%>
                     </tr>
-                </c:when><c:otherwise>
+                </c:when>
+                <c:otherwise>
                     <c:forEach var="dto" items="${memberList}">
                         <tr>
                             <td>${dto.userId}</td>
                             <td>${dto.userName}</td>
                             <td>${dto.userGender}</td>
                             <td>${dto.userEmail}</td>
-                            <td>${dto.userPhoneNum}</td>
+                            <td>${dto.userPhonenum}</td> 
                             <td>${dto.userAddr}</td>
                             <td>${dto.userBirthdate}</td>
                             <td>${dto.joindate}</td>
@@ -241,14 +213,49 @@
                                 </button>
                             </td>
                             <td class="action-links">
-                                <a href="edit.do?userId=${dto.userId}">수정</a> <%-- user_id -> userId --%>
-                                <a href="/delete.do?userId=${dto.userId}" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a> <%-- user_id -> userId --%>
+                                <a href="/admin/accountedit/edit.do?userId=${dto.userId}">수정</a>
+                                <a href="/admin/accountedit/delete.do?userId=${dto.userId}" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a> 
                             </td>
                         </tr>
                     </c:forEach>
-                </c:otherwise></c:choose> <%-- 이 부분과 위 <c:when> 닫는 부분 주의! --%>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
+    <script>
+    function validateSearch() {
+        var searchKeyword = document.getElementById("searchKeyword").value;
+        if (searchKeyword.trim() === "") {
+            alert("검색어를 입력하세요.");
+            return false;
+        }
+        return true;
+    }
+    function toggleEnable(userId, currentEnable) {
+        if (confirm('정말 상태를 변경하시겠습니까?')) {
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            // ★★★ action 경로 수정: 컨트롤러의 실제 매핑 경로에 맞게 조정해야 합니다.
+            // 예시: "/accountedit/toggleEnable.do" 또는 "/admin/toggleEnable.do"
+            form.setAttribute('action', '/admin/accountedit/toggleEnable.do'); // 이전 논의를 바탕으로 설정
+            var userIdField = document.createElement('input');
+            userIdField.setAttribute('type', 'hidden');
+            userIdField.setAttribute('name', 'userId');
+            userIdField.setAttribute('value', userId);
+            form.appendChild(userIdField);
+
+            var newEnableValue = (currentEnable == 1) ? 0 : 1;
+            var enableField = document.createElement('input');
+            enableField.setAttribute('type', 'hidden');
+            enableField.setAttribute('name', 'enable');
+            enableField.setAttribute('value', newEnableValue);
+            form.appendChild(enableField);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
     <script>
         <c:if test="${not empty message}">
             alert('${message}');

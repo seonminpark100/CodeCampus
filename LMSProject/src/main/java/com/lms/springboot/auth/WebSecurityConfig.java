@@ -34,11 +34,10 @@ public class WebSecurityConfig
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
 				.requestMatchers("/").permitAll() 
 				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-				.requestMatchers("/admin/create").permitAll() // ★★★ 추가: 계정 생성 페이지 허용 ★★★
 				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
-				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")
-				.requestMatchers("/admin/**").hasRole("ADMIN")
-				.anyRequest().authenticated()
+				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
+				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
+				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
 			);
 
 		http.formLogin((formLogin) -> formLogin
@@ -54,25 +53,38 @@ public class WebSecurityConfig
 		http.logout((logout) -> logout			// default : /logout
 				.logoutUrl("/myLogout.do")
 				.logoutSuccessUrl("/")
+				
+//				재로그인을 위한 설정
 				.invalidateHttpSession(true) // 세션 무효화
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID") // 쿠키 삭제
+				
 				.permitAll());
+		
 
 		http.exceptionHandling((expHandling) -> expHandling
 				.accessDeniedPage("/denied.do"));
 		
-		//http.sessionManagement((auth) -> auth
-                //.maximumSessions(1) // 최대 다중 로그인 허용자 설정
-                //.maxSessionsPreventsLogin(true)); 
-		
+//		http.sessionManagement((auth) -> auth
+//                .maximumSessions(1) // 최대 다중 로그인 허용자 설정
+//                .maxSessionsPreventsLogin(true)); 
 		
 		return http.build();
 	}
 	
-
+	 /*
+	    2단계(디자인 커스텀)에서 인메모리 방식으로 사용했던 메서드는 이번 단계에서는
+	    사용하지 않으니 삭제처리한다. 
+	 */
+	
+	//DB연결을 위한 데이터소스를 자동주입 받는다.
 	@Autowired
 	private DataSource dataSource;
-
+	
+	/*
+	    아래 2개의 쿼리문 실행을 통해 사용자의 인증정보와 권한을 인출한다. 
+	    첫번째 쿼리는 사용자의 아이디, 비번 그리고 계정활성화 여부를 확인한다. 
+	    두번째 쿼리는 사용자의 권한(회원등급)을 확인한다. 
+	 */
 	@Autowired
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
@@ -93,5 +105,5 @@ public class WebSecurityConfig
 	@Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+	 }
 }
