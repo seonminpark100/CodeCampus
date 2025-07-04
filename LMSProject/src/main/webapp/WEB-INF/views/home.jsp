@@ -14,7 +14,12 @@
 	    document.addEventListener('DOMContentLoaded', function() {
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	      initialView: 'dayGridMonth'
+	      initialView: 'dayGridMonth',
+	      aspectRatio: 1.5,
+	      events: [
+	    	  {title: '테스트 일정1', start: '2025-07-03'},
+	    	  {title: '테스트 일정2', start: '2025-07-05'}
+	      ]
 	      });
 	    calendar.render();
 	    });
@@ -36,16 +41,9 @@
 	                <button>FAQ</button>
 	            </span>
 	        </div>
-	        <div class="bl-right">
-	            <span class="bluelight">
-	                <a href="#">
-	                	<button>공지사항</button>
-					</a>
-	            </span>
-	        </div>
 		</div>
 	</body>
-	 <script>
+	<!--  <script>
     var calendarEl = document.getElementById('calendar');
     var request = $.ajax({
       url: "/calendar/event",
@@ -58,5 +56,5 @@
       });
       calendar.render();		
     });
-  </script>
+  </script> -->
 </html>

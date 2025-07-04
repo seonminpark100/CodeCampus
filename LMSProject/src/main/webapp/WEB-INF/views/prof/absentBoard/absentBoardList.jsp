@@ -66,13 +66,13 @@
 	        <c:forEach items="${ lists }" var="row" varStatus="loop">
 		        <tr align="center">
 		            <td><img width="40px" alt="사진" src="../images/logo.jpeg"></td> 
-		            <td>${ row.USER_MAJOR }</td> 
-		            <td>${ row.USER_ID }</td> 
-		            <td>${ row.USER_NAME }</td> 
+		            <td>${ row.user_major }</td> 
+		            <td>${ row.user_id }</td> 
+		            <td>${ row.user_name }</td> 
 		            <!-- 라디오의 name이 달라야 각각읜 학생의 출결 관리 가능 -->
-			        <td> <input type="radio" name="ABSENT_STATE_${ row.USER_ID }" value="출석">출석 </td>
-		            <td> <input type="radio" name="ABSENT_STATE_${ row.USER_ID }" value="결석">결석 </td>
-		            <td> <input type="radio" name="ABSENT_STATE_${ row.USER_ID }" value="지각">지각 </td>
+			        <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="출석">출석 </td>
+		            <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="결석">결석 </td>
+		            <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="지각">지각 </td>
 	       		</tr>
 	        </c:forEach>        
 	    </c:otherwise>    

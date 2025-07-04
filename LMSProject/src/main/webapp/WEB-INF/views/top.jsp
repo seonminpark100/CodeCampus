@@ -11,7 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- <style>
+<style>
  .img-concert {
    width: 100px;
    height: 100px;
@@ -23,7 +23,7 @@
  .login {
  	float: right;
  }
-</style> -->
+</style>
 
 <script type="text/javascript">
 function disableOtherButtons(clickedId) {
@@ -53,13 +53,13 @@ function disableOtherButtons(clickedId) {
 	    </c:choose>
 	</div>
 	<a href="#">
-	 	<!-- <img class="img-concert" src="images/logo.jpeg" /> -->
+	 	<img class="img-concert" src="images/logo.jpeg" />
 	</a>
 	<br/><br/>
 	<div class="btn-group">
-		   <button class="btn btn-success" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
-		   <button class="btn btn-success" id="button2" onclick="disableOtherButtons('button2'); location.href = '#'">커뮤니티</button>&nbsp;&nbsp;
-		   <button class="btn btn-success" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
+		   <button class="btn btn-primary" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
+		   <button class="btn btn-primary" id="button2" onclick="disableOtherButtons('button2'); location.href = '#'">커뮤니티</button>&nbsp;&nbsp;
+		   <button class="btn btn-primary" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
 	</div>
 	<br/><br/><br/>
 </div>

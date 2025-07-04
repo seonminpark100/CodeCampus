@@ -7,18 +7,18 @@
 		<title>대학교 eCampus</title>
 	</head>
 	<body>
-	<%@ include file = "../top.jsp" %>
-		<div class="container">
+	<%@ include file = "../sidebars.jsp" %>
+	<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+        <div class="pt-3">
 		<h2>강의 목록 </h2>
 
 		<!-- 검색 폼 -->
 		<form method="get">
-		<table border="1" width="90%">
+		<table class="table table-hover" border="1" width="90%">
 		<tr>
 			<td>
 				<select name="searchField">
 					<option value="lecture_name">강의명</option>
-					<option value="prof_name">교수명</option>
 				</select>
 				<input type="text" name="searchKeyword" />
 				<input type="submit" value="검색하기" />
@@ -28,13 +28,10 @@
 		</form>
 		
 		<!-- 목록 테이블 -->
-	    <table border="1" width="90%">
+	    <table class="table table-hover" border="1" width="90%">
 	        <tr>
-	            <th width="10%">번호</th>
+	            <th width="15%">번호</th>
 	            <th width="*">강의명</th>
-	            <th width="15%">교수명</th>
-	            <th width="10%">시작일</th>
-	            <th width="15%">종료일</th>
 	        </tr>
 	<c:choose>
 	    <c:when test="${ empty lists }"> 
@@ -55,11 +52,8 @@
 	            	${vNum}
 	            </td>
 	            <td align="left"> 
-	                <a href="./view.do?idx=${row.idx}&vNum=${vNum}">${ row.LECTURE_NAME }</a> 
+	                <a href="./view.do?idx=${row.idx}&vNum=${vNum}">${ row.board_title }</a> 
 	            </td> 
-	            <td>${ row.PROF_NAME }</td> 
-	            <td>${ row.LECTURE_START_DATE }</td> 
-	            <td>${ row.LECTURE_END_DATE }</td> 
 	        </tr>
 	        </c:forEach>        
 	    </c:otherwise>    
@@ -67,16 +61,17 @@
 	    </table>
 	    
 	    <!-- 하단 메뉴(바로가기, 글쓰기) -->
-	    <table border="1" width="90%">
+	    <table class="table table-hover" border="1" width="90%">
 	        <tr align="center">
 	            <td>
 	                ${ pagingImg }
 	            </td>
-	            <td width="100"><button type="button"
+	            <td width="200px"><button type="button" class="btn btn-dark"
 	                onclick="location.href='lectureUpload.do';">강의 업로드</button>
 	            </td>
 	        </tr>
 	    </table>
 		</div>
+		</main>
 	</body>
 </html>

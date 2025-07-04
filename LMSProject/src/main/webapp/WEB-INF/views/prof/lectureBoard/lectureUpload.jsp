@@ -29,22 +29,22 @@
 		    <tr>
 		        <td>강의명</td>
 		        <td>
-		            <input type="text" name="LECTURE_NAME" style="width:150px;" value="" readonly="readonly"/>
+		            <input type="text" name="lecture_name" style="width:150px;" value="" readonly="readonly"/>
 		        </td>
 		    </tr>
 		    <tr>
 		        <td>교수명</td>
 		        <td>
-		            <input type="text" name="PROF_NAME" style="width:90%;" value="" readonly="readonly"/>
+		            <input type="text" name="user_name" style="width:90%;" value="" readonly="readonly"/>
 		        </td>
 		    </tr>
 		    <tr>
 		        <td>시작일</td>
-		        <td><input type="date" name="LECTURE_START_DATE"> </td>
+		        <td><input type="date" name="lecture_start_date"> </td>
 		    </tr>
 		    <tr>
 		        <td>종료일</td>
-		        <td><input type="date" name="LECTURE_END_DATE"></td>
+		        <td><input type="date" name="lecture_end_date"></td>
 		    </tr>
 		    <tr>
 		        <td>첨부파일</td>

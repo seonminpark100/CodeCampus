@@ -10,6 +10,22 @@
 		.bl-left { position:relative; float:left; width:50%; height:300px; display: flex; justify-content: center; align-items: center; }
 		.bl-right{ position:relative; float:right; width:50%; height:300px; display: flex; justify-content: center; align-items: center; }
 		</style>
+		<script>
+		function gotoList(){
+	        let pageMoveForm = document.createElement('form');
+	        /* // 인수값넣을경우
+	        let obj = document.createElement('input');
+	   		 obj.setAttribute('type', 'hidden');
+	  		 obj.setAttribute('name', 'userid');
+	  		 obj.setAttribute('value', userid);
+	         pageMoveForm.appendChild(obj);
+	        */
+	        pageMoveForm.setAttribute('method', 'post');
+	        pageMoveForm.setAttribute('action', '/test/list.do');
+	        document.body.appendChild(pageMoveForm);
+	        pageMoveForm.submit(); 
+	    }
+		</script>
 	</head>
 	<body>
 	<div class="container">
@@ -35,9 +51,7 @@
 					    <c:otherwise> 
 					        <c:forEach items="${ lists }" var="row" varStatus="loop">    
  					        <tr align="center">
-					            <a href="./submain.do?lectureId=${row.LECTURE_ID}">${ row.CLASS_1 }</a> <br/>
-							    <a href="./view.do?lectureId=${row.LECTURE_ID}">${ row.CLASS_2 }</a> <br/>
-							    <a href="./view.do?lectureId=${row.LECTURE_ID}">${ row.CLASS_3 }</a> <br/>
+					            <a href="./submain.do?lectureCode=${row.lecture_code}">${ row.lecture_name }</a> <br/>
 					        </tr>
 					        </c:forEach>        
 					    </c:otherwise>    

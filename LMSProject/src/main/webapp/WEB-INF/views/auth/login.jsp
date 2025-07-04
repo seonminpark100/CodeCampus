@@ -26,7 +26,7 @@
 	    </style> -->
 	    
 	    
-	    <script type="text/javascript">
+	   <!--  <script type="text/javascript">
 	    function disableOtherButtons(clickedId) {
 	        const buttons = document.querySelectorAll('button');
 	        buttons.forEach(button => {
@@ -34,11 +34,12 @@
 	        });
 	        document.getElementById(clickedId).disabled = true; // 클릭된 버튼 비활성화
 	    }
-	    </script>
+	    </script> -->
 	    
 	</head>
 	<body class="m-5">
-	<div class="container" align="center">
+	<%@ include file = "../top.jsp" %>
+	<%-- <div class="container" align="center">
 			<div class="login">
 				<c:choose>
 				    <c:when test="${empty principal}">  <!-- "$ 띄어쓰기 하면 절대안됨 -->
@@ -63,7 +64,7 @@
 				   <button class="btn btn-success" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
 			</div>
 			<br/><br/><br/>
-		</div>
+		</div> --%>
 		<!-- div의 테두리에 두께, 라운딩, 색깔 등을 지정 -->
 		<div style="width:600px;" class="border border-2 border-primary rounded p-5" align="center">
 		<!-- 로그인 아이디가 없는경우 로그인 폼을 출력한다. -->

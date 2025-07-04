@@ -4,20 +4,19 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>OO대학교 eCampus</title>
+		<title>대학교 eCampus</title>
 	</head>
 	<body>
 	<%@ include file = "../sidebars.jsp" %>
 	<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
         <div class="pt-3">
-           <h2>수강생 목록</h2>
-            <p class="text-success">
+           <h2>과제 목록</h2>
              <table class="table table-hover" border="1" width="90%">
 	        <tr align="center">
 	            <th width="10%">번호</th>
-	            <th width="25%">수강생학번</th>
-	            <th width="25%">수강생이름</th>
-	            <th width="*">생성날짜</th>
+	            <th width="*%">과제제목</th>
+	            <th width="25%">등록일시</th>
+	            <th width="25%">마감일</th>
 	        </tr>
                 <c:choose>
 			    <c:when test="${ empty lists }"> 
@@ -37,23 +36,28 @@
 			                (((maps.pageNum-1) * maps.pageSize)	+ loop.index)}" />
 			            	${vNum}
 			            </td>
-			            <td>${ row.user_id }</td> 
-			            <td>${ row.user_name }</td> 
-			            <td>${ row.joindate }</td> 
+			            <td align="left">
+			            	<a href="./assignmentView.do?lectureCode=${lectureCode}&assignment_idx=${row.assignment_idx}">${ row.assignment_title }</a> 
+			            </td> 
+			            <td>${ row.uploaded_date }</td> 
+			            <td>${ row.deadline }</td> 
 			        </tr>
 			        </c:forEach>        
 			    </c:otherwise>    
 			</c:choose>
 			</table>
-			<table class="table table-hover" border="1" width="90%">
-		        <tr align="center">
-		            <td>
-		                ${ pagingImg }
-		            </td>
-		        </tr>
-	   	 	</table>
+			<!-- 하단 메뉴(바로가기, 글쓰기) -->
+	    <table class="table table-hover" border="1" width="90%">
+	        <tr align="center">
+	            <td>
+	                ${ pagingImg }
+	            </td>
+	            <td width="200px"><button type="button" class="btn btn-dark"
+	                onclick="location.href='assignmentUpload.do?lectureCode=${lectureCode}';">과제 업로드</button>
+	            </td>
+	        </tr>
+	    </table>
         </div>
     </main>
-	
 	</body>
 </html>

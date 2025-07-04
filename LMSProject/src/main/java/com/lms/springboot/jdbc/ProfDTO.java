@@ -5,45 +5,61 @@ import lombok.Data;
 @Data
 public class ProfDTO
 {
-	
 //	테이블 테스트 용 멤버변수
 	private String idx;
 	private String name;
 	private String title;
 	private String content;
 	private java.sql.Date postdate;
+	
+//	Boards 테이블
+	private String board_idx;
+	private String user_id;
+	private String lecture_code;
+	private String board_title;
+	private String board_content;
+	private java.sql.Date board_postdate;
+	private byte ofile;
+	private byte sfile;
+	private int downcount;
 	private int visitcount;
-
+	private String category;
+	private int bgroup;
+	private int bstep;
+	private int bindent;
+	private int board_like;
+	
+//	Assignment 테이블
+	private String assignment_idx;
+	private String assignment_title;
+	private String assignment_content;
+	private String assignment_code;
+	private java.sql.Date uploaded_date;
+	private java.sql.Date deadline;
+	
 //	USER_INTO 테이블
-	private String CLASS_1;
-	private String CLASS_2;
-	private String CLASS_3;
-	private java.sql.Date JOINDATE;
+	private java.sql.Date joindate;
 	
 //	Lecture 테이블
-	private String LECTURE_ID;
-	private String LECTURE_NAME;
-	private String PROF_ID;
-	private String PROF_NAME;
-	private java.sql.Date LECTURE_START_DATE;
-	private java.sql.Date LECTURE_END_DATE;
+	private String lecture_id;
+	private String lecture_name;
+	private String prof_id;
+	private java.sql.Date lecture_start_date;
+	private java.sql.Date lecture_end_date;
 	
-//	ABSENTS 테이블 
-	private String SURVEY_ID;
-//	private String LECTURE_NAME; // Lecture에서 가져오기
-	private String USER_MAJOR;
-	private String USER_ID;
-	private String USER_NAME;
-	private String ABSENT_STATE;
-	private String ORIGIN_IMAGE;
-	private String SAVED_IMAGE;
-	private java.sql.Date LECTURE_DATE;
-	private java.sql.Date ATTENDANCE_TIME;
-	
+//	ABSENTS 테이블 	
+	private String user_major;
+	private String user_name;
+	private String absent_state;
+	private String origin_image;
+	private String saved_image;
+	private java.sql.Date lecture_date;
+	private java.sql.Date attendance_time;
 	
 	//검색어 관련 멤버변수 
 	private String searchField;
 	private String searchKeyword;
+	
 	//게시물의 구간을 표현하는 멤버변수 
 	private int start;
 	private int end;

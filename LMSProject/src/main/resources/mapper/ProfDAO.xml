@@ -7,30 +7,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.lms.springboot.jdbc.IProfService">
 
-	<!-- 강의실 -->
+	<!-- 강의 목록 출력-->
 	<select id="userList" resultType="com.lms.springboot.jdbc.ProfDTO" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT * FROM USER_INFO u
+		<!-- SELECT * FROM USER_INFO u
 		JOIN LECTURE l ON u.user_id = l.prof_id
-		WHERE u.user_id = #{user_id}
+		WHERE u.user_id = #{user_id} -->
+		
+		SELECT user_id, user_name, lecture_name, lecture_code FROM 
+		    user_info u INNER JOIN lecture l
+		    ON u.user_id = l.prof_id
+		    WHERE prof_id =#{user_id}
 	</select>
 	
+	<!-- 강의 목록 -->
 	<select id="getLectureTotalCount" resultType="int" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT COUNT(*) FROM LECTURE
-		<if test="searchKeyword!=null and !searchKeyword.equals('')">
-			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
-		</if>
+		SELECT COUNT(*) FROM BOARDS
+		WHERE lecture_code = #{lecture_code}
 	</select>
 	<select id="lectureBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
-				SELECT * FROM LECTURE
+				<!-- SELECT * FROM 
+					 user_info u INNER JOIN BOARDS b
+   					 ON u.user_id = b.user_id
 				<if test="searchKeyword!=null and !searchKeyword.equals('')">
 					WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
 				</if>
-				ORDER BY lecture_id DESC
+				ORDER BY lecture_idx DESC -->
+				SELECT * FROM BOARDS 
+				WHERE lecture_code =#{lecture_code}
+                
+                
 			) Tb
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
@@ -40,40 +50,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 수강생 리스트 -->
 	<select id="getStudentTotalCount" resultType="int" 
 		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT COUNT(*) FROM user_info
-		  WHERE class_1 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId}) 
-		  OR class_2 = (SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
-		  OR class_3 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
+			SELECT COUNT(*) FROM 
+			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+			    WHERE e.lecture_code = #{lecture_code}
+
 	</select>
-	<select id="studentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
-		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT * FROM user_info
-		  WHERE class_1 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId}) 
-		  OR class_2 = (SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
-		  OR class_3 =(SELECT LECTURE_NAME FROM LECTURE WHERE LECTURE_ID =#{lectureId})
-		 ORDER BY user_id ASC
-	</select>
-	
-	<!-- 공지사항 -->
-	<select id="getNoticeBoardTotalCount" resultType="int" 
-		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT COUNT(*) FROM myboard
-		<if test="searchKeyword!=null and !searchKeyword.equals('')">
-			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
-		</if>
-	</select>
-	<select id="noticeBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
-		parameterType="com.lms.springboot.jdbc.ProfDTO">
-		SELECT * FROM (
-			SELECT Tb.*, rownum rNum FROM (
-				SELECT * FROM myboard
-				<if test="searchKeyword!=null and !searchKeyword.equals('')">
-					WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
-				</if>
-				ORDER BY idx DESC
-			) Tb
-		)
-		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	<select id="studentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" >
+			<!-- SELECT * FROM 
+			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+			    WHERE e.lecture_code = #{lecture_code} -->
+			    
+			    SELECT * FROM (
+					SELECT Tb.*, rownum rNum FROM (
+						SELECT * FROM 
+							user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+					    WHERE e.lecture_code = #{lecture_code}
+						ORDER BY u.user_id DESC
+					) Tb
+				)
+				WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
 	
 	
@@ -99,5 +94,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
 
+	<!-- 과제 -->
+	<select id="getAssignmentTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT COUNT(*) FROM assignment
+		WHERE lecture_code = #{lecture_code}
+	</select>
+	<select id="assignmentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		<!-- SELECT * FROM 
+		    assignment a LEFT JOIN lecture l ON a.lecture_code = l.lecture_code
+		    WHERE a.lecture_code =  #{lectureCode}
+		    ORDER BY ASSIGNMENT_IDX desc -->
+		    SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM 
+					assignment a LEFT JOIN lecture l ON a.lecture_code = l.lecture_code
+					WHERE a.lecture_code =  #{lecture_code}
+					ORDER BY ASSIGNMENT_IDX desc
+				) Tb
+			)
+			WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	<insert id="lectureUploadProcProf">
+		INSERT INTO assignment (ASSIGNMENT_IDX, ASSIGNMENT_TITLE, ASSIGNMENT_CONTENT, UPLOADED_DATE, DEADLINE, LECTURE_CODE)
+		VALUES
+		(seq_serial_num.nextval, #{_title}, #{_content}, sysdate, #{_deadline} ,#{_lectureCode})
+	</insert>
+	<select id="assignmentView" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM assignment WHERE assignment_idx = #{assignment_idx}
+	</select>
+	<update id="assignmentEdit" parameterType="com.lms.springboot.jdbc.ProfDTO">
+		UPDATE assignment SET
+		assignment_title=#{assignment_title}, assignment_content=#{assignment_content}, deadline=#{deadline}
+		WHERE assignment_idx=#{assignment_idx}
+	</update>
+	<delete id="assignmentDelete">
+    	DELETE FROM assignment WHERE assignment_idx=#{param1}
+    </delete>
 	
 </mapper>
