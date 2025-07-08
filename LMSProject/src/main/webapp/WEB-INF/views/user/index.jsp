@@ -27,12 +27,13 @@
 					<div class="row border border-3 border-primary p-3 rounded" style="height: 50%; text-align: center;">
 						<h3>Quick Menu</h3>
 						<div>
-							<button class="btn btn-outline-primary mx-1" type="button" onclick="location.href='resgistLecture.do'" style="width: 20%">개설과목</button>
+							<button class="btn btn-outline-primary mx-1" type="button" onclick="location.href='registLecture.do'" style="width: 20%">개설과목</button>
 							<button class="btn btn-outline-primary mx-1" type="button" onclick="" style="width: 20%">FAQ</button>
 						</div>
 		            </div>
 		    		<div class="row border border-3 border-primary mt-3 rounded" style="height: 50%">
 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button>
+		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='assignmentList.do'">내 과제</button>
 <!-- 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lecture.do'">강의</button> -->
 <!-- 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lectureView.do'">강의 영상 페이지</button> -->
 <!-- 		    			<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='lectureResource.do'">자료실 리스트</button> -->

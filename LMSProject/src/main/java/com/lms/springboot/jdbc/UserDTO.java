@@ -1,11 +1,16 @@
 package com.lms.springboot.jdbc;
 
-import java.sql.Blob;
 import java.sql.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO
 {
 	// user
@@ -18,10 +23,13 @@ public class UserDTO
 	private Date user_birthdate;
 	private Date joinDate;
 	private String authority;
-	private Blob saveFile;
-	private Blob originalFile;
+	private String saveFile;
+	private String originalFile;
 	private String major_id;
 	int enable;
+
+	// major
+	private String major_name;
 	
 	// lecture
 	private int lecture_idx;
@@ -36,8 +44,6 @@ public class UserDTO
 	private String board_title;
 	private String board_content;
 	private Date board_postdate;
-	private Blob oFile;
-	private Blob sFile;
 	private int downCount;
 	private int visitCount;
 	private String category;
@@ -45,4 +51,23 @@ public class UserDTO
 	private int bStep;
 	private int bIndent;
 	private int board_like;
+	
+	// assignment
+	private int assignment_idx;
+	private String assignment_title;
+	private String assignment_content;
+	private Date uploaded_date;
+	private Date deadline;
+	
+	// assignmen_submit
+	private int assignment_submit_idx;
+	private String assignment_content_s;
+	private String assignment_comment;
+	private String assignment_ofile;
+	private String assignment_sfile;
+	private int score;	
+	
+	// file
+	private String ofile;
+	private String sfile;
 }

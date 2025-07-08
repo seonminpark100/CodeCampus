@@ -12,9 +12,9 @@
 	</head>
 	<body>
 		<div class="container" style="text-align: center; max-width: 100%;">
-<!-- 			<div class="row"> -->
-<%-- 				<%@ include file="../navBar/navBar.jsp" %> --%>
-<!-- 			</div> -->
+			<div class="row">
+				<%@ include file="../navBar/navBar.jsp" %>
+			</div>
 		    <div class="row m-3 p-5 border border-3 border-warning rounded" style="height: 540px;">
 		    	<div class="col-4 border border-3 border-primary mx-4 rounded">
 		    		<img src="images/image.PNG" alt="login" class="img-fluid" />
@@ -34,7 +34,7 @@
 							<label for="user_id">아이디</label> 
 						</div>
 						<div class="col-m-3 form-floating w-50">
-							<input type="password" class="form-control" id="user_pwd" name="my_pass" placeholder="PASSWORD" value="1234" required>
+							<input type="password" class="form-control" id="user_pwd" name="my_pass" placeholder="PASSWORD" value="0000" required>
 							<label for="user_pwd">패스워드</label> 
 						</div>
 						<div class="col mt-5">
