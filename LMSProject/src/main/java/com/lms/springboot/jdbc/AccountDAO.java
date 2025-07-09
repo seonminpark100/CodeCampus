@@ -116,46 +116,47 @@ public class AccountDAO implements IMemberService {
 
 	@Override
 	public int update(AccountDTO accountDTO) {
+	    // 기존 데이터를 먼저 조회하여, 파일 정보가 없으면 기존 파일을 유지하도록 함
+	    AccountDTO existingAccount = selectOne(accountDTO); // accountDTO.getUserId() 사용
 
 	    String sql = "UPDATE USER_INFO SET USER_PW = ?, USER_NAME = ?, USER_GENDER = ?, " +
 	            "USER_EMAIL = ?, USER_PHONENUM = ?, USER_ADDR = ?, USER_BIRTHDATE = ?, " +
 	            "AUTHORITY = ?, SAVEFILE = ?, ORIGINALFILE = ?, MAJOR_ID = ?, ENABLE = ? " +
-	            "WHERE USER_ID = ?"; // 총 13개의 ?
+	            "WHERE USER_ID = ?";
 
 	    int result = jdbcTemplate.update(sql, new PreparedStatementSetter() {
-
 	        @Override
 	        public void setValues(PreparedStatement ps) throws SQLException {
-	            // 1. USER_PW
 	            ps.setString(1, accountDTO.getUserPw());
-	            // 2. USER_NAME
 	            ps.setString(2, accountDTO.getUserName());
-	            // 3. USER_GENDER
 	            ps.setString(3, accountDTO.getUserGender());
-	            // 4. USER_EMAIL
 	            ps.setString(4, accountDTO.getUserEmail());
-	            // 5. USER_PHONENUM
 	            ps.setString(5, accountDTO.getUserPhonenum());
-	            // 6. USER_ADDR
 	            ps.setString(6, accountDTO.getUserAddr());
-	            // 7. USER_BIRTHDATE (java.util.Date를 java.sql.Date로 변환)
-	            // accountDTO.getUserBirthdate()가 java.util.Date 타입이라고 가정합니다.
 	            if (accountDTO.getUserBirthdate() != null) {
-	                ps.setDate(7, java.sql.Date.valueOf(accountDTO.getUserBirthdate())); 
+	                ps.setDate(7, java.sql.Date.valueOf(accountDTO.getUserBirthdate()));
 	            } else {
 	                ps.setNull(7, java.sql.Types.DATE);
 	            }
-	            // 8. AUTHORITY
+	          
 	            ps.setString(8, accountDTO.getAuthority());
-	            // 9. SAVEFILE
-	            ps.setString(9, accountDTO.getSavefile()); 
 
-	            ps.setString(10, accountDTO.getOriginalfile()); // VARCHAR2(4000) 이므로 String
-	            // 11. MAJOR_ID
-	            ps.setString(11, accountDTO.getMajorId()); // DB 컬럼 MAJOR_ID
-	            // 12. ENABLE
+	          
+	            String finalSavefile = accountDTO.getSavefile();
+	            if (finalSavefile == null && existingAccount != null) {
+	                finalSavefile = existingAccount.getSavefile();
+	            }
+	            ps.setString(9, finalSavefile);
+
+	            // 10. ORIGINALFILE: accountDTO에 originalfile이 없으면 기존 existingAccount의 originalfile 사용
+	            String finalOriginalfile = accountDTO.getOriginalfile();
+	            if (finalOriginalfile == null && existingAccount != null) {
+	                finalOriginalfile = existingAccount.getOriginalfile();
+	            }
+	            ps.setString(10, finalOriginalfile);
+
+	            ps.setString(11, accountDTO.getMajorId());
 	            ps.setInt(12, accountDTO.getEnable());
-	            // 13. USER_ID (WHERE 절의 마지막 파라미터)
 	            ps.setString(13, accountDTO.getUserId());
 	        }
 	    });

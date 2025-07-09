@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.jdbc.ILectureService">
+
+	<select id="getTotalLectureCount" resultType="int"
+		parameterType="com.lms.springboot.jdbc.ParameterDTO">
+		SELECT COUNT(*) FROM LECTURE
+		<if test="searchKeyword!=null and !searchKeyword.equals('')">
+			WHERE
+            <choose>
+                <when test="searchField == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</when>
+                <when test="searchField == 'PROF_ID'">PROF_ID LIKE '%'||#{searchKeyword}||'%'</when>
+                <otherwise>LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</otherwise>
+            </choose>
+		</if>
+	</select>
+
+	<select id="listLecturePage" resultType="com.lms.springboot.jdbc.LectureBoardDTO"
+		parameterType="com.lms.springboot.jdbc.ParameterDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID
+				FROM LECTURE
+				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+					WHERE
+                    <choose>
+                        <when test="searchField == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</when>
+                        <when test="searchField == 'PROF_ID'">PROF_ID LIKE '%'||#{searchKeyword}||'%'</when>
+                        <otherwise>LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</otherwise>
+                    </choose>
+				</if>
+				ORDER BY LECTURE_IDX DESC
+			) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+
+	<insert id="insertLecture" parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
+		INSERT INTO LECTURE (LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID)
+		VALUES (
+            (SELECT NVL(MAX(LECTURE_IDX), 0) + 1 FROM LECTURE), #{lectureName},
+            #{profId},
+            #{lectureStartDate},
+            #{lectureEndDate},
+            #{lectureCode},
+            #{majorId}
+        )
+	</insert>
+
+	<select id="viewLecture" resultType="com.lms.springboot.jdbc.LectureBoardDTO"
+		parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
+		SELECT LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID
+		FROM LECTURE WHERE LECTURE_IDX=#{lectureIdx}
+	</select>
+
+	<update id="updateLecture" parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
+		UPDATE LECTURE SET
+		LECTURE_NAME=#{lectureName},
+        PROF_ID=#{profId},
+        LECTURE_START_DATE=#{lectureStartDate},
+        LECTURE_END_DATE=#{lectureEndDate},
+        LECTURE_CODE=#{lectureCode},
+        MAJOR_ID=#{majorId}
+		WHERE LECTURE_IDX=#{lectureIdx}
+	</update>
+
+	<delete id="deleteLecture">
+    	DELETE FROM LECTURE WHERE LECTURE_IDX=#{param1}
+    </delete>
+</mapper>

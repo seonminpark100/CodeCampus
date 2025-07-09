@@ -62,17 +62,17 @@
 			return false;
 		}
 		// ★ userPw 필드 유효성 검사 추가 (생성 폼이므로 필수)
-		if (form.userPw.value.trim() == "") {
+		/* if (form.userPw.value.trim() == "") {
 			alert("비밀번호를 입력하세요.");
 			form.userPw.focus();
 			return false;
-		}
+		} */
 		if (form.userName.value.trim() == "") {
 			alert("이름을 입력하세요.");
 			form.userName.focus();
 			return false;
 		}
-		// ★ userGender 값은 '남성', '여성'으로 변경
+		
 		var userGenderSelected = false;
 		for (var i = 0; i < form.userGender.length; i++) {
             if (form.userGender[i].checked) {
@@ -139,10 +139,6 @@
 				<input type="text" id="userId" name="userId" placeholder="사용할 아이디를 입력하세요." required>
 			</div>
 			<div class="form-group">
-				<label for="userPw">비밀번호:</label> <%-- ★ userPw 필드 추가 --%>
-				<input type="password" id="userPw" name="userPw" placeholder="비밀번호를 입력하세요." required>
-			</div>
-			<div class="form-group">
 				<label for="userName">이름:</label>
 				<input type="text" id="userName" name="userName" placeholder="이름을 입력하세요." required>
 			</div>
@@ -195,6 +191,7 @@
 				</select>
 			</div>			
 			<button type="submit">계정 생성</button>
+			<a href="<c:url value='/admin'/>" class="btn-back">관리자 시스템 페이지로</a>
 		</form>
 	</div>
 	<script>

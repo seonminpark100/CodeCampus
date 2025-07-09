@@ -11,9 +11,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeCampus 관리자</title>
+<title>CodeCampus 관리자 대시보드</title>
 <style>
-    /* body 전체 레이아웃: flex를 사용하여 사이드바와 메인 컨텐츠 영역 분리 */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -195,8 +194,8 @@
     .statistics-section tr:hover {
         background-color: #f1f1f1;
     }
-
 </style>
+
 </head>
 <body>
     <div class="admin-sidebar">
@@ -233,39 +232,92 @@
 
         <div class="main-content-area">
             <h2>강의 통계 대시보드</h2>
-
+			<h3>학생 현황</h3>
+                <p>총 학생 수: <strong>${totalStudentCount}</strong>명</p>
             <div class="statistics-section">
                 <h3>전체 강의 현황</h3>
                 <p>총 강의 수: <strong>${totalLectureCount}</strong>개</p>
 
-                <h3>신규 강의 목록 (최신 5개)</h3> 
+                <h3>신규 강의 목록 (최신 5개)</h3>
                 <c:if test="${not empty newLectures}">
                     <table>
                         <thead>
                             <tr>
                                 <th>강의명</th>
-                                <th>교수 ID</th> 
-                                <th>시작 날짜</th> 
-                                <th>종료 날짜</th> 
+                                <th>교수 ID</th>
+                                <th>시작 날짜</th>
+                                <th>종료 날짜</th>
                             </tr>
                         </thead>
                         <tbody>
-			            <c:forEach var="lecture" items="${newLectures}"> 
-			                <tr>			                    
-			                    <td>${lecture.lectureName}</td>
-			                    <td>${lecture.profId}</td>
-			                    <td>${lecture.lectureStartDate}</td>
-			                    <td>${lecture.lectureEndDate}</td>
-			                </tr>
-			            </c:forEach>
-			        </tbody>
+                        <c:forEach var="lecture" items="${newLectures}">
+                            <tr>
+                                <td>${lecture.lectureName}</td>         
+                        		<td>${lecture.profId}</td>             
+                        		<td>${lecture.lectureStartDate}</td>
+                        		<td>${lecture.lectureEndDate}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
                     </table>
                 </c:if>
                 <c:if test="${empty newLectures}">
-                    <p>신규 강의 데이터가 없습니다.</p> 
+                    <p>신규 강의 데이터가 없습니다.</p>
                 </c:if>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 서버에서 전달받은 학생 수
+            const totalStudents = ${totalStudentCount};
+            // 교수와 관리자 수는 사용하지 않으므로 변수에서 제거
+
+            const ctx = document.getElementById('userRoleChart').getContext('2d');
+            const userRoleChart = new Chart(ctx, {
+                type: 'bar', // 막대 그래프
+                data: {
+                    labels: ['학생'], // ★★★ 라벨을 '학생'만 남김
+                    datasets: [{
+                        label: '학생 수', // ★★★ 라벨 변경
+                        data: [totalStudents], // ★★★ 데이터도 학생 수만 남김
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)' // 학생 색상
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false, // ★★★ 범례 (legend)는 학생 하나뿐이므로 숨김
+                        },
+                        title: {
+                            display: true,
+                            text: '총 학생 수' // ★★★ 그래프 제목 변경
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0 // Y축 정수 값만 표시
+                            }
+                        },
+                        x: { // x축도 단순화
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

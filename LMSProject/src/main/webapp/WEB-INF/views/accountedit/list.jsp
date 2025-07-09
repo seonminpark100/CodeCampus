@@ -150,10 +150,30 @@
         border-radius: 4px;
         text-align: center;
     }
+    .back-to-admin-button {
+        position: absolute; /* 절대 위치 지정 */
+        top: 20px; /* 상단에서 20px */
+        left: 20px; /* 왼쪽에서 20px */
+        background-color: #007bff; /* 파란색 (admin-sidebar의 btn-blue와 유사) */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none; /* 링크 밑줄 제거 */
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+        z-index: 1000; /* 다른 요소 위에 표시 */
+    }
+
+    .back-to-admin-button:hover {
+        background-color: #0056b3; /* 호버 시 진한 파란색 */
+    }
 </style>
 
 </head>
 <body>
+	<a href="<c:url value='/admin'/>" class="back-to-admin-button">관리자 페이지로</a>
+
     <h2>회원목록</h2>
     <p>회원 목록 크기: ${fn:length(memberList)}</p>
 

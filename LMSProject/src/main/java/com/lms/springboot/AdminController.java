@@ -3,10 +3,12 @@ package com.lms.springboot;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map; // 필요 없으면 제거
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier; // ★★★ 추가
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller; 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,24 +19,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.springboot.jdbc.AccountDTO;
 import com.lms.springboot.jdbc.IMemberService;
+import com.lms.springboot.jdbc.StatsService; // 필요 없으면 제거
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin") 
 public class AdminController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
+    @Qualifier("accountDAO") 
     IMemberService dao;
 
-    public AdminController(BCryptPasswordEncoder bCryptPasswordEncoder) { 
+    public AdminController(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    @RequestMapping("/accountedit/list.do") 
+   
+    @GetMapping("") 
+    public String redirectToDashboard() {
+    	return "redirect:/admin/dashboard"; 
+    }
+
+    @RequestMapping("/accountedit/list.do")
     public String member2(Model model,
                           @RequestParam(value = "searchField", required = false) String searchField,
                           @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
+    	System.out.println("### DEBUG: AdminController - member2 (accountedit/list.do) 메서드 진입! ###");
         List<AccountDTO> memberList;
 
         if (searchKeyword != null && !searchKeyword.trim().isEmpty()
@@ -47,25 +58,31 @@ public class AdminController {
             memberList = dao.select();
         }
         model.addAttribute("memberList", memberList);
-        return "accountedit/list"; 
+        return "accountedit/list";
     }
 
-    @GetMapping("/accountedit/edit.do") 
+    @GetMapping("/accountedit/edit.do")
     public String member3(AccountDTO accountDTO, Model model) {
+    	System.out.println("### DEBUG: AdminController - member3 (accountedit/edit.do) 메서드 진입! ###");
         accountDTO = dao.selectOne(accountDTO);
+        if (accountDTO != null) {
+            System.out.println("### DEBUG: selectOne 결과: " + accountDTO.getUserId() + " 회원 정보 로드됨 ###");
+        } else {
+            System.out.println("### DEBUG: selectOne 결과: 회원 정보 로드 실패 (null) ###");
+        }
         model.addAttribute("dto", accountDTO);
-        return "accountedit/edit"; 
+        return "accountedit/edit";
     }
 
-    @PostMapping("/accountedit/edit.do") 
+    @PostMapping("/accountedit/edit.do")
     public String member7(@ModelAttribute AccountDTO accountDTO, RedirectAttributes redirectAttributes) {
-
+    	 System.out.println("### DEBUG: AdminController - member7 (accountedit/edit.do - POST) 메서드 진입! ###");
         System.out.println("DEBUG: accountDTO.getUserGender(): " + accountDTO.getUserGender());
 
         AccountDTO existingAccount = dao.selectOne(accountDTO);
         if (existingAccount == null) {
             redirectAttributes.addFlashAttribute("message", "회원 정보를 찾을 수 없어 수정에 실패했습니다.");
-            return "redirect:/admin/accountedit/list.do"; // ★★★ 리다이렉트 경로 수정 (클래스 레벨 @RequestMapping 고려)
+            return "redirect:/admin/accountedit/list.do";
         }
 
         String existingEncodedPassword = existingAccount.getUserPw();
@@ -76,7 +93,6 @@ public class AdminController {
                 accountDTO.setUserPw(existingEncodedPassword);
             }
         } else {
-           
             accountDTO.setUserPw(existingEncodedPassword);
         }
 
@@ -87,12 +103,13 @@ public class AdminController {
         } else {
             redirectAttributes.addFlashAttribute("message", "회원 정보 수정에 실패했습니다.");
         }
-        return "redirect:/admin/accountedit/list.do"; 
+        return "redirect:/admin/accountedit/list.do";
     }
 
-    
-    @RequestMapping("/accountedit/delete.do") 
+
+    @RequestMapping("/accountedit/delete.do")
     public String member4(AccountDTO accountDTO, RedirectAttributes redirectAttributes) {
+    	 System.out.println("### DEBUG: AdminController - member4 (accountedit/delete.do) 메서드 진입! ###");
         int result = dao.delete(accountDTO);
         if (result == 1) {
             System.out.println("삭제되었습니다.");
@@ -100,19 +117,21 @@ public class AdminController {
         } else {
             redirectAttributes.addFlashAttribute("message", "삭제에 실패했습니다.");
         }
-        return "redirect:/admin/accountedit/list.do"; 
+        return "redirect:/admin/accountedit/list.do";
     }
 
 
     @GetMapping("/create")
     public String showCreateAccountForm() {
-        return "admin/create"; 
+    	 System.out.println("### DEBUG: AdminController - showCreateAccountForm 메서드 진입! ###");
+        return "admin/create";
     }
 
-    
-    @PostMapping("/create") 
+
+    @PostMapping("/create")
     public String createAccount(@ModelAttribute AccountDTO accountDTO,
                                 RedirectAttributes redirectAttributes) {
+    	 System.out.println("### DEBUG: AdminController - createAccount (POST) 메서드 진입! ###");
         try {
             // 파일 업로드 관련 로직 제거
             accountDTO.setSavefile(null);
@@ -130,11 +149,11 @@ public class AdminController {
             } else {
                 System.err.println("ERROR: userBirthdate가 null이어서 초기 패스워드를 설정할 수 없습니다.");
                 redirectAttributes.addFlashAttribute("message", "생년월일이 없어 초기 패스워드 설정에 실패했습니다.");
-                return "redirect:/admin/create"; 
+                return "redirect:/admin/create";
             }
-
+            
             int result = dao.insert(accountDTO);
-
+            System.out.println("### DEBUG: dao.insert() 결과: " + result + " ###"); // ★★★ 추가
             if (result == 1) {
                 redirectAttributes.addFlashAttribute("message", "계정 생성에 성공했습니다. 초기 패스워드는 생년월일입니다.");
             } else {
@@ -143,18 +162,18 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", "계정 생성 중 오류가 발생했습니다: " + e.getMessage());
-            return "redirect:/admin/create"; 
+            return "redirect:/admin/create";
         }
-        return "redirect:/admin/accountedit/list.do"; 
+        return "redirect:/admin/accountedit/list.do";
     }
 
-    @PostMapping("/accountedit/toggleEnable.do") 
+    @PostMapping("/accountedit/toggleEnable.do")
     public String toggleEnable(@RequestParam("userId") String userId, @RequestParam("enable") int enable,
                                RedirectAttributes redirectAttributes) {
 
         try {
             int result = dao.updateEnableStatus(userId, enable);
-
+            System.out.println("### DEBUG: dao.updateEnableStatus() 결과: " + result + " ###"); // ★★★ 추가
             if (result > 0) {
                 redirectAttributes.addFlashAttribute("message", "회원 상태가 성공적으로 변경되었습니다.");
             } else {
@@ -164,6 +183,6 @@ public class AdminController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", "회원 상태 변경 중 오류가 발생했습니다: " + e.getMessage());
         }
-        return "redirect:/admin/accountedit/list.do"; // ★★★ 리다이렉트 경로 수정 (클래스 레벨 @RequestMapping 고려)
+        return "redirect:/admin/accountedit/list.do";
     }
 }

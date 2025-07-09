@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lms.springboot.jdbc.INoticeService">
+
+    <select id="getTotalNoticeCount" resultType="int" parameterType="com.lms.springboot.jdbc.ParameterDTO2">
+        SELECT COUNT(*) FROM BOARDS  <where>
+            <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchField == 'BOARD_TITLE'">
+                        BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
+                    </when>
+                    <when test="searchField == 'USER_ID'">
+                        USER_ID LIKE '%' || #{searchKeyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    <select id="listNoticePage" resultType="com.lms.springboot.jdbc.NoticeBoardDTO" parameterType="com.lms.springboot.jdbc.ParameterDTO2">
+        SELECT * FROM (
+            SELECT Tb.*, ROWNUM rNum FROM (
+                SELECT
+                    BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
+                FROM BOARDS  <where>
+                    <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
+                        <choose>
+                            <when test="searchField == 'BOARD_TITLE'">
+                                BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
+                            </when>
+                            <when test="searchField == 'USER_ID'">
+                                USER_ID LIKE '%' || #{searchKeyword} || '%'
+                            </when>
+                        </choose>
+                    </if>
+                </where>
+                ORDER BY BOARD_IDX DESC
+            ) Tb
+        )
+        WHERE rNum BETWEEN #{start} AND #{end}
+    </select>
+
+    <insert id="insertNotice" parameterType="com.lms.springboot.jdbc.NoticeBoardDTO">
+    INSERT INTO BOARDS (  BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
+    	) VALUES (
+        BOARDS_SEQ.NEXTVAL, #{userId}, #{boardTitle}, #{boardContent}, SYSDATE, 0, #{category, jdbcType=VARCHAR} )
+	</insert>
+
+    <select id="viewNotice" resultType="com.lms.springboot.jdbc.NoticeBoardDTO" parameterType="int">
+        SELECT BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
+        FROM BOARDS  WHERE BOARD_IDX = #{boardIdx}
+    </select>
+
+    <update id="updateVisitCount" parameterType="int">
+        UPDATE BOARDS SET VISITCOUNT = VISITCOUNT + 1 WHERE BOARD_IDX = #{boardIdx} </update>
+
+    <update id="updateNotice" parameterType="com.lms.springboot.jdbc.NoticeBoardDTO">
+        UPDATE BOARDS  SET
+            BOARD_TITLE = #{boardTitle},
+            BOARD_CONTENT = #{boardContent},
+            USER_ID = #{userId} WHERE BOARD_IDX = #{boardIdx}
+    </update>
+
+    <delete id="deleteNotice" parameterType="int">
+        DELETE FROM BOARDS WHERE BOARD_IDX = #{boardIdx} </delete>
+
+</mapper>

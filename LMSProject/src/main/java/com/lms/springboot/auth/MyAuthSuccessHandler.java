@@ -24,7 +24,7 @@ public class MyAuthSuccessHandler implements AuthenticationSuccessHandler
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         String role = iterator.next().getAuthority();
         if (role.equals("ROLE_ADMIN")) {
-            response.sendRedirect("/admin/index.do"); // Admin 권한을 가진 사용자는 /admin/index.do 로 이동
+            response.sendRedirect("/admin/dashboard"); // Admin 권한을 가진 사용자는 /admin/index.do 로 이동
         } else if (role.equals("ROLE_PROF")) {
             response.sendRedirect("/prof/index.do"); // Prof 권한을 가진 사용자는 /prof/index.do 로 이동
         } else if (role.equals("ROLE_USER")){
