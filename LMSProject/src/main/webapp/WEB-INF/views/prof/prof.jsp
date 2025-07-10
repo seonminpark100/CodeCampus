@@ -58,7 +58,7 @@
 					</c:choose>
 				    </span>
 				</div>
-		       	<div class="bl-right">
+<%-- 		       	<div class="bl-right">
 		            <span class="bluelight">
 		                <h2>Quick Menu(임시메뉴임)</h2>
 		                <a href="/prof/lectureboard.do"><button>강의</button></a>
@@ -69,7 +69,7 @@
 		                <button>메뉴5</button>
 		                <button>메뉴6</button>
 		            </span>
-		        </div>
+		        </div> --%>
 			</div>
 		</div>
 		

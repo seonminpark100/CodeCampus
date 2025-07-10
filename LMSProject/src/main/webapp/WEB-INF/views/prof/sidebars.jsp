@@ -53,7 +53,7 @@
 		    </c:when>
 		    <c:otherwise>
 		    <s:authorize access="isAuthenticated()"><s:authentication property="name"/>님 반갑습니다.</s:authorize>
-		    	<button class="btn btn-dark" type="button" onclick="location.href='' ">마이페이지</button>
+		    	<button class="btn btn-dark" type="button" onclick="location.href='/prof/mypage.do' ">마이페이지</button>
 		    	<button class="btn btn-dark" type="button" onclick="location.href='/myLogout.do' ">로그아웃</button>
 	            <!-- <a class="" href="#">마이페이지</a>
 	            <a class="" href="/myLogout.do">로그아웃</a> -->
@@ -84,12 +84,12 @@
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/prof/assignmentList.do?lectureCode=${lectureCode}">과제 등록</a>
-                                <a class="nav-link" href="#">과제 채점</a>
+                                <a class="nav-link" href="/prof/submittedAssignmentList.do?lectureCode=${lectureCode}">과제 채점</a>
                             </nav>
                         </div>
                         
                         <div class="sb-sidenav-menu-heading">Addons</div>
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/prof/absentboard.do?lectureCode=${lectureCode}">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             출석
                         </a>

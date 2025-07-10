@@ -48,6 +48,8 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'org.springframework.security:spring-security-taglibs'
+	
+	implementation 'commons-io:commons-io:2.16.1'
 }
 
 tasks.named('test') {

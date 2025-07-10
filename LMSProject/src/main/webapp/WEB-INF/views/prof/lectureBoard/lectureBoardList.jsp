@@ -13,12 +13,13 @@
 		<h2>강의 목록 </h2>
 
 		<!-- 검색 폼 -->
-		<form method="get">
+		<form method="get" action="/prof/lectureList.do">
+		 <input type="hidden" name="lectureCode" value="${ lectureCode }" />
 		<table class="table table-hover" border="1" width="90%">
 		<tr>
 			<td>
 				<select name="searchField">
-					<option value="lecture_name">강의명</option>
+					<option value="board_title">강의명</option>
 				</select>
 				<input type="text" name="searchKeyword" />
 				<input type="submit" value="검색하기" />
@@ -29,7 +30,7 @@
 		
 		<!-- 목록 테이블 -->
 	    <table class="table table-hover" border="1" width="90%">
-	        <tr>
+	        <tr align="ce">
 	            <th width="15%">번호</th>
 	            <th width="*">강의명</th>
 	        </tr>
@@ -52,7 +53,7 @@
 	            	${vNum}
 	            </td>
 	            <td align="left"> 
-	                <a href="./view.do?idx=${row.idx}&vNum=${vNum}">${ row.board_title }</a> 
+	                <a href="./lectureView.do?lectureCode=${row.lecture_code}&board_idx=${row.board_idx}">${ row.board_title }</a> 
 	            </td> 
 	        </tr>
 	        </c:forEach>        
@@ -67,7 +68,7 @@
 	                ${ pagingImg }
 	            </td>
 	            <td width="200px"><button type="button" class="btn btn-dark"
-	                onclick="location.href='lectureUpload.do';">강의 업로드</button>
+	                onclick="location.href='lectureUpload.do?lectureCode=${ lectureCode }';">강의 업로드</button>
 	            </td>
 	        </tr>
 	    </table>

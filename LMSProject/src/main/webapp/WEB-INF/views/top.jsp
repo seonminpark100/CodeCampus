@@ -44,15 +44,18 @@ function disableOtherButtons(clickedId) {
 		    </c:when>
 		    <c:otherwise>
 		        <ul class="navbar-nav">
-			        <li class="nav-item"><a class="nav-link" href="#">마이페이지</a></li>
+			        <li class="nav-item"><a class="nav-link" href="/mypage.do">마이페이지</a></li>
 		        </ul>
 		        <ul class="navbar-nav">
 		            <li class="nav-item"><a class="nav-link" href="/myLogout.do">로그아웃</a></li>
 		        </ul>
+		        <ul class="navbar-nav">
+			        <li class="nav-item"><a class="nav-link" href="/prof/index.do">내 강의실</a></li>
+		        </ul>
 		    </c:otherwise>
 	    </c:choose>
 	</div>
-	<a href="#">
+	<a href="/prof/index.do">
 	 	<img class="img-concert" src="images/logo.jpeg" />
 	</a>
 	<br/><br/>

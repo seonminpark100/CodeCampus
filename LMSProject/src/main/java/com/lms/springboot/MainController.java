@@ -12,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lms.springboot.jdbc.IProfService;
-import com.lms.springboot.jdbc.ProfDTO;
+import com.lms.springboot.prof.IProfService;
+import com.lms.springboot.prof.ProfDTO;
 
 @Controller
 public class MainController

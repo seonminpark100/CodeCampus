@@ -7,28 +7,61 @@
 		<title>대학교 eCampus</title>
 		<!-- css -->
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-		<!-- js -->
-		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-		<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-		 -->
-	</head>
-	<body>
-		<%@ include file = "../top.jsp" %>
-		<div class="container">
-		<h2>출석 관리</h2>
-		<input type="date" id="ATTENDANCE_TIME" name="ATTENDANCE_TIME" onchange="checkValue()">
-		<script>
+		 <script>
 		  function checkValue() {
-		    const inputValue = document.getElementById("ATTENDANCE_TIME").value;
+		    const inputValue = document.getElementById("attendance_time").value;
 		    console.log("입력 값:", inputValue);
 		    // 추가적인 로직 구현 가능
 		  }
+		  
+		  function validateForm(writeFrm){
+				const attendanceTime = document.getElementById("attendance_time").value;
+				if(attendanceTime === ''){
+					alert("날짜를 입력해주세요.");
+					document.getElementById("attendance_time").focus();
+					return false;
+				}
+				return true;
+			}
+		  function insertData(selectedValue, selectedId) {
+			    var xhr = new XMLHttpRequest();
+			    xhr.open("POST", "/prof/absentProc.do", true);
+			    xhr.setRequestHeader("Content-Type", "application/json");
+
+			    xhr.onreadystatechange = function() {
+			        if (xhr.readyState === 4 && xhr.status === 200) {
+			            alert("저장 성공!"); // 성공 메시지 표시
+			        }
+			    };
+
+			    xhr.send(JSON.stringify({ data: selectedValue }));
+			    xhr.send(JSON.stringify({ data_2: selectedId }));
+			}
+		  
+		  function insertId(selectedValue) {
+			    var xhr = new XMLHttpRequest();
+			    xhr.open("POST", "/prof/absentProc.do", true);
+			    xhr.setRequestHeader("Content-Type", "application/json");
+
+			    xhr.onreadystatechange = function() {
+			        if (xhr.readyState === 4 && xhr.status === 200) {
+			            alert("저장 성공!"); // 성공 메시지 표시
+			        }
+			    };
+
+			    xhr.send(JSON.stringify({ data_2: selectedValue }));
+			}
 		</script>
+	</head>
+	<body>
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		<h2>출석 관리</h2>
+		
 		
 		<!-- 검색 폼 -->
 		<form method="get">
-		<table border="1" width="90%">
+		<table class="table table-hover" border="1" width="90%">
 		<tr>
 			<td>
 				<select name="searchField">
@@ -42,8 +75,10 @@
 		</table>		
 		</form>
 		
+		<form name="writeFrm" method="post" enctype="multipart/form-data"
+			action="./absentProc.do?lectureCode=${ lectureCode }" onsubmit="return validateForm(this);">
 		<!-- 목록 테이블 -->
-	    <table border="1" width="90%">
+	    <table class="table table-hover" border="1" width="90%">
 	    	<tr>
 	            <th width="">사진</th>
 	            <th width="">학과</th>
@@ -57,7 +92,7 @@
 	        <c:choose>
 	    <c:when test="${ empty lists }"> 
 	        <tr>
-	            <td colspan="5" align="center">
+	            <td colspan="8" align="center">
 	                수강생이 없습니다.
 	            </td>
 	        </tr>
@@ -65,31 +100,46 @@
 	    <c:otherwise> 
 	        <c:forEach items="${ lists }" var="row" varStatus="loop">
 		        <tr align="center">
-		            <td><img width="40px" alt="사진" src="../images/logo.jpeg"></td> 
-		            <td>${ row.user_major }</td> 
-		            <td>${ row.user_id }</td> 
+		            <td>
+		            	<c:choose>
+		            		<c:when test="${ row.savefile eq null }">
+		            			<img width="40px" alt="사진" src="../images/person.png">
+		            		</c:when>
+		            		<c:otherwise>
+		            			<img width="40px" alt="사진" src="../images/${ row.savefile }">
+		            		</c:otherwise>
+		            	</c:choose>
+		            	<%-- <c:if test="${ row.savefile } == null">
+			            	<img width="40px" alt="사진" src="../images/logo.jpeg">
+		            	</c:if>
+			            	<img width="40px" alt="사진" src="../images/${ row.savefile }"> --%>
+		            </td> 
+		            <td>${ row.major_id }</td> 
+		            <td> <input name="user_id" value="${ row.user_id }" readonly="readonly"></td> 
 		            <td>${ row.user_name }</td> 
+		            
 		            <!-- 라디오의 name이 달라야 각각읜 학생의 출결 관리 가능 -->
-			        <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="출석">출석 </td>
-		            <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="결석">결석 </td>
-		            <td> <input type="radio" name="ABSENT_STATE_${ row.user_id }" value="지각">지각 </td>
+ 			        <td> <input type="radio" name="absent_state" value="출석" onclick="insertData('출석', '${ row.user_id }') ;">출석 </td>
+		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="결석" onclick="insertData('결석')">결석 </td>
+		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="지각" onclick="insertData('지각')">지각 </td>
 	       		</tr>
 	        </c:forEach>        
 	    </c:otherwise>    
 	</c:choose>
 	    </table>
-		
+		<!-- 날짜 -->
+		<input type="date" id="attendance_time" name="attendance_time" onchange="checkValue()">
+	    
 		<!-- 하단 메뉴(바로가기) -->
-	    <table border="1" width="90%">
+	    <table class="table table-hover" border="1" width="90%">
 	        <tr align="center">
-	            <td>
-	                ${ pagingImg }
-	            </td>
-	            <td width="100"><button type="button"
-	                onclick="location.href='./absentProc.do';">저장</button>
+
+	            <td width="100">
+	            	<button class="btn btn-dark" type="submit">작성 완료</button>
 	            </td>
 	        </tr>
 	    </table>
-		</div>
+	    </form>
+		</main>
 	</body>
 </html>

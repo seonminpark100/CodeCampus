@@ -1,5 +1,14 @@
 package com.lms.springboot.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.ui.Model;
+
+import com.lms.springboot.prof.ProfDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 public class PagingUtil
 {
 	public static String pagingImg(
@@ -67,4 +76,33 @@ public class PagingUtil
 		
 		return pagingStr;
 	}
+	
+	
+	public static void paging(HttpServletRequest req, ProfDTO profDTO, Model model, int totalCount, int pageSize, int blockPage, int pageNum) {
+		try
+		{
+			//현제 페이지에 출력할 게시물의 구간을 계산한다. 
+			int start = (pageNum-1) * pageSize + 1;
+			int end = pageNum * pageSize;
+			//계산의 결과는 DTO에 저장한다. 
+			profDTO.setStart(start);
+			profDTO.setEnd(end);
+			
+			//View에서 게시물의 가상번호 계산을 위한 값을 Map에 저장 
+			Map<String, Object> maps = new HashMap<String, Object>();
+			maps.put("totalCount", totalCount);
+			maps.put("pageSize", pageSize);
+			maps.put("pageNum", pageNum);
+			model.addAttribute("maps", maps);
+			
+		} catch (Exception e)
+		{
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
 }

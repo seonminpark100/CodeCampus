@@ -1,4 +1,4 @@
-package com.lms.springboot.jdbc;
+package com.lms.springboot.prof;
 
 import lombok.Data;
 
@@ -19,8 +19,8 @@ public class ProfDTO
 	private String board_title;
 	private String board_content;
 	private java.sql.Date board_postdate;
-	private byte ofile;
-	private byte sfile;
+	private Object ofile;
+	private String sfile;
 	private int downcount;
 	private int visitcount;
 	private String category;
@@ -37,8 +37,27 @@ public class ProfDTO
 	private java.sql.Date uploaded_date;
 	private java.sql.Date deadline;
 	
+//	Assignment_submit 테이블
+	private String assignment_submit_idx;
+	private String assignment_content_s;
+	private String assignment_comment;
+	private String assignment_ofile;
+	private String assignment_sfile;
+	private String score;
+	private java.sql.Date submitted_date;
+	
+//	Files 테이블
+	private String file_idx;
+	
 //	USER_INTO 테이블
 	private java.sql.Date joindate;
+	private String user_pw;
+	private java.sql.Date user_birthdate;
+	private String authority;
+	private String savefile;
+	private String originalfile;
+	private String major_id;
+	private String enable;
 	
 //	Lecture 테이블
 	private String lecture_id;
