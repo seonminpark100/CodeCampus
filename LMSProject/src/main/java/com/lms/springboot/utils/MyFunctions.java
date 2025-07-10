@@ -46,46 +46,5 @@ public class MyFunctions
 		
 		//변경된 파일명을 반환한다. 
 		return newFileName;
-	}
-//
-//	public static void file(HttpServletRequest req, Model model, ProfDTO profDTO) {
-//		try
-//		{
-//			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-//			System.out.println("물리적 경로: "+uploadDir);
-//			
-//			Map<String, String> saveFileMaps = new HashMap<>();
-//
-//			Collection<Part> parts = req.getParts();
-//			for(Part part: parts) {
-//				if(!part.getName().equals("ofile"))
-//					continue;
-//				String partHeader = part.getHeader("content-disposition");
-//				System.out.println("partHeader= " + partHeader);
-//				String[] phArr = partHeader.split("filename=");
-//				String originalFileName = phArr[1].trim().replace("\"", "");
-//				if(!originalFileName.isEmpty()) {
-//					part.write(uploadDir + File.separator + originalFileName);
-//				}
-//			//서버에 저장된 파일명을 UUID를 통해 생성된 이름으로 변경한다. 
-//			String savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
-//			model.addAttribute("originalFileName", originalFileName);
-//			model.addAttribute("savedFileName", savedFileName);			
-//			
-//			//DB입력 (JDBC연동)
-//			profDTO.setOfile(originalFileName);
-//			profDTO.setSfile(savedFileName);
-//			
-//			
-//			int result_files =  dao.insertLectureWithFile(profDTO); // files 테이블에 저장
-//
-//			}
-//			
-//		} catch (Exception e)
-//		{
-//			System.out.println("업로드 실패");
-//			e.printStackTrace();
-//		}
-//	}
-	
+	}	
 }

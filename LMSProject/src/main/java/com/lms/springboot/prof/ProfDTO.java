@@ -12,6 +12,8 @@ public class ProfDTO
 	private String content;
 	private java.sql.Date postdate;
 	
+	private String data;
+	
 //	Boards 테이블
 	private String board_idx;
 	private String user_id;

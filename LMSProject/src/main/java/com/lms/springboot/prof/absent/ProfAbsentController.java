@@ -51,44 +51,23 @@ public class ProfAbsentController
 	}
 	
 	@PostMapping("/prof/absentProc.do")
-	public ResponseEntity<String> insertData(@RequestBody MyData data, @RequestBody MyData_2 data_2, Model model, HttpServletRequest req) {
+	public ResponseEntity<String> insertData(@RequestBody ProfDTO profDTO, Model model, HttpServletRequest req) {
 		
-		model.addAttribute("user_id", req.getParameter("user_id"));
-		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
+		String absent_states = profDTO.getData();
 		
-		String lectureCode = req.getParameter("lectureCode");
-//		String user_id = req.getParameter("absent_state");
-		String absent_state = data.getData();
-		String user_id = data_2.getData_2();
+		System.out.println(absent_states);
+		String[] parts = absent_states.split("\\.");
 
-		System.out.println("lectureCode: " + lectureCode);
-		System.out.println("user_id: " + user_id);
-		System.out.println("absent_state: " + absent_state);
+		String absent_state = parts[0]; //출결상태
+		String user_id = parts[1]; // 사용자 아이디
+		String lectureCode = parts[2]; // 강의코드
+		
+		
+		int result_prof = dao.absentProcProf(user_id, absent_state, lectureCode);
 		
 		return new ResponseEntity<>("Data inserted successfully", HttpStatus.OK);
 
 	}
-	static class MyData {
-        private String data;
 
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
-        }
-    }
 	
-	static class MyData_2 {
-		private String data_2;
-		
-		public String getData_2() {
-			return data_2;
-		}
-		
-		public void setData_2(String data_2) {
-			this.data_2 = data_2;
-		}
-	}
 }

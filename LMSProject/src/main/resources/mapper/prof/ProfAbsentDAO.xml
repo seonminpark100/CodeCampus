@@ -59,5 +59,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
 		VALUES
 		(seq_serial_num.nextval, #{_lectureCode}, #{_user_id},#{_absent_state} ,sysdate ,sysdate)
+		
+		<!-- INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
+		  VALUES (seq_serial_num.nextval, #{_lectureCode}, #{_user_id},#{_absent_state} ,sysdate ,sysdate)
+		  	ON DUPLICATE KEY UPDATE
+			    absent_state = #{_absent_state} -->
 	</insert>	
 </mapper>

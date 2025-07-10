@@ -14,7 +14,7 @@
 		    // 추가적인 로직 구현 가능
 		  }
 		  
-		  function validateForm(writeFrm){
+		  /* function validateForm(writeFrm){
 				const attendanceTime = document.getElementById("attendance_time").value;
 				if(attendanceTime === ''){
 					alert("날짜를 입력해주세요.");
@@ -22,8 +22,8 @@
 					return false;
 				}
 				return true;
-			}
-		  function insertData(selectedValue, selectedId) {
+			} */
+		  function insertData(selectedValue) {
 			    var xhr = new XMLHttpRequest();
 			    xhr.open("POST", "/prof/absentProc.do", true);
 			    xhr.setRequestHeader("Content-Type", "application/json");
@@ -35,7 +35,6 @@
 			    };
 
 			    xhr.send(JSON.stringify({ data: selectedValue }));
-			    xhr.send(JSON.stringify({ data_2: selectedId }));
 			}
 		  
 		  function insertId(selectedValue) {
@@ -56,7 +55,7 @@
 	<body>
 		<%@ include file = "../sidebars.jsp" %>
 		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
-		<h2>출석 관리</h2>
+		<h2>출결 수동 관리</h2>
 		
 		
 		<!-- 검색 폼 -->
@@ -77,6 +76,8 @@
 		
 		<form name="writeFrm" method="post" enctype="multipart/form-data"
 			action="./absentProc.do?lectureCode=${ lectureCode }" onsubmit="return validateForm(this);">
+		
+		<input type="date" id="attendance_time" name="attendance_time" onchange="checkValue()">
 		<!-- 목록 테이블 -->
 	    <table class="table table-hover" border="1" width="90%">
 	    	<tr>
@@ -119,26 +120,26 @@
 		            <td>${ row.user_name }</td> 
 		            
 		            <!-- 라디오의 name이 달라야 각각읜 학생의 출결 관리 가능 -->
- 			        <td> <input type="radio" name="absent_state" value="출석" onclick="insertData('출석', '${ row.user_id }') ;">출석 </td>
-		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="결석" onclick="insertData('결석')">결석 </td>
-		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="지각" onclick="insertData('지각')">지각 </td>
+ 			        <td> <input type="radio" name="absent_state_${ row.user_id }" value="출석" onclick="insertData('출석.${ row.user_id }.${lectureCode }');">출석 </td>
+		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="결석" onclick="insertData('결석.${ row.user_id }.${lectureCode }');">결석 </td>
+		            <td> <input type="radio" name="absent_state_${ row.user_id }" value="지각" onclick="insertData('지각.${ row.user_id }.${lectureCode }');">지각 </td>
 	       		</tr>
 	        </c:forEach>        
 	    </c:otherwise>    
 	</c:choose>
 	    </table>
 		<!-- 날짜 -->
-		<input type="date" id="attendance_time" name="attendance_time" onchange="checkValue()">
+		
 	    
 		<!-- 하단 메뉴(바로가기) -->
-	    <table class="table table-hover" border="1" width="90%">
+	    <!-- <table class="table table-hover" border="1" width="90%">
 	        <tr align="center">
 
 	            <td width="100">
 	            	<button class="btn btn-dark" type="submit">작성 완료</button>
 	            </td>
 	        </tr>
-	    </table>
+	    </table> -->
 	    </form>
 		</main>
 	</body>
