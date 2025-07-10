@@ -34,14 +34,14 @@
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="row d-flex justify-content-center border border-3 border-primary rounded" style="height: 90%; text-align: center;">
-		    		<form method="get">
+		    		<form method="get" action="lmsBoard.do?pageNum=1">
 				    	<div class="row-4 input-group border border-3 border-primary rounded w-50" style="height: 50px;">
-							<select class="form-select" id="searchField" name="searchField" aria-label="Default select example">
+							<select class="form-select" id="searchField" name="searchField">
 								<option value="board_title" selected>제목</option>
 								<option value="user_name">작성자</option>
 							</select> 
 							<input type="text" class="form-control w-75" id="searchKeyword" name="searchKeyword">
-							<button class="btn btn-primary" type="submit" onclick="location.href='registLecture.do?pageNum=1'">검색</button>
+							<button class="btn btn-primary" type="submit">검색</button>
 						</div>	    	
 					</form>
 			    	<div class="row border border-3 border-primary rounded p-1" style="height: 80%">
@@ -60,7 +60,7 @@
 								<c:choose>
 									<c:when test="${ empty list }"> 
 								        <tr>
-								            <td colspan="5" align="center">
+								            <td colspan="6" align="center">
 								                등록된 게시물이 없습니다^^*
 								            </td>
 								        </tr>
@@ -70,7 +70,8 @@
 										<c:forEach items="${ list }" var="row">																			
 											<tr>
 												<td style="width: 10%">${ row.category }</td>
-												<td style="width: 60%;"><a href="javascript:sendBoard_idx('${ row.board_idx }')">${ row.board_title }</a></td>
+<%-- 												<td style="width: 60%;"><a href="javascript:sendBoard_idx('${ row.board_idx }')">${ row.board_title }</a></td> --%>
+												<td style="width: 60%;"><a href="lmsBoardView.do?board_idx=${ row.board_idx }">${ row.board_title }</a></td>
 												<td>${ row.user_name }</td>
 												<td>${ row.board_postdate }</td>
 												<td>${ row.visitCount }</td>

@@ -23,7 +23,6 @@ public interface IUserService
 	// 강의 관련
 	public ArrayList<UserDTO> selectLectureSessionList(String lecture_code);
 //	public int validateUser(UserDTO dto);
-	public UserDTO selectOneBoard(UserDTO dto);
 	
 	// 수강 신청
 	public int duplicationEnrollCheck(UserDTO dto);
@@ -35,19 +34,25 @@ public interface IUserService
 	public UserDTO selectOneAssignment(int assignment_idx);
 	public int insertAssignmentSubmit(UserDTO dto);
 	public UserDTO selectOneAssignmentSubmit(String user_id);
+	public int updateAssignmentSubmit(UserDTO dto);
 	public int submitCheck(UserDTO dto);
 	
 	
 	// Board 관련 (강의, 커뮤니티)
 	public ArrayList<UserDTO> selectAllBoardListPage(UserListParameterDTO param);
+	public UserDTO selectOneBoard(int dto);
 //	public UserDTO selectOneLMSBoard(int board_idx);
 	public int insertBoard(UserDTO dto);
 	public int updateBoard(UserDTO dto);
+	public int deleteBoard(int dto);
 	public int getTotalBoardCount(UserListParameterDTO param);
+	public int increaseVisitCount(int board_idx);
 	
 	// files
 	public int insertFiles(List<UserDTO> list);
 	public int insertFile(UserDTO dto);
 	public ArrayList<UserDTO> selectFiles(int board_idx);
 	public UserDTO selectOneFile(String sfile);
+	public int deleteFiles(int board_idx);
+	public int getTotalFilesCount(int board_idx);
 }

@@ -45,14 +45,14 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 740px">
 			    <h3>수강신청</h3>	    	
 		    	<div class="row d-flex justify-content-center border border-3 border-primary rounded" style="height: 90%; text-align: center;">
-		    		<form method="get">
+		    		<form method="get" action="registLecture.do?pageNum=1">
 				    	<div class="row-4 input-group border border-3 border-primary rounded w-50" style="height: 50px;">
-							<select class="form-select" id="searchField" name="searchField" aria-label="Default select example">
+							<select class="form-select" id="searchField" name="searchField">
 								<option value="lecture_name" selected>강의명</option>
 								<option value="user_name">교수</option>
 							</select> 
 							<input type="text" class="form-control w-75" id="searchKeyword" name="searchKeyword">
-							<button class="btn btn-primary" type="submit" onclick="location.href='registLecture.do?pageNum=1'">검색</button>
+							<button class="btn btn-primary" type="submit">검색</button>
 						</div>	    	
 					</form>
 			    	<div class="row border border-3 border-primary rounded p-1" style="overflow: auto; height: 80%">

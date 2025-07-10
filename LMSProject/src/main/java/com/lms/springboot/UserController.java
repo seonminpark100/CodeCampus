@@ -1,13 +1,11 @@
 package com.lms.springboot;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +18,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.Model;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.springboot.jdbc.IUserService;
@@ -55,8 +51,7 @@ public class UserController
 	int propBlockPage;
 	
 	@GetMapping("/index.do")
-	public String welcome(Principal principal, Model model, HttpSession session)
-	{
+	public String welcome(Principal principal, Model model, HttpSession session) {
 		String user_id = principal.getName();
 		session.setAttribute("user_id", user_id);
 		return "user/index";
@@ -80,25 +75,32 @@ public class UserController
 		return "user/lectureList";
 	}
 	
-	@PostMapping("/lectureView.do")
+	@RequestMapping("/lectureView.do")
 	public String lectureView(Model model, UserDTO dto) {
+		dao.increaseVisitCount(dto.getBoard_idx());
+		dto.setCategory("L");
+		dto = dao.selectOneBoard(dto.getBoard_idx());
+		ArrayList<UserDTO> files = dao.selectFiles(dto.getBoard_idx());
+		ArrayList<UserDTO> videoList = new ArrayList<>();
+		ArrayList<UserDTO> fileList = new ArrayList<>();
+		List<String> videoExt = Arrays.asList("mp4", "mov", "wmv", "avi", "mkv");
 		
-		dto = dao.selectOneBoard(dto);
+		for(UserDTO file : files) {
+			
+			if(videoExt.contains(file.getSfile().substring(file.getSfile().lastIndexOf(".") + 1).toLowerCase())) { // 파일이 비디오라면
+				videoList.add(file);
+			} else { // 파일이 비디오가 아니라면
+				fileList.add(file);
+			}
+		}
+		model.addAttribute("video", FileUtil.getVideoFile(videoList));
+		model.addAttribute("file", FileUtil.getFiles(fileList)); 
+		
 		model.addAttribute("dto", dto);
 		UserDTO lecture = dao.selectOneLecture(dto.getLecture_code());		
 		model.addAttribute("lecture_name", lecture.getLecture_name());
 		model.addAttribute("user_name", lecture.getUser_name());
 		return "user/lectureView";
-	}
-	
-	@GetMapping("/lectureBoardWrite.do")
-	public String lectureBoardWrite() {
-		return "user/lectureBoardWrite";
-	}
-	
-	@GetMapping("/lectureBoardEdit.do")
-	public String lectureBoardEdit() {
-		return "user/lectureBoardEdit";
 	}
 	
 	@GetMapping("/myPage.do")
@@ -117,22 +119,19 @@ public class UserController
 	}
 	
 	@PostMapping("/infoEdit.do")
-	public String infoEditAction(Model model, UserDTO dto, HttpServletRequest req)
-	{
-		try
-		{
+	public String infoEditAction(Model model, UserDTO dto, HttpServletRequest req) {
+		try {
 			String passwd =	PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(dto.getUser_pw());
 			passwd = passwd.substring(8);
 			dto.setUser_pw(passwd);
 			
-			dto = FileUtil.singleFileUpload(req, dto, "profileImg");
+			dto = FileUtil.singleFileUpload(req, dto, "profileImg", "User");
 			
 			int result = dao.updateUser(dto);
 			if(result == 1)	System.out.println("성공");
 			else System.out.println("실패");
 			
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -140,8 +139,7 @@ public class UserController
 	}
 	
 	@GetMapping("/registLecture.do")
-	public String registLecture(Model model, @ModelAttribute("message") String message, HttpServletRequest req, UserListParameterDTO param)
-	{
+	public String registLecture(Model model, @ModelAttribute("message") String message, HttpServletRequest req, UserListParameterDTO param) {
 		int totalCount = dao.getTotalLectureCount(param);
 		
 		int pageSize = this.propPageSize;
@@ -174,18 +172,13 @@ public class UserController
 	
 	@PostMapping("/registLecture.do")
 	public String registLectureAction(RedirectAttributes redirectAttributes, HttpServletResponse resp, UserDTO dto,
-			@AuthenticationPrincipal UserDetails ud) throws IOException
-	{
+			@AuthenticationPrincipal UserDetails ud) throws IOException {
 		dto.setUser_id(ud.getUsername());
-		if(dao.duplicationEnrollCheck(dto) == 0)	// 이미 수강중인 강의가 아닐때
-		{
-			try
-			{
-				transactionTemplate.execute(new TransactionCallbackWithoutResult()
-				{
+		if(dao.duplicationEnrollCheck(dto) == 0) {	// 이미 수강중인 강의가 아닐때
+			try {
+				transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 					@Override
-					protected void doInTransactionWithoutResult(TransactionStatus status)
-					{
+					protected void doInTransactionWithoutResult(TransactionStatus status) {
 						int result = dao.insertEnroll(dto);
 						if(result == 1) redirectAttributes.addFlashAttribute("message", "수강신청 성공!!");
 						else {
@@ -193,12 +186,10 @@ public class UserController
 						}
 					}
 				});
-			} catch (Exception e)
-			{
+			} catch (Exception e) {
 				redirectAttributes.addFlashAttribute("message", "수강신청 실패...");
 			}
-		} else
-		{
+		} else {
 			redirectAttributes.addFlashAttribute("message", "이미 수강중인 강의입니다.");
 		}
 		return "redirect:registLecture.do";
@@ -206,8 +197,7 @@ public class UserController
 	
 	@RequestMapping("/assignmentList.do")
 	public String assignmentList(Model model, HttpServletRequest req, UserListParameterDTO param, 
-			@AuthenticationPrincipal UserDetails ud)
-	{
+			@AuthenticationPrincipal UserDetails ud) {
 		param.setUser_id(ud.getUsername());
 		int pageSize = this.propPageSize;
 		int blockPage = this.propBlockPage;
@@ -237,48 +227,84 @@ public class UserController
 	}
 	
 	@RequestMapping("assignmentSubmitWrite.do")
-	public String assignmentWrite(Model model, UserDTO dto, @AuthenticationPrincipal UserDetails ud)
-	{
+	public String assignmentWrite(Model model, UserDTO dto, @AuthenticationPrincipal UserDetails ud) {
 		dto.setUser_id(ud.getUsername());
 		int result = dao.submitCheck(dto);
-		if(result == 0)
-		{
+		if(result == 0) {
 			dto = dao.selectOneAssignment(dto.getAssignment_idx());
+			model.addAttribute("dto", dto);
 			return "user/assignmentSubmitWrite";	
 		}
-		model.addAttribute("dto", dto);
-		return "assignmentSubmitView.do";
+		return "redirect:assignmentSubmitView.do";
 	}
 	
 	@PostMapping("assignmentWriteAction.do")
 	public String assignmentWriteAction(Model model, UserDTO dto, HttpServletRequest req,
-			@AuthenticationPrincipal UserDetails ud)
-	{
+			@AuthenticationPrincipal UserDetails ud) {
 		dto.setAssignment_idx(Integer.parseInt(req.getParameter("idx")));
 		dto.setUser_id(ud.getUsername());
-		int result = dao.insertAssignmentSubmit(dto);
-		
-		if(result == 1)	System.out.println("성공");
-		else System.out.println("실패");
+
+		try {
+			dto = FileUtil.singleFileUpload(req, dto, "assignmentFile", "Assignment");
+			int result = dao.insertAssignmentSubmit(dto);
+			
+			if (result == 1)
+				System.out.println("성공");
+			else
+				System.out.println("실패");
+		} catch (IOException | ServletException e){
+			e.printStackTrace();
+		}
+//		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+//			@Override
+//			protected void doInTransactionWithoutResult(TransactionStatus status) {
+//				
+//		});
 		
 		return "redirect:assignmentSubmitView.do";
 	}
 	
 	@RequestMapping("assignmentSubmitView.do")
-	public String assignmentSubmitView(Model model, UserDTO dto, @AuthenticationPrincipal UserDetails ud)
-	{
+	public String assignmentSubmitView(Model model, UserDTO dto, @AuthenticationPrincipal UserDetails ud) {
 		dto.setUser_id(ud.getUsername());
 		dto = dao.selectOneAssignmentSubmit(dto.getUser_id());
-		System.out.println(dto.getAssignment_content_s());
 		model.addAttribute("dto", dto);
+		model.addAttribute("file", FileUtil.getAssignFile(dto.getAssignment_ofile(), dto.getAssignment_sfile()));
 		
 		return "user/assignmentSubmitView";
 	}
 	
-	@GetMapping("lmsBoard.do")
-	public String lmsBoard(Model model, HttpServletRequest req, UserListParameterDTO param)
-	{		
+	@RequestMapping("assignmentSubmitEdit.do")
+	public String assignmentEdit(Model model, UserDTO dto, @AuthenticationPrincipal UserDetails ud) {
+		dto = dao.selectOneAssignmentSubmit(ud.getUsername());
+		
+		model.addAttribute("dto", dto);
+		return "user/assignmentSubmitEdit";
+	}
+	
+	@RequestMapping("assignmentSubmitEditAction.do")
+	public String assignmentSubmitEditAction(UserDTO dto, HttpServletRequest req, @AuthenticationPrincipal UserDetails ud) {
+		dto.setUser_id(ud.getUsername());
+		try {
+			FileUtil.deleteAssignmentFile(dto);
+			dto = FileUtil.singleFileUpload(req, dto, "assignmentFile", "Assignment");
+			dto.setUser_id(ud.getUsername());
+			System.out.println(dto);
+			int result = dao.updateAssignmentSubmit(dto);
+			if(result != 1) {
+				int error = 10 / 0;
+			}
+		} catch (IOException | ServletException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:assignmentSubmitView.do";
+	}
+	
+	@RequestMapping("lmsBoard.do")
+	public String lmsBoard(Model model, HttpServletRequest req, UserListParameterDTO param) {		
 		param.setCategory("C");
+		
 		int totalCount = dao.getTotalBoardCount(param);
 		
 		int pageSize = this.propPageSize;
@@ -298,7 +324,6 @@ public class UserController
 		maps.put("pageNum", pageNum);
 		model.addAttribute("maps", maps);
 		ArrayList<UserDTO> list = dao.selectAllBoardListPage(param);
-//		ArrayList<UserDTO> list = dao.selectAllLMSBoardList();
 		model.addAttribute("list", list);
 		
 		String pagingImg = PagingUtil.pagingImg(totalCount, pageSize, blockPage, pageNum, req.getContextPath() + "lmsBoard.do?");
@@ -308,14 +333,12 @@ public class UserController
 	}
 	
 	@RequestMapping("lmsBoardView.do")
-	public String lmsBoardView(Model model, UserDTO dto, HttpServletRequest req, @AuthenticationPrincipal UserDetails ud)
-	{
-		dto.setCategory("C");
+	public String lmsBoardView(Model model, UserDTO dto, HttpServletRequest req, @AuthenticationPrincipal UserDetails ud) {
 		dto.setBoard_idx(Integer.parseInt(req.getParameter("board_idx")));
 		
-		try
-		{
-			dto = dao.selectOneBoard(dto);
+		try {
+			dao.increaseVisitCount(dto.getBoard_idx());
+			dto = dao.selectOneBoard(dto.getBoard_idx());
 			model.addAttribute("dto", dto);
 			if(dto.getUser_id().equals(ud.getUsername())) 
 				model.addAttribute("isWriter", true);
@@ -325,8 +348,7 @@ public class UserController
 			if(!(files.equals(""))) {	//첨부파일이 있을때
 				model.addAttribute("files", files);
 			}
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println("LMSView 받아오기 실패");
 		}
 		
@@ -344,20 +366,26 @@ public class UserController
 		dto.setCategory("C");
 		dto.setUser_id(ud.getUsername());
 
-		transactionTemplate.execute(new TransactionCallbackWithoutResult()
-		{
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
 			@Override
-			protected void doInTransactionWithoutResult(TransactionStatus status)
-			{
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
 				int result = dao.insertBoard(dto);
-				if (result == 1)
-				{
+				int result2 = 0;
+				if (result == 1) {
 					dto.setBoard_idx(dto.getBoard_idx());
-					try
-					{
-						dao.insertFiles(FileUtil.boardFileUpload(req, dto, "files"));
-					} catch (IOException | ServletException e)
-					{
+					try {
+						ArrayList<UserDTO> files = FileUtil.boardFileUpload(req, dto, "files");
+						if(files.size() > 0)
+						{
+							result2 = dao.insertFiles(files);
+							if(result2 >= 1) {
+								System.out.println("파일 업로드 성공");
+							} else {
+								int error = 10 / 0;
+							}
+						}
+						
+					} catch (IOException | ServletException e) {
 						e.printStackTrace();
 					}
 					System.out.println("성공");
@@ -368,31 +396,104 @@ public class UserController
 			}
 		});
 				
-		return "redirect:lmsBoard.do";
+		return "redirect:lmsBoardView.do?board_idx=" + dto.getBoard_idx();
 	}
 	
-	@PostMapping("lmsBoardEdit.do")
-	public String lmsBoardEdit(Model model, HttpServletRequest req, UserDTO dto) {
-		dto.setBoard_idx(Integer.parseInt(req.getParameter("board_idx")));
-		dto.setCategory("C");
-		dto = dao.selectOneBoard(dto);
-		
-		model.addAttribute("dto", dto);
+	@RequestMapping("lmsBoardEdit.do")
+	public String lmsBoardEdit(Model model, HttpServletRequest req, int board_idx) {
+		try {
+			UserDTO dto = dao.selectOneBoard(board_idx);
+			model.addAttribute("dto", dto);
+		} catch (Exception e) {
+			System.out.println("LMSBoardEdit 받아오기 실패");
+		}
 		
 		return "user/lmsBoardEdit";
 	}
 	
 	@PostMapping("lmsBoardEditAction.do")
-	public String lmsBoardEditAction(Model model, UserDTO dto) {
+	public String lmsBoardEditAction(Model model, UserDTO dto, HttpServletRequest req) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				int result = dao.updateBoard(dto);
+				int result2 = 0;
+				int result3 = 0;
+				try
+				{
+					if(dao.getTotalFilesCount(dto.getBoard_idx()) > 0) {
+						ArrayList<UserDTO> ofiles = dao.selectFiles(dto.getBoard_idx());
+						result2 = dao.deleteFiles(dto.getBoard_idx());
+						if(result2 < 1) {
+							int error = 10 / 0;
+						}
+						if(FileUtil.deleteFiles(ofiles) < 1) {// 폴더에 있는 파일 삭제
+							int error = 10 / 0;
+						}
+					}
+					ArrayList<UserDTO> files = FileUtil.boardFileUpload(req, dto, "files");
+					if(files.size() > 0) {
+						result3 = dao.insertFiles(files);
+						if(result3 < 1) {
+							int error = 10 / 0;
+						}
+					}
+				} catch (IOException | ServletException e)
+				{
+					e.printStackTrace();
+				}
+				if (result == 1) {
+					System.out.println("성공");
+				}else {
+					int error = 10 / 0;
+				}		
+			}
+		});
 		
-		model.addAttribute("dto", dto);
 		return "redirect:lmsBoardView.do?board_idx=" + dto.getBoard_idx();
 	}
 	
+	@RequestMapping("deleteBoard.do")
+	public String deleteLMSBoard(int board_idx) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+			@Override
+			protected void doInTransactionWithoutResult(TransactionStatus status) {
+				int result = dao.deleteBoard(board_idx);
+				int result2 = 0;
+				if(dao.getTotalFilesCount(board_idx) > 0) // 첨부파일이 있을때
+				{
+					ArrayList<UserDTO> ofiles = dao.selectFiles(board_idx);
+					result2 = dao.deleteFiles(board_idx);
+					if(result2 < 1) {
+						int error = 10 / 0;
+					}
+					if(FileUtil.deleteFiles(ofiles) < 1) {// 폴더에 있는 파일 삭제
+						int error = 10 / 0;
+					}
+				}
+				if(result == 1) {
+					System.out.println("성공");
+				}else {
+					int error = 10 / 0;
+				}		
+			}
+		});
+		return "redirect:lmsBoard.do";
+	}
+	
 	@RequestMapping("download.do")
-	public void download(UserDTO dto, HttpServletRequest req, HttpServletResponse resp, String redirect) {
+	public void download(UserDTO dto, HttpServletRequest req, HttpServletResponse resp) {
 		String fileName = req.getParameter("fileName");
+		
 		dto = dao.selectOneFile(fileName);
 		FileUtil.downloadFile(dto.getSfile(), dto.getOfile(), resp);
+	}	
+	
+	@RequestMapping("assignDownload.do")
+	public void assignDownload(UserDTO dto, HttpServletRequest req, HttpServletResponse resp,
+			@AuthenticationPrincipal UserDetails ud) {
+		String fileName = req.getParameter("fileName");
+		dto = dao.selectOneAssignmentSubmit(ud.getUsername());
+		FileUtil.downloadFile(dto.getAssignment_sfile(), dto.getAssignment_ofile(), resp);
 	}
 }

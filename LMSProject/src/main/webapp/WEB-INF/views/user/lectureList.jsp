@@ -7,6 +7,7 @@
 		<meta charset="UTF-8">
 		<title>lecture</title>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<script>
@@ -45,7 +46,8 @@
 			    	<div class="row border border-3 border-primary rounded p-1" style="overflow: auto; height: 80%">
 <!-- 			    		실제 값을 받을땐 foreach문을 사용 -->
 						<c:forEach items="${ list }" var="row">	
-			    			<div class="border border-3 border-success rounded my-1 h-25"><button class="btn btn-primary" onclick="sendLectureCode('${ row.category }', ${ row.board_idx });">${ row.board_title }</button></div>
+<%-- 			    			<div class="border border-3 border-success rounded my-1 h-25"><button class="btn btn-primary" onclick="sendLectureCode('${ row.category }', ${ row.board_idx });">${ row.board_title }</button></div> --%>
+			    			<div class="border border-3 border-success rounded my-1 h-25"><button class="btn btn-primary" onclick="location.href='lectureView.do?board_idx=${ row.board_idx }'">${ row.board_title }</button></div>
 			    		</c:forEach>
 			    	</div>
 		    	</div>

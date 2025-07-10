@@ -6,13 +6,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%    
-	response.setHeader("Cache-Control","no-store");    
-	response.setHeader("Pragma","no-cache");    
-	response.setDateHeader("Expires",0);    
-	if (request.getProtocol().equals("HTTP/1.1"))  
-	        response.setHeader("Cache-Control", "no-cache");  
-%>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,8 +17,14 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<script>
-		
-		function sendBoard_idx(board_idx) {
+		function deleteConfirm(board_idx){
+			if(!confirm("삭제하시겠습니까?")){
+				return false;
+			}
+			window.location.href="deleteBoard.do?board_idx=" + board_idx;
+		}
+	
+		function sendBoard_idx(board_idx, action) {
 			let f = document.createElement('form');
 			  
 			let obj
@@ -34,8 +34,8 @@
 		    obj.setAttribute('value', board_idx);
 		    f.appendChild(obj);
 		    
-		    f.setAttribute('method', 'post');
-		    f.setAttribute('action', 'lmsBoardEdit.do');
+		    f.setAttribute('method', 'get');
+		    f.setAttribute('action', action);
 		    document.body.appendChild(f);
 		    f.submit();
 		}
@@ -49,11 +49,13 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="border border-3 border-primary rounded p-2" style="text-align: left;">
 		    		<div class="border border-3 border-primary rounded" style="height: 12%;">
-		    			<span class="m-2" style="font-size: 1.5em; font-weight: bold;">${ dto.board_title } | ${ dto.user_name }</span>
+		    			<span class="m-2" style="font-size: 1.5em; font-weight: bold;">${ dto.board_title } | ${ dto.user_name } | 조회수 : ${ dto.visitCount }</span>
 		    			<c:if test="${ isWriter eq true }">
 			    			<div class="border border-3 border-primary rounded" style="float: right;">
-			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx('${ dto.board_idx }')">수정</button>
-			    				<button class="btn btn-outline-primary mx-2">삭제</button>
+			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx(${ dto.board_idx }, 'lmsBoardEdit.do')">수정</button>
+<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="lmsBoardEdit.do?board_idx=${ dto.board_idx }">수정</button> --%>
+<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx('${ dto.board_idx }', 'deleteBoard.do')">삭제</button> --%>
+			    				<button class="btn btn-outline-primary mx-2" onclick="deleteConfirm(${ dto.board_idx });">삭제</button>
 		    				</div>
 	    				</c:if>
 		    			<div class="border border-3 border-primary rounded mx-2" style="float: right;">

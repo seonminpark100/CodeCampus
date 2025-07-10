@@ -19,6 +19,7 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
 		    		<form action="lmsBoardEditAction.do" method="post" enctype="multipart/form-data">
+		    			<input type="hidden" name="board_idx" id="board_idx" value="${ dto.board_idx }" />
 			    		<div class="border border-3 border-primary rounded" style="height: 12%;">
 			    			<input type="text" name="board_title" id="board_title" class="m-2"style="font-size: 1.5em; font-weight: bold;" value="${ dto.board_title }" required />
 			    		</div>

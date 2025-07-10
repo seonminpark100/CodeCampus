@@ -25,7 +25,7 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 			    <h3>${ dto.lecture_name } | ${ dto.user_name }</h3>	    
 			    	
-			    <form action="assignmentWriteAction.do" method="post">
+			    <form action="assignmentWriteAction.do" method="post" enctype="multipart/form-data">
 			    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
 			    		<input type="hidden" id="idx" name="idx" value="${ dto.assignment_idx }" />
 			    		<div class="border border-3 border-primary rounded" style="height: 10%;">
@@ -34,12 +34,11 @@
 			    		<div class="border border-3 border-primary rounded p-2" style="height: 75%; overflow: auto;">
 			    			${ dto.assignment_content }<br/>
 			    			<textarea rows="10" cols="200" id="assignment_content_s" name="assignment_content_s"></textarea>
-			    		</div>
 <!-- 			    		파일넣기 나중에 수정해-->
-						<input type="text" id="assignment_ofile" name="assignment_ofile" value=""/>
-						<input type="text" id="assignment_sfile" name="assignment_sfile" value=""/>
+			    			<input type="file" class="form-control" id="assignmentFile" name="assignmentFile" value="">
+			    		</div>
 			    		<div class="border border-3 border-primary rounded" style="text-align: center;">
-				    		<button type="submit" class="btn btn-primary" onclick="">제출</button>
+				    		<button type="submit" class="btn btn-primary">제출</button>
 				    		<button type="button" class="btn btn-primary" onclick="location.href='assignmentList.do'">취소</button>
 			    		</div>
 			    	</div>

@@ -132,24 +132,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM boards 
 		 WHERE category='L' AND lecture_code=#{ lecture_code }
 	</select>
-
-	<select id="selectOneBoard" parameterType="com.lms.springboot.jdbc.UserDTO"
-		resultType="com.lms.springboot.jdbc.UserDTO">
-		SELECT 
-			board_idx,
-			b.user_id,
-			user_name,
-			lecture_code,
-			category,
-			board_title,
-			board_content,
-			board_postdate,
-			visitCount,
-			board_like
-		FROM boards b, user_info u
-		 WHERE b.user_id = u.user_id
-		  AND category=#{ category } AND board_idx=#{ board_idx }
-	</select>
 	
 	<select id="duplicationEnrollCheck" parameterType="com.lms.springboot.jdbc.UserDTO"
 		resultType="int">
@@ -214,6 +196,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				assignment_content_s,
 				assignment_ofile,
 				assignment_sfile,
+				submitted_date,
 				user_id
 			)
 			VALUES
@@ -223,6 +206,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{ assignment_content_s },
 				#{ assignment_ofile },
 				#{ assignment_sfile },
+				sysdate,
 				#{ user_id }
 			)
 	</insert>
@@ -230,6 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectOneAssignmentSubmit" parameterType="com.lms.springboot.jdbc.UserDTO"
 		resultType="com.lms.springboot.jdbc.UserDTO">
 		SELECT 
+		 a.assignment_idx,
 		 lecture_name,
 		 user_name, 
 		 assignment_title,
@@ -245,6 +230,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND l.prof_id = u.user_id
 		 	AND s.user_id = #{ user_id }
 	</select>
+	
+	<update id="updateAssignmentSubmit" parameterType="com.lms.springboot.jdbc.UserDTO">
+		UPDATE assignment_submit
+		 SET
+		  assignment_content_s=#{ assignment_content_s },
+		  <choose>
+		  	<when test="assignment_ofile!=null and !assignment_ofile.equals('')">
+		  		assignment_ofile=#{ assignment_ofile },
+		  		assignment_sfile=#{ assignment_sfile },
+		  	</when>
+		  	<otherwise>
+		  		assignment_ofile=null,
+		  		assignment_sfile=null,
+		  	</otherwise>
+		  </choose>
+		  submitted_date=sysdate
+		WHERE assignment_idx=#{ assignment_idx } 
+			AND user_id=#{ user_id }
+	</update>
 	
 	<select id="submitCheck" parameterType="com.lms.springboot.jdbc.UserDTO"
 		resultType="int">
@@ -281,7 +285,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				WHERE b.user_id = u.user_id
 					AND category=#{ category }
                 <if test="searchKeyword!=null and !searchKeyword.equals('')">
-					AND #{searchField} LIKE '%'||#{searchKeyword}||'%'
+					AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
 				</if>
 				ORDER BY board_idx DESC
 			) Tb	
@@ -289,24 +293,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
 	
-<!-- 	<select id="selectOneLMSBoard" parameterType="int" -->
-<!-- 		resultType="com.lms.springboot.jdbc.UserDTO"> -->
-<!-- 		SELECT  -->
-<!-- 		 lecture_name, -->
-<!-- 		 user_name,  -->
-<!-- 		 assignment_title, -->
-<!-- 		 assignment_content, -->
-<!-- 		 assignment_content_s, -->
-<!-- 		 assignment_ofile, -->
-<!-- 		 assignment_sfile, -->
-<!-- 		 score -->
-<!-- 		FROM assignment a, assignment_submit s, lecture l, user_info u -->
-<!-- 		WHERE -->
-<!-- 			a.assignment_idx = s.assignment_idx -->
-<!-- 			AND a.lecture_code = l.lecture_code -->
-<!-- 			AND l.prof_id = u.user_id -->
-<!-- 		 	AND s.user_id = #{ user_id } -->
-<!-- 	</select> -->
+	<select id="selectOneBoard" parameterType="int"
+		resultType="com.lms.springboot.jdbc.UserDTO">
+		SELECT 
+			board_idx,
+			b.user_id,
+			user_name,
+			lecture_code,
+			category,
+			board_title,
+			board_content,
+			board_postdate,
+			visitCount,
+			board_like
+		FROM boards b, user_info u
+		 WHERE b.user_id = u.user_id
+		  AND board_idx=#{ board_idx }
+	</select>
 	
 	<insert id="insertBoard" parameterType="com.lms.springboot.jdbc.UserDTO">
 		INSERT INTO boards 
@@ -352,15 +355,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				SELECT seq_serial_num.currval FROM dual
 			</selectKey>
 	</insert>
+	
+	<update id="updateBoard" parameterType="com.lms.springboot.jdbc.UserDTO">
+		UPDATE boards
+		 SET
+		  board_title=#{ board_title },
+		  board_content=#{ board_content }
+		WHERE board_idx=#{ board_idx }
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM boards
+		 WHERE board_idx=#{ board_idx }
+	</delete>
 
 	<select id="getTotalBoardCount" resultType="int"
 		parameterType="com.lms.springboot.jdbc.UserListParameterDTO">
-			SELECT COUNT(*) FROM boards
-			WHERE category=#{ category }
+			SELECT COUNT(*) 
+			 FROM boards b, user_info u
+			 WHERE b.user_id = u.user_id
+			 	AND category=#{ category } 
 			<if test="searchKeyword != null and !searchKeyword.equals('')">
-				AND #{ searchField } LIKE '%'||#{searchKeyword}||'%'
+				AND ${ searchField } LIKE '%'||#{searchKeyword}||'%'
 			</if>
 	</select>
+	
+	<update id="increaseVisitCount" parameterType="int">
+		UPDATE boards
+		 SET
+		  visitCount=visitCount+1
+		WHERE board_idx=#{ board_idx }
+	</update>
 	
 	<insert id="insertFiles" parameterType="java.util.List">
 			INSERT INTO files (
@@ -406,5 +431,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="com.lms.springboot.jdbc.UserDTO">
 		SELECT * FROM files
 		 WHERE sfile=#{ sfile }	
+	</select>
+	
+	<delete id="deleteFiles" parameterType="int">
+		DELETE FROM files
+		 WHERE board_idx=#{ board_idx }
+	</delete>
+	
+	<select id="getTotalFilesCount" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*) FROM files
+		 WHERE board_idx=#{ board_idx }	
 	</select>
 </mapper>

@@ -18,21 +18,21 @@
 			
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 			    <h3>${ dto.lecture_name } | ${ dto.user_name }</h3>	    
-			    	
-			    <form action="assignmentViewAction.do" method="post">
-			    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
-			    		<div class="border border-3 border-primary rounded" style="height: 10%;">
-			    			${ dto.assignment_title }
-			    		</div>
-			    		<div class="border border-3 border-primary rounded p-2" style="height: 75%; overflow: auto;">
-			    			${ dto.assignment_content }<br/>
-			    			<textarea rows="10" cols="200" id="assignment_content_s" name="assignment_content_s" readonly>${ dto.assignment_content_s }</textarea>
-			    		</div>
-			    		<div class="border border-3 border-primary rounded" style="text-align: center;">
-				    		<button class="btn btn-primary" onclick="assignmentSubmitEdit.do">수정</button>
-			    		</div>
-			    	</div>
-		    	</form>
+		    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
+		    		<div class="border border-3 border-primary rounded" style="height: 10%;">
+		    			${ dto.assignment_title }
+		    		</div>
+		    		<div class="border border-3 border-primary rounded p-2" style="height: 75%; overflow: auto;">
+		    			${ dto.assignment_content }<br/>
+		    			<textarea rows="10" cols="200" id="assignment_content_s" name="assignment_content_s" readonly>${ dto.assignment_content_s }</textarea>
+		    		</div>
+		    		<div class="border border-3 border-primary rounded p-2" style="overflow: auto;">
+		    			${ file }
+		    		</div>
+		    		<div class="border border-3 border-primary rounded" style="text-align: center;">
+			    		<button class="btn btn-primary" onclick="location.href='assignmentSubmitEdit.do'">수정</button>
+		    		</div>
+		    	</div>
 		  	</div>
 		</div>
 		<footer>

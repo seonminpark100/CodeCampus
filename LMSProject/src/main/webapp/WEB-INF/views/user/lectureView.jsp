@@ -1,19 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!-- 만료된 페이지를 안나오게 하기 위해 캐시를 지운다? -->
-<%    
-response.setHeader("Cache-Control","no-store");    
-response.setHeader("Pragma","no-cache");    
-response.setDateHeader("Expires",0);    
-if (request.getProtocol().equals("HTTP/1.1"))  
-        response.setHeader("Cache-Control", "no-cache");  
-%>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
 		<title>lectureView</title>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<body>
@@ -28,7 +21,11 @@ if (request.getProtocol().equals("HTTP/1.1"))
 		    		<h3>${ dto.board_title } | ${ dto.board_postdate } | 조회수 : ${ dto.visitCount }</h3>
 <!-- 		    		<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button> -->
 					<div class="border border-3 border-primary rounded" style="height: 90%; position: relative;">
-						${ dto.board_content }
+						${ dto.board_content } <br/>
+						${ video }
+					</div>
+					<div class="border border-3 border-primary rounded">
+						${ file }
 					</div>
 		    	</div>
 		  	</div>
