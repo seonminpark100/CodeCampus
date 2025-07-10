@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> <%-- Spring Security 태그 라이브러리 --%>
+<%-- ⭐⭐ JSTL core 태그 라이브러리 추가 ⭐⭐ --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>공지사항 등록</title>
+		<title>Q&A 작성</title>
 		<style>
             body {
                 font-family: Arial, sans-serif;
@@ -16,7 +19,7 @@
                 min-height: 90vh;
             }
 
-            .container {
+            .container { /* 이 클래스는 현재 코드에서 사용되지 않지만, 유지합니다. */
                 background-color: #fff;
                 padding: 30px;
                 border-radius: 8px;
@@ -67,6 +70,11 @@
                 box-sizing: border-box;
                 font-size: 0.95em;
             }
+            /* userId readonly 필드에 대한 스타일 추가 */
+            input[name="userId"][readonly] {
+                background-color: #e9ecef; /* 연한 회색 배경 */
+                cursor: not-allowed; /* 마우스 커서 변경 */
+            }
 
             .button-group {
                 display: flex;
@@ -98,10 +106,11 @@
             button[type="reset"]:hover {
                 background-color: #5a6268;
             }
-            button[onclick*="noticelist.do"] {
+            /* 버튼 선택자에 qnaboardlist.do 로 변경 */
+            button[onclick*="qnaboardlist.do"] {
                 background-color: #17a2b8;
             }
-            button[onclick*="noticelist.do"]:hover {
+            button[onclick*="qnaboardlist.do"]:hover {
                 background-color: #138496;
             }
 
@@ -126,74 +135,75 @@
         </style>
 		<script>
         let validateForm = (frm) => {
-            if(frm.boardTitle.value == ''){
+            if(frm.boardTitle.value.trim() == ''){
                 alert('제목을 입력하세요.');
                 frm.boardTitle.focus();
                 return false;
             }
-            // userId는 이제 Hidden 필드이며, 컨트롤러에서 강제 설정하므로 여기서 검증할 필요 없음
-            // if(frm.userId.value == ''){
-            //     alert('작성자를 입력하세요.');
-            //     frm.userId.focus();
-            //     return false;
-            // }
-            if(frm.boardContent.value == ''){
+            // userId는 컨트롤러에서 설정하므로, 여기서 유효성 검사 필요 없음
+
+            if(frm.boardContent.value.trim() == ''){
                 alert('내용을 입력하세요.');
                 frm.boardContent.focus();
                 return false;
             }
-            // CATEGORY 필드 선택 검증 강화
-            if(frm.category && frm.category.value == ''){ // '선택'이 선택되었을 경우
-                alert('카테고리를 선택하세요.');
-                frm.category.focus();
-                return false;
-            }
+
             return true;
         }
         </script>
 	</head>
 	<body>
-		<h2>공지사항 등록</h2>
-        <form name="writeFrm" method="post"
-            action="/noticeboard/noticewrite.do" onsubmit="return validateForm(this);">
-        <table border="1" width="90%">
-            <tr>
-                <td>제목</td>
-                <td>
-                    <input type="text" name="boardTitle" style="width:90%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>작성자</td>
-                <td>
-                    <input type="hidden" name="userId" value="공지담당자" />
-                    공지담당자
-                </td>
-            </tr>
-            <tr>
-                <td>내용</td>
-                <td>
-                    <textarea name="boardContent" style="width:90%;height:100px;"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>카테고리</td>
-                <td>
-                    <select name="category" style="width:150px;">
-                        <option value="">선택</option> <option value="N">일반 공지</option>
-                        <option value="L">강의 공지</option> </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <button type="submit">등록</button>
-                    <button type="reset">초기화</button>
-                    <button type="button" onclick="location.href='/noticeboard/noticelist.do';">
-                        목록 바로가기
-                    </button>
-                </td>
-            </tr>
-        </table>
-        </form>
+        <%@ include file="../top.jsp" %>
+        <div class="container"> 
+            <h2>Q&A 작성</h2>
+
+            <form name="writeFrm" method="post"
+                action="/qnaboard/qnawrite.do" onsubmit="return validateForm(this);">
+            <table border="1" width="90%">
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <input type="text" name="boardTitle" placeholder="제목을 입력하세요." style="width:90%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>
+                        <sec:authentication property="principal.username" var="loggedInUserId" />
+                        <input type="text" name="userId" value="${loggedInUserId}" readonly="readonly" style="width:150px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>강의 코드 (선택 사항)</th>
+                    <td>
+                        <input type="text" name="lectureCode" placeholder="관련 강의 코드를 입력하세요." style="width:150px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <textarea name="boardContent" placeholder="내용을 입력하세요." style="width:90%;height:150px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>카테고리</th>
+                    <td>
+                        <input type="hidden" name="category" value="Q" />
+                        Q&A
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" class="button-group">
+                        <button type="submit">작성 완료</button>
+                        <button type="reset">초기화</button>
+                      
+                        <button type="button" onclick="location.href='/qnaboard/qnaboardlist.do';">
+                            목록으로 돌아가기
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div> 
 	</body>
 </html>

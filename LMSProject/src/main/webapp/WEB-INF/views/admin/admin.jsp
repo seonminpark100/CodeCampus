@@ -212,7 +212,9 @@
             <li>
                 <a href="<c:url value='/noticeboard/noticelist.do'/>" class="btn btn-blue">공지사항 등록/수정/삭제</a>
             </li>
-            <li><a href="#" class="btn btn-blue">게시판/댓글 건의사항 통계</a></li>
+          	<li>
+            	<a href="<c:url value='/qnaboard/qnaboardlist.do'/>" class="btn btn-blue">Q&A 게시판</a>
+            </li>
         </ul>
     </div>
     <div class="admin-content">

@@ -33,6 +33,9 @@ public class DashboardController {
         model.addAttribute("totalStudentCount", totalStudentCount);
         System.out.println("DEBUG: 총 학생 수 (authority 1): " + totalStudentCount);
 
+        List<Map<String, Object>> topVisitedBoards = statsService.getTopVisitedBoards(3); // 메서드 호출 변경
+        model.addAttribute("topVisitedBoards", topVisitedBoards); // 속성 이름 변경
+        System.out.println("DEBUG: 조회수가 많은 게시글 (총 " + (topVisitedBoards != null ? topVisitedBoards.size() : 0) + "개): " + topVisitedBoards);
 
         return "admin/dashboard"; 
     }

@@ -211,7 +211,9 @@
             <li>
                 <a href="<c:url value='/noticeboard/noticelist.do'/>" class="btn btn-blue">공지사항 등록/수정/삭제</a>
             </li>
-            <li><a href="#" class="btn btn-blue">게시판/댓글 건의사항 통계</a></li>
+            <li>
+            	<a href="<c:url value='/qnaboard/qnaboardlist.do'/>" class="btn btn-blue">Q&A 게시판</a>
+            </li>
         </ul>
     </div>
     <div class="admin-content">
@@ -244,7 +246,7 @@
                         <thead>
                             <tr>
                                 <th>강의명</th>
-                                <th>교수 ID</th>
+                                <th>교수명</th>
                                 <th>시작 날짜</th>
                                 <th>종료 날짜</th>
                             </tr>
@@ -261,32 +263,56 @@
                     </tbody>
                     </table>
                 </c:if>
-                <c:if test="${empty newLectures}">
+                                <c:if test="${empty newLectures}">
                     <p>신규 강의 데이터가 없습니다.</p>
                 </c:if>
+
+                 <h3>인기 게시글 (조회수 많은 순 3개)</h3> 
+                <c:if test="${not empty topVisitedBoards}"> 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>게시글 제목</th>
+                                <th>작성자 ID</th>
+                                <th>작성일</th>
+                                <th>조회수</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="board" items="${topVisitedBoards}"> 
+                            <tr>
+                                <td title="${board.boardContent}">
+                                    ${board.boardTitle}
+                                </td>
+                                <td>${board.userId}</td>
+                                <td>${board.boardPostDate}</td>
+                                <td><strong>${board.visitCount}</strong></td> 
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                    </table>
+                </c:if>
+                <c:if test="${empty topVisitedBoards}"> <%-- ★★★ 모델 속성 이름 변경 --%>
+                    <p>조회수가 많은 게시글 데이터가 없습니다.</p> <%-- ★★★ 메시지 변경 --%>
+                </c:if>
+                
             </div>
         </div>
     </div>
-    <script>
+ <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 서버에서 전달받은 학생 수
             const totalStudents = ${totalStudentCount};
-            // 교수와 관리자 수는 사용하지 않으므로 변수에서 제거
 
             const ctx = document.getElementById('userRoleChart').getContext('2d');
             const userRoleChart = new Chart(ctx, {
-                type: 'bar', // 막대 그래프
+                type: 'bar',
                 data: {
-                    labels: ['학생'], // ★★★ 라벨을 '학생'만 남김
+                    labels: ['학생'],
                     datasets: [{
-                        label: '학생 수', // ★★★ 라벨 변경
-                        data: [totalStudents], // ★★★ 데이터도 학생 수만 남김
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.6)' // 학생 색상
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)'
-                        ],
+                        label: '학생 수',
+                        data: [totalStudents],
+                        backgroundColor: ['rgba(75, 192, 192, 0.6)'],
+                        borderColor: ['rgba(75, 192, 192, 1)'],
                         borderWidth: 1
                     }]
                 },
@@ -294,26 +320,12 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false, // ★★★ 범례 (legend)는 학생 하나뿐이므로 숨김
-                        },
-                        title: {
-                            display: true,
-                            text: '총 학생 수' // ★★★ 그래프 제목 변경
-                        }
+                        legend: { display: false },
+                        title: { display: true, text: '총 학생 수' }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0 // Y축 정수 값만 표시
-                            }
-                        },
-                        x: { // x축도 단순화
-                            grid: {
-                                display: false
-                            }
-                        }
+                        y: { beginAtZero: true, ticks: { precision: 0 } },
+                        x: { grid: { display: false } }
                     }
                 }
             });

@@ -46,7 +46,20 @@ public class WebSecurityConfig
 				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
 				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
 				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
-				.anyRequest().authenticated() 	// 나머지 모든 요청은 인증 필요
+				
+				.requestMatchers("/qnaboard/qnaboardlist.do", "/qnaboard/qnaboardview.do").permitAll() 
+	            // Q&A 작성 폼 접근 (GET)은 인증만 되면 허용
+	            .requestMatchers(org.springframework.http.HttpMethod.GET, "/qnaboard/qnaboardwrite.do").authenticated() 
+	            // Q&A 작성 (POST), 수정 (POST), 삭제 (POST)
+	            .requestMatchers(org.springframework.http.HttpMethod.POST,
+	                             "/qnaboard/qnaboardwrite.do",
+	                             "/qnaboard/qnaboardedit.do",
+	                             "/qnaboard/qnadelete.do"
+	                            ).hasAnyRole("USER", "PROF", "ADMIN") 
+	           
+	            .requestMatchers("/qnaboard/qnaboardnswer.do").hasAnyRole("PROF", "ADMIN") // 답변은 교수, 관리자만 (GET/POST 모두 적용)
+
+				.anyRequest().authenticated() 
 			);
 
 		http.formLogin((formLogin) -> formLogin

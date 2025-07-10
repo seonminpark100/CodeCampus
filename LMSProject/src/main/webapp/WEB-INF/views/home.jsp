@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -150,6 +150,9 @@
                 <h2>Quick Menu</h2>
                 <button>개설과목</button>
                 <button>FAQ</button>
+                <a href="/qnaboard/qnaboardlist.do">
+                    <button>Q&A 게시판</button>
+                </a>
             </div>
             
             <div class="bl-item bluelight">

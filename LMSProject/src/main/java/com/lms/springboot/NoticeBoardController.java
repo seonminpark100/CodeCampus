@@ -2,6 +2,7 @@ package com.lms.springboot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import com.lms.springboot.jdbc.ParameterDTO2;
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession; // 추가되어야 할 경우 (로그인 처리 시)
+
 
 @Controller
 public class NoticeBoardController {
@@ -30,6 +31,7 @@ public class NoticeBoardController {
     // 공지사항 목록
     @GetMapping("/noticeboard/noticelist.do")
     public String noticeboardList(Model model, HttpServletRequest req, ParameterDTO2 parameterDTO) {
+        // 이 부분은 변경 없음
         int totalCount = dao.getTotalNoticeCount(parameterDTO);
         int pageSize = 10;
         int blockPage = 2;
@@ -58,30 +60,23 @@ public class NoticeBoardController {
 
     // 공지사항 작성 폼
     @GetMapping("/noticeboard/noticewrite.do")
-    public String boardWriteGet(Model model) {
-        // 이전에 세션에서 userId 가져오는 부분은 주석 처리했으므로, 다시 필요하다면 추가
-        // HttpSession session = (HttpSession) request.getSession();
-        // String loggedInUserId = (String) session.getAttribute("userId");
-        // if (loggedInUserId != null) {
-        //     model.addAttribute("loggedInUserId", loggedInUserId);
-        // } else {
-        //     return "redirect:/login.do";
-        // }
+    public String boardWriteGet(Model model) { // HttpServletRequest, HttpSession 관련 파라미터 제거
+        // ★★★ 로그인 관련 로직 모두 제거 (주석처리된 부분 포함) ★★★
+        // 이제 로그인 여부와 관계없이 작성 폼을 바로 보여줍니다.
+        // model.addAttribute("loggedInUserId", "guest"); // 필요하다면 고정된 작성자 ID를 전달
         return "noticeboard/noticewrite";
     }
 
+    // 공지사항 작성 처리
     @PostMapping("/noticeboard/noticewrite.do")
-    public String boardWritePost(NoticeBoardDTO noticeBoardDTO) {
-        // 이전에 세션에서 userId 가져오는 부분은 주석 처리했으므로, 다시 필요하다면 추가
-        // HttpSession session = (HttpSession) request.getSession();
-        // String loggedInUserId = (String) session.getAttribute("userId");
-        // if (loggedInUserId != null) {
-        //     noticeBoardDTO.setUserId(loggedInUserId);
-        // } else {
-        //     return "redirect:/login.do";
-        // }
+    public String boardWritePost(NoticeBoardDTO noticeBoardDTO) { // HttpServletRequest 파라미터 제거
+       
+        noticeBoardDTO.setUserId("공지담당자"); // ★★★ 예시: 'guest'로 고정 (DB에 해당 ID가 없어도 가능하도록)
+                                           // 실제 사용 시 '관리자', '공지담당' 등으로 지정 가능
+                                           // DB의 USER_ID 컬럼이 NOT NULL이면 이 부분 필수!
 
-        System.out.println("등록 요청 DTO: " + noticeBoardDTO);
+        //noticeBoardDTO.setCategory("N"); // 공지사항 카테고리를 'N'으로 고정
+        System.out.println("등록 요청 DTO: " + noticeBoardDTO); // DTO 값 확인 (userId, boardTitle, boardContent)
         int result = dao.insertNotice(noticeBoardDTO);
         System.out.println("등록 결과 (0=실패, 1=성공): " + result);
         return "redirect:/noticeboard/noticelist.do";
@@ -107,6 +102,7 @@ public class NoticeBoardController {
     // 공지사항 수정 처리
     @PostMapping("/noticeboard/noticeedit.do")
     public String boardEditPost(NoticeBoardDTO noticeBoardDTO) {
+        // 이 부분은 변경 없음
         int result = dao.updateNotice(noticeBoardDTO);
         return "redirect:/noticeboard/noticeview.do?boardIdx=" + noticeBoardDTO.getBoardIdx();
     }
@@ -114,23 +110,24 @@ public class NoticeBoardController {
     // 공지사항 삭제 처리
     @PostMapping("/noticeboard/noticedelete.do")
     public String boardDeletePost(@RequestParam("boardIdx") int boardIdx) {
+        // 이 부분은 변경 없음
         int result = dao.deleteNotice(boardIdx);
         return "redirect:/noticeboard/noticelist.do";
     }
 
+    // 메인 페이지 등에 표시할 최신 공지사항 API
     @GetMapping("/noticeboard/api/latestNotices")
-    @ResponseBody // 이 어노테이션이 정말 중요합니다! 없으면 HTML 뷰를 찾으려 합니다.
+    @ResponseBody
     public ArrayList<NoticeBoardDTO> getLatestNotices(ParameterDTO2 parameterDTO) {
-
+        // 이 부분은 변경 없음
         try {
             parameterDTO.setStart(1);
             parameterDTO.setEnd(5);
             ArrayList<NoticeBoardDTO> notices = dao.listNoticePage(parameterDTO);
-            return notices; // JSON으로 변환되어야 함
+            return notices;
         } catch (Exception e) {
-            // 데이터베이스 조회 중 오류가 발생하면 이 블록으로 들어옵니다.
             System.err.println("!!! 공지사항 로드 중 오류 발생 (DB/DAO): " + e.getMessage());
-            e.printStackTrace(); // 스택 트레이스 확인
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }

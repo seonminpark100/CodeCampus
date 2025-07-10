@@ -4,14 +4,15 @@
 <mapper namespace="com.lms.springboot.jdbc.INoticeService">
 
     <select id="getTotalNoticeCount" resultType="int" parameterType="com.lms.springboot.jdbc.ParameterDTO2">
-        SELECT COUNT(*) FROM BOARDS  <where>
-            <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
+        SELECT COUNT(*) FROM BOARDS
+        <where>
+            CATEGORY = 'N' <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
                 <choose>
                     <when test="searchField == 'BOARD_TITLE'">
-                        BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
+                        AND BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
                     </when>
                     <when test="searchField == 'USER_ID'">
-                        USER_ID LIKE '%' || #{searchKeyword} || '%'
+                        AND USER_ID LIKE '%' || #{searchKeyword} || '%'
                     </when>
                 </choose>
             </if>
@@ -23,14 +24,15 @@
             SELECT Tb.*, ROWNUM rNum FROM (
                 SELECT
                     BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
-                FROM BOARDS  <where>
-                    <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
+                FROM BOARDS
+                <where>
+                    CATEGORY = 'N' <if test="searchField != null and searchKeyword != null and searchKeyword != ''">
                         <choose>
                             <when test="searchField == 'BOARD_TITLE'">
-                                BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
+                                AND BOARD_TITLE LIKE '%' || #{searchKeyword} || '%'
                             </when>
                             <when test="searchField == 'USER_ID'">
-                                USER_ID LIKE '%' || #{searchKeyword} || '%'
+                                AND USER_ID LIKE '%' || #{searchKeyword} || '%'
                             </when>
                         </choose>
                     </if>
@@ -42,27 +44,38 @@
     </select>
 
     <insert id="insertNotice" parameterType="com.lms.springboot.jdbc.NoticeBoardDTO">
-    INSERT INTO BOARDS (  BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
-    	) VALUES (
-        BOARDS_SEQ.NEXTVAL, #{userId}, #{boardTitle}, #{boardContent}, SYSDATE, 0, #{category, jdbcType=VARCHAR} )
+	    <selectKey keyProperty="boardIdx" resultType="int" order="BEFORE">
+	        SELECT BOARDS_SEQ.NEXTVAL FROM DUAL
+	    </selectKey>
+	    INSERT INTO BOARDS (
+	        BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY, BGROUP, BSTEP, BINDENT, BOARD_LIKE
+	    ) VALUES (
+	        #{boardIdx},
+	        #{userId},
+	        #{boardTitle},
+	        #{boardContent},
+	        SYSDATE,
+	        0,
+	        #{category},
+	        0,  0,  0,  0   )
 	</insert>
 
     <select id="viewNotice" resultType="com.lms.springboot.jdbc.NoticeBoardDTO" parameterType="int">
         SELECT BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY
-        FROM BOARDS  WHERE BOARD_IDX = #{boardIdx}
-    </select>
+        FROM BOARDS
+        WHERE BOARD_IDX = #{boardIdx} AND CATEGORY = 'N' </select>
 
     <update id="updateVisitCount" parameterType="int">
-        UPDATE BOARDS SET VISITCOUNT = VISITCOUNT + 1 WHERE BOARD_IDX = #{boardIdx} </update>
+        UPDATE BOARDS SET VISITCOUNT = VISITCOUNT + 1 WHERE BOARD_IDX = #{boardIdx} AND CATEGORY = 'N' </update>
 
     <update id="updateNotice" parameterType="com.lms.springboot.jdbc.NoticeBoardDTO">
-        UPDATE BOARDS  SET
+        UPDATE BOARDS SET
             BOARD_TITLE = #{boardTitle},
             BOARD_CONTENT = #{boardContent},
-            USER_ID = #{userId} WHERE BOARD_IDX = #{boardIdx}
-    </update>
+            USER_ID = #{userId}
+        WHERE BOARD_IDX = #{boardIdx} AND CATEGORY = 'N' </update>
 
     <delete id="deleteNotice" parameterType="int">
-        DELETE FROM BOARDS WHERE BOARD_IDX = #{boardIdx} </delete>
+        DELETE FROM BOARDS WHERE BOARD_IDX = #{boardIdx} AND CATEGORY = 'N' </delete>
 
 </mapper>

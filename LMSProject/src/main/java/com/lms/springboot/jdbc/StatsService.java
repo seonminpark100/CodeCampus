@@ -5,6 +5,8 @@ package com.lms.springboot.jdbc; // 이 파일이 맞는지 확인
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,17 @@ import java.util.Map;
 public class StatsService {
 
     private final JdbcTemplate jdbcTemplate;
+    
+    private static final Map<String, String> PROF_ID_TO_NAME_MAP = new HashMap<>();
 
+    static {
+        PROF_ID_TO_NAME_MAP.put("PROF001", "카리나");
+        PROF_ID_TO_NAME_MAP.put("PROF002", "윈터");
+        PROF_ID_TO_NAME_MAP.put("PROF003", "배혜진");
+        PROF_ID_TO_NAME_MAP.put("PROF004", "박선민");
+        PROF_ID_TO_NAME_MAP.put("PROF005", "안현준");
+    }
+    
     @Autowired
     public StatsService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -33,8 +45,18 @@ public class StatsService {
                 "LECTURE_START_DATE AS lectureStartDate, " +
                 "LECTURE_END_DATE AS lectureEndDate " +
                 "FROM LECTURE ORDER BY LECTURE_START_DATE DESC) WHERE ROWNUM <= ?";
-        return jdbcTemplate.queryForList(sql, limit);
+        
+        List<Map<String, Object>> lectures = jdbcTemplate.queryForList(sql, limit);
+
+      
+        for (Map<String, Object> lecture : lectures) {
+            String profId = (String) lecture.get("profId");
+            String profName = PROF_ID_TO_NAME_MAP.getOrDefault(profId, "알 수 없음"); // 매핑된 이름이 없으면 "알 수 없음"
+            lecture.put("profName", profName); // 새로운 키 'profName'에 이름 추가
+        }
+        return lectures;
     }
+    
     
     public int getTotalStudentCount() {
         System.out.println("DEBUG: StatsService.getTotalStudentCount() 호출됨 (JDBC 방식)");
@@ -42,5 +64,21 @@ public class StatsService {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
         System.out.println("DEBUG: 총 학생 수 (authority 1): " + (count != null ? count : 0));
         return count != null ? count : 0;
+    }
+    public List<Map<String, Object>> getTopVisitedBoards(int limit) { // 메서드 이름 변경
+        System.out.println("DEBUG: StatsService.getTopVisitedBoards() 호출됨 (JDBC 방식)");
+        // VISITCOUNT를 기준으로 내림차순 정렬하여 상위 N개 게시글을 가져옴
+        String sql = "SELECT * FROM (SELECT " +
+                     "BOARD_TITLE AS boardTitle, " +
+                     "USER_ID AS userId, " +
+                     "BOARD_POSTDATE AS boardPostDate, " +
+                     "VISITCOUNT AS visitCount, " + 
+                     "BOARD_CONTENT AS boardContent " +
+                     "FROM BOARDS " +
+                     "ORDER BY VISITCOUNT DESC) " +
+                     "WHERE ROWNUM <= ?";
+        
+        List<Map<String, Object>> topBoards = jdbcTemplate.queryForList(sql, limit);
+        return topBoards;
     }
 }
