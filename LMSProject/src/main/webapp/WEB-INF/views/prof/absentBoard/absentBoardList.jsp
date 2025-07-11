@@ -9,9 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 		 <script>
 		  function checkValue() {
-		    const inputValue = document.getElementById("attendance_time").value;
+		    const inputValue = document.getElementById("lecture_date").value;
+		    insertDate(inputValue);
 		    console.log("입력 값:", inputValue);
-		    // 추가적인 로직 구현 가능
 		  }
 		  
 		  /* function validateForm(writeFrm){
@@ -24,6 +24,14 @@
 				return true;
 			} */
 		  function insertData(selectedValue) {
+
+				const attendanceTime = document.getElementById("lecture_date").value;
+				if(attendanceTime === ''){
+					alert("날짜를 입력해주세요.");
+					document.getElementById("lecture_date").focus();
+					return false;
+				}
+				
 			    var xhr = new XMLHttpRequest();
 			    xhr.open("POST", "/prof/absentProc.do", true);
 			    xhr.setRequestHeader("Content-Type", "application/json");
@@ -36,8 +44,8 @@
 
 			    xhr.send(JSON.stringify({ data: selectedValue }));
 			}
-		  
-		 /*  function insertId(selectedValue) {
+		  function insertDate(selectedValue) {
+
 			    var xhr = new XMLHttpRequest();
 			    xhr.open("POST", "/prof/absentProc.do", true);
 			    xhr.setRequestHeader("Content-Type", "application/json");
@@ -48,8 +56,9 @@
 			        }
 			    };
 
-			    xhr.send(JSON.stringify({ data_2: selectedValue }));
-			} */
+			    xhr.send(JSON.stringify({ date: selectedValue }));
+			}
+		  
 		</script>
 	</head>
 	<body>
@@ -77,9 +86,9 @@
 		<form name="writeFrm" method="post" enctype="multipart/form-data"
 			action="./absentProc.do?lectureCode=${ lectureCode }" onsubmit="return validateForm(this);">
 		
-		<input type="date" id="attendance_time" name="attendance_time" onchange="checkValue()">
+		<input type="date" id="lecture_date" name="lecture_date" onchange="checkValue()">
 		<!-- 목록 테이블 -->
-	    <table class="table table-hover" border="1" width="90%">
+	    <table class="table table-hover" border="1" style="width: 90%;">
 	    	<tr>
 	            <th width="">사진</th>
 	            <th width="">학과</th>

@@ -7,6 +7,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>대학교 eCampus</title>
+		
 		<script>
 		function deletePost(board_idx,lectureCode){
 			var confirmed = confirm("정말로 삭제하겠습니까?");
@@ -24,7 +25,6 @@
 		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
 	        <div class="pt-3">
 	           <h2>강의 자세히 보기 </h2>
-	            <c:forEach items="${ myFileLists }" var="row" varStatus="loop">${row.file_idx } <br/> </c:forEach>
 	           <form name="writeFrm">
 	           <input type="hidden" name="board_idx" value="${result.board_idx }" />
 	           <input type="hidden" name="lectureCode" value="${ result.lecture_code }" />
@@ -36,6 +36,7 @@
 				    <!-- 게시글 정보 -->
 				    <tr>
 				        <td>번호</td> <td>${ result.board_idx }</td>
+				        <td>업로드날짜</td> <td>${ result.board_postdate }</td>
 				    </tr>
 				    <tr>
 				        <td>제목</td>

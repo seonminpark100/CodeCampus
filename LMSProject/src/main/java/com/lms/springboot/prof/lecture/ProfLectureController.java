@@ -33,11 +33,10 @@ public class ProfLectureController
 
 //	강의 업로드 관리
 	@RequestMapping("/prof/lectureList.do")
-	public String lectureBoardList(@RequestParam("lectureCode") String lecture_code, Model model, HttpServletRequest req, ProfDTO profDTO) 
+	public String lectureBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) 
 	{
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		String currentPrincipalName = authentication.getName();
-		profDTO.setLecture_code(lecture_code);
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getLectureTotalCount(profDTO);
 		int pageSize = 5; 
@@ -51,33 +50,38 @@ public class ProfLectureController
 		//DB에서 인출한 게시물의 목록을 Model에 저장 
 		ArrayList<ProfDTO> lists = dao.lectureBoardListPage(profDTO);
 		model.addAttribute("lists", lists);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
-				req.getContextPath()+"/prof/lectureList.do?lectureCode="+lecture_code+"&");
+				req.getContextPath()+"/prof/lectureList.do?lectureCode="+lectureCode+"&");
 		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/lectureBoard/lectureBoardList";       
 	}
 //	강의 작성을 위한 기본값 가져오기
 	@RequestMapping("/prof/lectureUpload.do")
-	public String lectureUpload(@RequestParam("lectureCode") String lecture_code, Model model, ProfDTO profDTO) {
-		profDTO.setLecture_code(lecture_code);
+	public String lectureUpload(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
 		//DB에서 인출한 게시물의 목록을 Model에 저장 
 		profDTO = dao.lectureUploadPage(profDTO);
 		model.addAttribute("profDTO", profDTO);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		return "prof/lectureBoard/lectureUpload";
 	}
+	
 //	강의 업로드(파일 처리)
 	@RequestMapping("/prof/lectureUploadProc.do")
-	public String lectureUploadProc(@RequestParam("lectureCode") String lecture_code, HttpServletRequest req, Model model, ProfDTO profDTO) {
-		System.out.println("profDTO=" + profDTO);
+	public String lectureUploadProc(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
 		model.addAttribute("user_id", req.getParameter("user_id"));
-		model.addAttribute("lecture_code", req.getParameter("lecture_code"));
+		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
 		model.addAttribute("board_title", req.getParameter("board_title"));
 		model.addAttribute("board_content", req.getParameter("board_content"));
 		model.addAttribute("category", req.getParameter("category"));
@@ -119,39 +123,42 @@ public class ProfLectureController
 			e.printStackTrace();
 		}
 		
-		return "redirect:lectureList.do?lectureCode="+lecture_code;
+		return "redirect:lectureList.do?lectureCode="+lectureCode;
 	}
 //	강의 보기
 	@RequestMapping("/prof/lectureView.do")
-	public String lectureView(@RequestParam("lectureCode") String lecture_code, Model model, ProfDTO profDTO, HttpServletRequest req) {
-//		profDTO.setLecture_code(lecture_code);
-//		String board_idx = req.getParameter("board_idx");
-//		profDTO.setBoard_idx(board_idx);
+	public String lectureView(Model model, ProfDTO profDTO, HttpServletRequest req) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
 		// 강의 목록 내용
 		profDTO =  dao.lectureViewWithoutFile(profDTO);	
 		
 		// 파일 보기
 		ArrayList<ProfDTO> myFileLists = dao.lectureViewWithFile(profDTO);
-//		System.out.println(myFileLists);
-//		profDTO.setBoard_content(profDTO.getBoard_content().replace("\r\n", "<br/>"));
-//		System.out.println("board_idx: " + board_idx);
+		System.out.println(myFileLists);
+		profDTO.setBoard_content(profDTO.getBoard_content().replace("\r\n", "<br/>"));
+		
 		model.addAttribute("myFileLists", myFileLists);
 		model.addAttribute("result", profDTO);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/lectureBoard/lectureView";
 	}
 	
 //	강의 수정하기 - 내용가져오기
 	@RequestMapping("/prof/lectureEdit.do")
-	public String lectureEdit(@RequestParam("lectureCode") String lecture_code, Model model, ProfDTO profDTO) {
+	public String lectureEdit(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
 		// 강의 목록 내용
 		profDTO =  dao.lectureViewWithoutFile(profDTO);	
 		// 파일 보기
 		ArrayList<ProfDTO> myFileLists = dao.lectureViewWithFile(profDTO);
 		model.addAttribute("myFileLists", myFileLists);
 		model.addAttribute("profDTO", profDTO);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		return "prof/lectureBoard/lectureEdit";
 	}
 //	강의 수정하기 - action
@@ -160,7 +167,7 @@ public class ProfLectureController
 		System.out.println("profDTO=" + profDTO);
 		
 		model.addAttribute("user_id", req.getParameter("user_id"));
-		model.addAttribute("lecture_code", req.getParameter("lecture_code"));
+		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
 		model.addAttribute("board_title", req.getParameter("board_title"));
 		model.addAttribute("board_content", req.getParameter("board_content"));
 		model.addAttribute("category", req.getParameter("category"));

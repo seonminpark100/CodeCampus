@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProfController
@@ -20,15 +21,17 @@ public class ProfController
 	
 //	강의 메인 화면
 	@RequestMapping("/prof/submain.do")
-	public String profSubMain(@RequestParam("lectureCode") String lectureCode, Model model) {
-		model.addAttribute("lectureCode", lectureCode);
+	public String profSubMain(HttpServletRequest req, Model model) {
+		String lectureCode = req.getParameter("lectureCode");
+		model.addAttribute("lectureCode" , lectureCode);
 		return "prof/submain";
 	}
 	
 //	수강생 리스트
 	@RequestMapping("/prof/studentList.do")
-	public String studentList(@RequestParam("lectureCode") String lecture_code, HttpServletRequest req, Model model, ProfDTO profDTO) {
-		profDTO.setLecture_code(lecture_code);
+	public String studentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getStudentTotalCount(profDTO);
 		int pageSize = 10; 
@@ -42,19 +45,17 @@ public class ProfController
 		//DB에서 인출한 게시물의 목록을 Model에 저장 
 		ArrayList<ProfDTO> lists = dao.studentBoardListPage(profDTO);
 		model.addAttribute("lists", lists);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
-				req.getContextPath()+"/prof/studentList.do?lectureCode="+lecture_code+"&");
+				req.getContextPath()+"/prof/studentList.do?lectureCode="+lectureCode+"&");
 		model.addAttribute("pagingImg", pagingImg);
 		
 		return "prof/studentBoard/studentList";
 	}
 
-
-	
 	@RequestMapping("/prof/mypage.do")
 	public String mypage() {
 		return "prof/mypage";

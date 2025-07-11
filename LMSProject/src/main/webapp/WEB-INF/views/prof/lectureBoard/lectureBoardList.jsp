@@ -5,6 +5,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>대학교 eCampus</title>
+		
 	</head>
 	<body>
 	<%@ include file = "../sidebars.jsp" %>

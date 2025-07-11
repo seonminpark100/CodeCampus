@@ -13,6 +13,7 @@ public class ProfDTO
 	private java.sql.Date postdate;
 	
 	private String data;
+	private String date;
 	
 //	Boards 테이블
 	private String board_idx;

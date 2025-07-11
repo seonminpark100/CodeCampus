@@ -34,8 +34,9 @@ public class ProfAssignmentController
 	
 //	과제 목록 관리(교수)
 	@GetMapping("/prof/assignmentList.do")
-	public String assignmentList(@RequestParam("lectureCode") String lecture_code, HttpServletRequest req, Model model, ProfDTO profDTO) {
-		profDTO.setLecture_code(lecture_code);
+	public String assignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getAssignmentTotalCount(profDTO);
 		int pageSize = 3; 
@@ -54,14 +55,14 @@ public class ProfAssignmentController
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
-				req.getContextPath()+"/prof/assignmentList.do?lectureCode="+lecture_code+"&");
+				req.getContextPath()+"/prof/assignmentList.do?lectureCode="+lectureCode+"&");
 		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		return "prof/assignmentBoard/assignmentList";
 	}
 //	과제 업로드(교수) - 화면보기
 	@RequestMapping("/prof/assignmentUpload.do")
-	public String lectureUpload (@RequestParam("lectureCode") String lectureCode, Model model) {
+	public String lectureUpload (@RequestParam String lectureCode, Model model) {
 		model.addAttribute("lectureCode", lectureCode);
 		return "prof/assignmentBoard/assignmentUpload";
 	}
@@ -78,7 +79,10 @@ public class ProfAssignmentController
 	}
 //	과제 상세보기(교수)
 	@RequestMapping("/prof/assignmentView.do")
-	public String assignmentView(@RequestParam("lectureCode") String lectureCode, Model model, ProfDTO profDTO) {
+	public String assignmentView(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
 		profDTO = dao.assignmentView(profDTO);
 		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
 		model.addAttribute("profDTO", profDTO);
@@ -109,8 +113,9 @@ public class ProfAssignmentController
 	
 //	과제 목록 관리(학생이 올린 과제 보기)
 	@GetMapping("/prof/submittedAssignmentList.do")
-	public String submittedAssignmentList(@RequestParam("lectureCode") String lecture_code, HttpServletRequest req, Model model, ProfDTO profDTO) {
-		profDTO.setLecture_code(lecture_code);
+	public String submittedAssignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getSubmittedAssignmentTotalCount(profDTO);
 		int pageSize = 3; 
@@ -129,15 +134,17 @@ public class ProfAssignmentController
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
-				req.getContextPath()+"/prof/submittedAssignmentList.do?lectureCode="+lecture_code+"&");
+				req.getContextPath()+"/prof/submittedAssignmentList.do?lectureCode="+lectureCode+"&");
 		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		return "prof/assignmentBoard/submittedAssignmentList";
 	}
 	
 	@RequestMapping("/prof/submittedAssignmentView.do")
-	public String submittedAssignmentView(@RequestParam("lectureCode") String lectureCode, Model model, ProfDTO profDTO, HttpServletRequest req) {
+	public String submittedAssignmentView(Model model, ProfDTO profDTO, HttpServletRequest req) {
+		String lectureCode = req.getParameter("lectureCode");
 		profDTO.setLecture_code(lectureCode);
+		
 		profDTO = dao.submittedAssignmentView(profDTO);
 		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
 		String assignment_submit_idx = req.getParameter("assignment_submit_idx");

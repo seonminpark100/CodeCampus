@@ -23,10 +23,12 @@ public class ProfAbsentController
 {
 	@Autowired
 	IProfAbsentService dao;
+	
 //	출석
 	@RequestMapping("/prof/absentboard.do")
-	public String absentBoardList(@RequestParam("lectureCode") String lecture_code, Model model, HttpServletRequest req, ProfDTO profDTO) {
-		profDTO.setLecture_code(lecture_code);
+	public String absentBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getStudentTotalCount(profDTO);
 		int pageSize = 50; 
@@ -43,9 +45,9 @@ public class ProfAbsentController
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
-				req.getContextPath()+"/prof/absentboard.do?lectureCode="+lecture_code+"&");
+				req.getContextPath()+"/prof/absentboard.do?lectureCode="+lectureCode+"&");
 		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("lectureCode", lecture_code);
+		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/absentBoard/absentBoardList";
 	}
@@ -53,9 +55,11 @@ public class ProfAbsentController
 	@PostMapping("/prof/absentProc.do")
 	public ResponseEntity<String> insertData(@RequestBody ProfDTO profDTO, Model model, HttpServletRequest req) {
 		
+		String lecture_date = profDTO.getDate();
 		String absent_states = profDTO.getData();
 		
-		System.out.println(absent_states);
+		System.out.println("absent_states" + absent_states);
+		System.out.println("lecture_date" + lecture_date);
 		String[] parts = absent_states.split("\\.");
 
 		String absent_state = parts[0]; //출결상태
@@ -63,7 +67,7 @@ public class ProfAbsentController
 		String lectureCode = parts[2]; // 강의코드
 		
 		
-		int result_prof = dao.absentProcProf(user_id, absent_state, lectureCode);
+		int result_prof = dao.absentProcProf(user_id, absent_state, lecture_date, lectureCode);
 		
 		return new ResponseEntity<>("Data inserted successfully", HttpStatus.OK);
 
