@@ -43,9 +43,13 @@ public interface IUserService
 	public UserDTO selectOneBoard(int dto);
 //	public UserDTO selectOneLMSBoard(int board_idx);
 	public int insertBoard(UserDTO dto);
+	public int insertReply(UserDTO dto);
 	public int updateBoard(UserDTO dto);
 	public int deleteBoard(int dto);
 	public int getTotalBoardCount(UserListParameterDTO param);
+	public int getTotalReplyCount(int bGroup);
+	public int getTotalReplyStepCount(UserDTO dto);
+	public int updateBStep(UserDTO dto);
 	public int increaseVisitCount(int board_idx);
 	
 	// files

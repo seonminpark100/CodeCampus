@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lmsBoardWrite</title>
+		<title>replyWrite</title>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -18,12 +18,15 @@
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
-		    		<form action="lmsBoardWrite.do" method="post" enctype="multipart/form-data">
+		    		<form action="replyWriteAction.do" method="post" enctype="multipart/form-data">
+		    			<input type="hidden" id="bGroup" name="bGroup" value="${ dto.BGroup }" />
+		    			<input type="hidden" id="bStep" name="bStep" value="${ dto.BStep }" />
+		    			<input type="hidden" id="bIndent" name="bIndent" value="${ dto.BIndent }" />
 			    		<div class="border border-3 border-primary rounded" style="height: 12%;">
-			    			<input type="text" name="board_title" id="board_title" class="m-2" placeholder="제목을 입력해주세요" style="font-size: 1.5em; font-weight: bold;" required />
+			    			<input type="text" name="board_title" id="board_title" class="m-2" placeholder="제목을 입력해주세요" style="font-size: 1.5em; font-weight: bold;" value="${ dto.board_title }" required />
 			    		</div>
 			    		<div class="border border-3 border-primary rounded p-2" style="height: 78%; overflow: auto;">
-			    			<textarea name="board_content" id="board_content" cols="30" rows="10" placeholder="내용을 입력해주세요" required></textarea>
+			    			<textarea name="board_content" id="board_content" cols="30" rows="10" placeholder="내용을 입력해주세요" required>${ dto.board_content }</textarea>
 			    			<input type="file" class="form-control" id="files" name="files" value="" multiple>
 			    		</div>
 			    		<div class="border border-3 border-primary rounded" style="height: 10%; text-align: center;">

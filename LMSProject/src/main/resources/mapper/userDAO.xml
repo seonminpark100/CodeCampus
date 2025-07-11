@@ -269,7 +269,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			board_title,
 			board_postdate,
 			visitCount,
-			board_like
+			bGroup,
+			bStep,
+			bIndent
 		 FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT
@@ -280,14 +282,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				 board_title,
 				 board_postdate,
 				 visitCount,
-				 board_like
+				 bGroup,
+				 bStep,
+				 bIndent
 				FROM boards b, user_info u
 				WHERE b.user_id = u.user_id
 					AND category=#{ category }
                 <if test="searchKeyword!=null and !searchKeyword.equals('')">
 					AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
 				</if>
-				ORDER BY board_idx DESC
+				ORDER BY bGroup DESC, bStep ASC
 			) Tb	
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
@@ -305,7 +309,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			board_content,
 			board_postdate,
 			visitCount,
-			board_like
+			bGroup,
+			bStep,
+			bIndent
 		FROM boards b, user_info u
 		 WHERE b.user_id = u.user_id
 		  AND board_idx=#{ board_idx }
@@ -356,6 +362,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</selectKey>
 	</insert>
 	
+	<insert id="insertReply" parameterType="com.lms.springboot.jdbc.UserDTO">
+		INSERT INTO boards 
+			(
+				board_idx,
+				user_id,
+				lecture_code,
+				board_title,
+				board_content,
+				board_postdate,
+				downCount,
+				visitCount,
+				category,
+				bGroup,
+				bStep,
+				bIndent,
+				board_like		
+			)
+			VALUES
+			(
+				seq_serial_num.nextval,
+				#{ user_id },
+				<choose>
+					<when test='lecture_code != null'>
+						#{ lecture_code },					
+					</when>
+					<otherwise>
+						null,
+					</otherwise>
+				</choose>
+				#{ board_title },
+				#{ board_content },
+				sysdate,
+				0,
+				0,
+				#{ category },
+				#{ bGroup },
+				#{ bStep },
+				#{ bIndent },
+				0
+			)
+			<selectKey keyProperty="board_idx" resultType="int" order="AFTER">
+				SELECT seq_serial_num.currval FROM dual
+			</selectKey>
+	</insert>
+	
 	<update id="updateBoard" parameterType="com.lms.springboot.jdbc.UserDTO">
 		UPDATE boards
 		 SET
@@ -379,6 +430,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND ${ searchField } LIKE '%'||#{searchKeyword}||'%'
 			</if>
 	</select>
+	
+	<select id="getTotalReplyCount" resultType="int"
+		parameterType="int">
+			SELECT COUNT(*) 
+			 FROM boards
+			 WHERE bGroup=#{ bGroup }
+	</select>
+	
+	<select id="getTotalReplyStepCount" resultType="int"
+		parameterType="com.lms.springboot.jdbc.UserDTO">
+			SELECT COUNT(*) 
+			 FROM boards
+			 WHERE bGroup=#{ bGroup } AND bStep=#{ bStep }
+	</select>
+	
+	<update id="updateBStep" parameterType="com.lms.springboot.jdbc.UserDTO">
+		UPDATE boards
+		 SET
+		  bStep=bStep+1
+		 WHERE bGroup=#{ bGroup } AND bStep<![CDATA[>=]]>#{ bStep }
+	</update>
 	
 	<update id="increaseVisitCount" parameterType="int">
 		UPDATE boards

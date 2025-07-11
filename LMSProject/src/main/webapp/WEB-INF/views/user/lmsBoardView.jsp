@@ -49,6 +49,11 @@
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="border border-3 border-primary rounded p-2" style="text-align: left;">
 		    		<div class="border border-3 border-primary rounded" style="height: 12%;">
+<%-- 		    			<input type="hidden" id="bgroup" name="bgroup" value="${ dto.BGroup }" /> --%>
+<%-- 		    			<input type="hidden" id="bStep" name="bStep" value="${ dto.BStep }" /> --%>
+<%-- 		    			<input type="hidden" id="bIndent" name="bIndent" value="${ dto.BIndent }" /> --%>
+<%-- 		    			<input type="hidden" id="board_title" name="board_title" value="${ dto.board_title }" /> --%>
+<%-- 		    			<input type="hidden" id="board_content" name="board_content" value="${ dto.board_content }" /> --%>
 		    			<span class="m-2" style="font-size: 1.5em; font-weight: bold;">${ dto.board_title } | ${ dto.user_name } | 조회수 : ${ dto.visitCount }</span>
 		    			<c:if test="${ isWriter eq true }">
 			    			<div class="border border-3 border-primary rounded" style="float: right;">
@@ -58,9 +63,10 @@
 			    				<button class="btn btn-outline-primary mx-2" onclick="deleteConfirm(${ dto.board_idx });">삭제</button>
 		    				</div>
 	    				</c:if>
-		    			<div class="border border-3 border-primary rounded mx-2" style="float: right;">
-		    				<button class="btn btn-outline-primary mx-2">bb</button>
-		    				<button class="btn btn-outline-primary mx-2">qq</button>
+		    			<div class="border border-3 border-primary rounded mx-2" style="float: right;">		    				
+		    				<button class="btn btn-outline-primary mx-2" onclick="location.href='replyWrite.do?board_idx=${ dto.board_idx }'">답글쓰기</button>
+<!-- 		    				<button class="btn btn-outline-primary mx-2">qq</button> -->
+<!-- 		    				<button class="btn btn-outline-primary mx-2">bb</button> -->
 	    				</div>
 		    		</div>
 		    		<div class="border border-3 border-primary rounded p-2" style="height: 60%; overflow: auto;">

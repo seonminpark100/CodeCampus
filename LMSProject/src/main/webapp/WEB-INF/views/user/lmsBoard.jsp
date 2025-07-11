@@ -48,12 +48,10 @@
 						<table class="table table-striped table-bordered border-3 border-warning rounded p-1">
 							<thead>
 								<tr>
-									<th style="width: 10%">구분</th>
 									<th style="width: 60%;">제목</th>
 									<th>작성자</th>
 									<th>작성일</th>
 									<th>조회수</th>
-									<th>좋아요</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -69,13 +67,13 @@
 	<!-- 			    		실제 값을 받을땐 foreach문을 사용 -->
 										<c:forEach items="${ list }" var="row">																			
 											<tr>
-												<td style="width: 10%">${ row.category }</td>
 <%-- 												<td style="width: 60%;"><a href="javascript:sendBoard_idx('${ row.board_idx }')">${ row.board_title }</a></td> --%>
-												<td style="width: 60%;"><a href="lmsBoardView.do?board_idx=${ row.board_idx }">${ row.board_title }</a></td>
+												<td align="left" style="width: 60%; padding-left: ${ row.BIndent * 20 }px;">
+													<c:if test="${ row.BIndent > 0 }"><img src="images/paging3.gif" /></c:if>
+													<a href="lmsBoardView.do?board_idx=${ row.board_idx }">${ row.board_title }</a></td>
 												<td>${ row.user_name }</td>
 												<td>${ row.board_postdate }</td>
 												<td>${ row.visitCount }</td>
-												<td>${ row.board_like }</td>
 											</tr>
 										</c:forEach>
 									</c:otherwise>

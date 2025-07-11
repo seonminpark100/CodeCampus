@@ -56,7 +56,7 @@ public class FileUtil
 		if(!originalFileName.isEmpty()) {
 			part.write(uploadDir + File.separator + originalFileName);
 		}
-		System.out.println(originalFileName);
+//		System.out.println(originalFileName);
 		String savedFileName = FileUtil.renameFile(uploadDir, originalFileName);
 		
 //		System.out.println(originalFileName + " : " + savedFileName);
@@ -239,22 +239,14 @@ public class FileUtil
 	
 	public static String getVideoFile(ArrayList<UserDTO> list) {
 		String result = "";
-		String uploadDir;
-		try {
-			uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			System.out.println(uploadDir);
-			for(UserDTO dto : list) {
-//				System.out.println(uploadDir + dto.getSfile()); 
-				result += "<video width='400' controls>";
-				result += "<source src='" + uploadDir + "\\" + dto.getSfile() + "' type='video/" + dto.getSfile().substring(dto.getSfile().lastIndexOf(".") + 1) + "'>";
-				result += "이 브라우저는 동영상을 재생할 수 없습니다.";
-				result += "</video><br/>";
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println("파일 받기 실패");
-			e.printStackTrace();
+		for (UserDTO dto : list) {
+			result += "<video height='400' controls>";
+			result += "<source src='" + "../uploads/" + "" + dto.getSfile() + "' type='video/"
+					+ dto.getSfile().substring(dto.getSfile().lastIndexOf(".") + 1) + "'>";
+			result += "이 브라우저는 동영상을 재생할 수 없습니다.";
+			result += "</video><br/>";
 		}
-		
+			
 		return result;
 	}
 }

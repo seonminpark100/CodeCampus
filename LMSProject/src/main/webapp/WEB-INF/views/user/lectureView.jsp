@@ -20,7 +20,7 @@
 		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: left: ;">
 		    		<h3>${ dto.board_title } | ${ dto.board_postdate } | 조회수 : ${ dto.visitCount }</h3>
 <!-- 		    		<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button> -->
-					<div class="border border-3 border-primary rounded" style="height: 90%; position: relative;">
+					<div class="border border-3 border-primary rounded" style="height: 90%; position: relative; overflow: auto;">
 						${ dto.board_content } <br/>
 						${ video }
 					</div>
