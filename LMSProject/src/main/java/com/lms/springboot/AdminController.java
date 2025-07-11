@@ -3,7 +3,7 @@ package com.lms.springboot;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map; // 필요 없으면 제거
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier; // ★★★ 추가
@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.springboot.jdbc.AccountDTO;
-import com.lms.springboot.jdbc.IMemberService;
-import com.lms.springboot.jdbc.StatsService; // 필요 없으면 제거
+import com.lms.springboot.jdbc.IAccountService;
+
+
 
 @Controller
 @RequestMapping("/admin") 
@@ -29,7 +30,7 @@ public class AdminController {
 
     @Autowired
     @Qualifier("accountDAO") 
-    IMemberService dao;
+    IAccountService dao;
 
     public AdminController(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -45,16 +46,17 @@ public class AdminController {
     public String member2(Model model,
                           @RequestParam(value = "searchField", required = false) String searchField,
                           @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
-    	System.out.println("### DEBUG: AdminController - member2 (accountedit/list.do) 메서드 진입! ###");
+        System.out.println("### DEBUG: AdminController - member2 (accountedit/list.do) 메서드 진입! ###");
         List<AccountDTO> memberList;
 
-        if (searchKeyword != null && !searchKeyword.trim().isEmpty()
-                || (searchField != null && !searchField.trim().isEmpty())) {
+        // 검색 키워드가 유효할 때만 검색 로직을 수행
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
             AccountDTO searchDTO = new AccountDTO();
-            searchDTO.setSearchField(searchField);
-            searchDTO.setSearchKeyword(searchKeyword);
+            searchDTO.setSearchField(searchField); // searchField는 null일 수 있으므로 DAO에서 기본값 처리
+            searchDTO.setSearchKeyword(searchKeyword.trim()); // 공백 제거
             memberList = dao.searchMembers(searchDTO);
         } else {
+            // 검색 키워드가 없으면 전체 목록 조회
             memberList = dao.select();
         }
         model.addAttribute("memberList", memberList);
@@ -133,7 +135,6 @@ public class AdminController {
                                 RedirectAttributes redirectAttributes) {
     	 System.out.println("### DEBUG: AdminController - createAccount (POST) 메서드 진입! ###");
         try {
-            // 파일 업로드 관련 로직 제거
             accountDTO.setSavefile(null);
             accountDTO.setOriginalfile(null);
 

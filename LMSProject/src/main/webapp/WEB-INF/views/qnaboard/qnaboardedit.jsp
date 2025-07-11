@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- ⭐⭐ c:url 태그 라이브러리 URI 변경 (일반적으로 더 호환성 좋음) ⭐⭐ --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%-- ⭐⭐ fmt 태그 라이브러리 추가 (날짜 형식 지정용) ⭐⭐ --%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
@@ -137,7 +135,6 @@
         </script>
     </head>
     <body>
-        <%@ include file="../top.jsp" %>
         <div class="form-section"> 
             <h2>Q&A 수정(Mybatis)</h2>
             <form name="writeFrm" method="post"

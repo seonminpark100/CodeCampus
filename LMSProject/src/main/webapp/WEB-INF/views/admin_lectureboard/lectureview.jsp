@@ -127,7 +127,7 @@
 			if(confirmed){
 				var form = document.writeFrm;
 				form.method = "post";
-				form.action = "/lectureboard/lecturedelete.do";
+				form.action = "/admin_lectureboard/lecturedelete.do";
 				form.submit();
 			}
 		}
@@ -152,22 +152,22 @@
 				<td>강의 코드</td> <td>${ lectureBoardDTO.lectureCode }</td>
 			</tr>
             <tr>
-                <td>강의 시작일</td> <td>${ lectureBoardDTO.lectureStartDate }</td> <%-- 'L'을 소문자 'l'로 변경 --%>
-                <td>강의 종료일</td> <td>${ lectureBoardDTO.lectureEndDate }</td> <%-- 'L'을 소문자 'l'로 변경 --%>
+                <td>강의 시작일</td> <td>${ lectureBoardDTO.lectureStartDate }</td> 
+                <td>강의 종료일</td> <td>${ lectureBoardDTO.lectureEndDate }</td>
             </tr>
             <tr>
                 <td>전공ID</td>
-                <td colspan="3">${ lectureBoardDTO.majorId }</td> <%-- 'L'을 소문자 'l'로 변경 --%>
+                <td colspan="3">${ lectureBoardDTO.majorId }</td>
             </tr>
             <tr>
             <td colspan="4" align="center">
-		            <button type="button" onclick="location.href='/lectureboard/lectureedit.do?lectureIdx=${ lectureBoardDTO.lectureIdx }';">
+		            <button type="button" onclick="location.href='/admin_lectureboard/lectureedit.do?lectureIdx=${ lectureBoardDTO.lectureIdx }';">
 		                수정하기
 		            </button>
 		            <button type="button" onclick="deletePost('${ lectureBoardDTO.lectureIdx }');">
 		                삭제하기
 		            </button>
-		            <button type="button" onclick="location.href='/lectureboard/lecturelist.do';">
+		            <button type="button" onclick="location.href='/admin_lectureboard/lecturelist.do';">
 		                목록 바로가기
 		            </button>
 		        </td>

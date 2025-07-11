@@ -61,12 +61,7 @@
 			form.userId.focus();
 			return false;
 		}
-		// ★ userPw 필드 유효성 검사 추가 (생성 폼이므로 필수)
-		/* if (form.userPw.value.trim() == "") {
-			alert("비밀번호를 입력하세요.");
-			form.userPw.focus();
-			return false;
-		} */
+
 		if (form.userName.value.trim() == "") {
 			alert("이름을 입력하세요.");
 			form.userName.focus();
@@ -130,6 +125,7 @@
 <body>
 	<div class="form-section">
 		<h2>새 계정 생성</h2>
+        
 		<c:if test="${not empty message}">
 			<div class="message"><c:out value="${message}" /></div>
 		</c:if>
@@ -138,6 +134,12 @@
 				<label for="userId">계정 (ID):</label>
 				<input type="text" id="userId" name="userId" placeholder="사용할 아이디를 입력하세요." required>
 			</div>
+			<br>
+			<div class="initial-password-info">
+	            ※ 초기 비밀번호는 **생년월일 8자리** 입니다.<br>
+	            (예: 2000년 04월 11일생 → 20000411) <br>생년월일 지정 시 자동 패스워드가 생성 됩니다.
+	        </div>
+	        <br>
 			<div class="form-group">
 				<label for="userName">이름:</label>
 				<input type="text" id="userName" name="userName" placeholder="이름을 입력하세요." required>

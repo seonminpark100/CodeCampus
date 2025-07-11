@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 
 import jakarta.servlet.DispatcherType;
 
@@ -22,8 +24,7 @@ public class WebSecurityConfig
 	private MyAuthSuccessHandler myAuthSuccessHandler;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
-	{
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http.csrf((csrf)->csrf.disable()) 
 			.cors((cors)-> cors.disable()) 
 			.authorizeHttpRequests((request) -> request	// http 요청에 대한 인가 설정 처리
@@ -57,7 +58,7 @@ public class WebSecurityConfig
 	                             "/qnaboard/qnadelete.do"
 	                            ).hasAnyRole("USER", "PROF", "ADMIN") 
 	           
-	            .requestMatchers("/qnaboard/qnaboardnswer.do").hasAnyRole("PROF", "ADMIN") // 답변은 교수, 관리자만 (GET/POST 모두 적용)
+	            .requestMatchers("/qnaboard/qnanswer.do").hasAnyRole("PROF", "ADMIN") // 답변은 교수, 관리자만 (GET/POST 모두 적용)
 
 				.anyRequest().authenticated() 
 			);
@@ -97,8 +98,7 @@ public class WebSecurityConfig
 	private DataSource dataSource;
 	
 	@Autowired
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception
-	{
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 		auth.jdbcAuthentication()
 			.dataSource(dataSource)
 			.usersByUsernameQuery("SELECT user_id, user_pw, enable "
@@ -110,5 +110,6 @@ public class WebSecurityConfig
 	@Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-	 }
+	}
+	
 }

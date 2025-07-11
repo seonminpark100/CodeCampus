@@ -1,6 +1,7 @@
 package com.lms.springboot.jdbc;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +24,14 @@ public class QnaboardDTO {
 	    private int bstep;
 	    private int bindent;
 	    private int boardLike;
+	    
+	    private List<QnaboardDTO> answers;
+	    
+	    public List<QnaboardDTO> getAnswers() {
+	        return answers;
+	    }
+
+	    public void setAnswers(List<QnaboardDTO> answers) {
+	        this.answers = answers;
+	    }
 }

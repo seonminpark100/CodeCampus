@@ -131,12 +131,7 @@
                 frm.boardTitle.focus();
                 return false;
             }
-            // userId는 이제 Hidden 필드이며, 컨트롤러에서 강제 설정하므로 여기서 검증할 필요 없음
-            // if(frm.userId.value == ''){
-            //     alert('작성자를 입력하세요.');
-            //     frm.userId.focus();
-            //     return false;
-            // }
+
             if(frm.boardContent.value == ''){
                 alert('내용을 입력하세요.');
                 frm.boardContent.focus();

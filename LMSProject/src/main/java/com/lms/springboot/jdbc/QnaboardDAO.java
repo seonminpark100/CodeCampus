@@ -54,6 +54,9 @@ public interface QnaboardDAO {
 
     // Q&A 게시글을 삭제하는 메서드
     int deleteQna(int boardIdx);
+    
 
+    // 새롭게 추가할 메서드 선언
+    List<QnaboardDTO> listAnswersByBgroup(int bgroup);
    
 }

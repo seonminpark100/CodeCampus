@@ -3,6 +3,7 @@ package com.lms.springboot.jdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service 
 public class QnaboardServiceImpl implements QnaboardService {
@@ -74,10 +75,23 @@ public class QnaboardServiceImpl implements QnaboardService {
         return qnaboardDAO.insertAnswer(dto);
     }
 
-    @Override
+    @Override // <--- 여기를 수정합니다.
     public QnaboardDTO viewQna(int boardIdx) {
-        updateVisitCount(boardIdx); // 조회수 증가 서비스 메서드 호출 (선택적)
-        return qnaboardDAO.viewQna(boardIdx);
+        // 1. 기존 게시글 상세 조회
+        QnaboardDTO qnaBoardDTO = qnaboardDAO.viewQna(boardIdx);
+
+        if (qnaBoardDTO != null) {
+            // 2. 조회수 증가 로직 (기존 위치)
+            updateVisitCount(boardIdx);
+
+            // 3. 해당 게시글의 bgroup을 이용해 모든 관련 글 (원글 + 답글) 조회
+            // 이 메서드를 호출하려면 먼저 QnaboardDAO 인터페이스에 listAnswersByBgroup 메서드가 선언되어 있어야 합니다.
+            List<QnaboardDTO> relatedPosts = qnaboardDAO.listAnswersByBgroup(qnaBoardDTO.getBgroup());
+
+            // 4. 조회된 답글 목록을 qnaBoardDTO 객체에 설정 (QnaboardDTO에 setAnswers() 메서드가 있어야 합니다.)
+            qnaBoardDTO.setAnswers(relatedPosts);
+        }
+        return qnaBoardDTO;
     }
 
     @Override

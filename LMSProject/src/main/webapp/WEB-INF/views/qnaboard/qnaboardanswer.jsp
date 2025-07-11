@@ -18,7 +18,6 @@
     </style>
 </head>
 <body>
-    <%@ include file="../top.jsp" %>
     <div class="container">
         <h2>Q&A 답변 작성</h2>
 

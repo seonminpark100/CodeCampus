@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -161,10 +162,8 @@
                 background-color: #218838;
             }
 
-            .back-to-admin-button {
-                position: absolute;
-                top: 20px;
-                left: 20px;
+         
+            .fixed-nav-button { /* 공통 스타일 */
                 background-color: #007bff;
                 color: white;
                 padding: 10px 15px;
@@ -173,11 +172,28 @@
                 text-decoration: none;
                 font-size: 1em;
                 transition: background-color 0.3s ease;
-                z-index: 1000;
+                position: fixed; /* 뷰포트 기준으로 고정 */
+                z-index: 1000; /* 다른 요소 위에 표시 */
             }
 
-            .back-to-admin-button:hover {
+            .fixed-nav-button:hover {
                 background-color: #0056b3;
+            }
+
+            /* 개별 버튼의 위치 지정 */
+            .button-admin {
+                top: 20px;
+                left: 20px;
+            }
+
+            .button-professor {
+                top: 70px; /* 첫 번째 버튼보다 아래에 위치 */
+                left: 20px;
+            }
+
+            .button-home {
+                top: 120px; /* 두 번째 버튼보다 아래에 위치 */
+                left: 20px;
             }
 
             .reply-indent-img {
@@ -187,10 +203,15 @@
         </style>
 	</head>
 	<body>
-        <%@ include file="../top.jsp" %>
-        <div class="container"> 
+        <%-- 컨테이너 바깥에 버튼 그룹을 배치 --%>
+        <div class="fixed-buttons-group">
+            <a href="<c:url value='/admin'/>" class="fixed-nav-button button-admin">관리자 페이지로</a>
+            <a href="<c:url value='/prof'/>" class="fixed-nav-button button-professor">교수 페이지로</a>
+            <a href="<c:url value='/'/>" class="fixed-nav-button button-home">홈으로</a>
+        </div>
+
+        <div class="container">
             <h2>Q&A 목록(MyBatis)</h2>
-            <a href="<c:url value='/admin'/>" class="back-to-admin-button">관리자 페이지로</a>
 
             <form method="get" action="/qnaboard/qnaboardlist.do" class="search-form-group">
                 <select name="searchField">
@@ -224,7 +245,7 @@
                     <c:forEach items="${ lists }" var="row" varStatus="loop">
                     <tr align="center">
                         <td>
-                           
+
                             <c:set var="vNum" value="${ maps.totalCount - (((maps.pageNum-1) * maps.pageSize) + loop.index)}" />
                             ${vNum}
                         </td>
@@ -254,6 +275,6 @@
                     </button>
                 </div>
             </div>
-        </div> 
+        </div>
 	</body>
 </html>

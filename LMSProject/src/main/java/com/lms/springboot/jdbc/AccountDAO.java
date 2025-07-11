@@ -6,8 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -16,9 +19,12 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class AccountDAO implements IMemberService {
+@Repository("accountDAO")
+public class AccountDAO implements IAccountService {
 
+	@Autowired
+    private SqlSession sqlSession;
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -180,7 +186,7 @@ public class AccountDAO implements IMemberService {
             "USER_ADDR AS userAddr, USER_BIRTHDATE AS userBirthdate, " +
             "JOINDATE AS joindate, AUTHORITY AS authority, " +
             "SAVEFILE AS savefile, ORIGINALFILE AS originalfile, " +
-            "MAJOR AS majorId, ENABLE AS enable " + 
+            "MAJOR_ID AS majorId, ENABLE AS enable " + 
             "FROM USER_INFO");
         List<Object> params = new ArrayList<>();
 
@@ -214,5 +220,16 @@ public class AccountDAO implements IMemberService {
     public int updateEnableStatus(String userId, int enable) {
         String sql = "UPDATE USER_INFO SET ENABLE=? WHERE USER_ID=?";
         return jdbcTemplate.update(sql, enable, userId);
+    }
+    @Override
+    public int updateProfileImage(String userId, String saveFileName, String originalFileName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("savefile", saveFileName); // DB 컬럼명 또는 DTO 필드명과 일치
+        params.put("originalfile", originalFileName); // DB 컬럼명 또는 DTO 필드명과 일치
+
+        // MyBatis Mapper XML의 id와 일치해야 합니다.
+        // 예: <update id="updateProfileImage" ...>
+        return sqlSession.update("com.lms.springboot.jdbc.IMemberMapper.updateProfileImage", params);
     }
 }

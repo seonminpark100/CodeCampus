@@ -38,13 +38,10 @@ public class MyAuthSuccessHandler implements AuthenticationSuccessHandler
             return; // 리다이렉트 후 메서드 종료
         }
 
-        // 2. SavedRequest가 없다면 (예: 직접 로그인 페이지에 접근했거나, 접근하려던 페이지가 permitAll()이었을 경우)
-        //    기존 로직대로 사용자 역할에 따른 기본 페이지로 리다이렉트
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         
-        // 주의: 사용자가 여러 권한을 가질 경우, 이 로직은 첫 번째 권한만 사용하여 처리합니다.
-        // 만약 더 복잡한 권한 기반 리다이렉트가 필요하면 로직을 개선해야 합니다.
+
         String role = iterator.next().getAuthority(); 
 
         if (role.equals("ROLE_ADMIN")) {
@@ -52,9 +49,9 @@ public class MyAuthSuccessHandler implements AuthenticationSuccessHandler
         } else if (role.equals("ROLE_PROF")) {
             response.sendRedirect("/prof/index.do");
         } else if (role.equals("ROLE_USER")){
-            response.sendRedirect("/user/index.do");
+            response.sendRedirect("/");
         } else {
-            // 예상치 못한 역할이거나, 기본적으로 갈 곳이 없다면 홈으로 리다이렉트
+            
             response.sendRedirect("/");
         }
     }

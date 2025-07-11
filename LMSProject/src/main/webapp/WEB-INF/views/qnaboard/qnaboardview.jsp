@@ -114,6 +114,26 @@
             .back-to-admin-button:hover {
                 background-color: #0056b3;
             }
+            .answers-section {
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid #eee;
+            }
+            .answer-item {
+                background-color: #fdfdfd;
+                border: 1px solid #e0e0e0;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 6px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+            .answer-item p {
+                margin-bottom: 5px;
+            }
+            .answer-item small {
+                color: #777;
+                font-size: 0.85em;
+            }
         </style>
         <script>
         function deletePost(boardIdx){
@@ -121,14 +141,13 @@
             if(confirmed){
                 var form = document.writeFrm;
                 form.method = "post";
-                form.action = "/qnaboard/qnadelete.do"; 
+                form.action = "/qnaboard/qnadelete.do";
                 form.submit();
             }
         }
         </script>
     </head>
     <body>
-        <%@ include file="../top.jsp" %>
         <div class="container">
             <h2>Q&A 상세 보기</h2>
             <form name="writeFrm" method="post">
@@ -156,27 +175,66 @@
                     <td colspan="3" style="white-space: pre-wrap;">${ qnaBoardDTO.boardContent }</td>
                 </tr>
                 <tr>
-                    <td colspan="4" align="center" class="button-group">
-                        <sec:authorize access="hasAnyRole('ADMIN', 'PROFESSOR') or authentication.principal.username == qnaBoardDTO.userId">
-                            <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?boardIdx=${ qnaBoardDTO.boardIdx }"/>';">
-                                수정하기
-                            </button>
-                            <button type="button" class="delete-button" onclick="deletePost('${ qnaBoardDTO.boardIdx }');">
-                                삭제하기
-                            </button>
-                        </sec:authorize>
+                     <td colspan="4" align="center" class="button-group">
+                        <c:set var="qnaBoard" value="${qnaBoardDTO}" />
+                        <c:if test="${qnaBoard != null}">
+                            <sec:authorize access="hasAnyRole('ADMIN', 'PROFESSOR')">
+                                <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?boardIdx=${ qnaBoard.boardIdx }"/>';">
+                                    수정하기
+                                </button>
+                                <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.boardIdx }');">
+                                    삭제하기
+                                </button>
+                                <button type="button" onclick="location.href='<c:url value="/qnaboard/qnanswer.do?boardIdx=${ qnaBoard.boardIdx }&bgroup=${qnaBoard.bgroup}&bstep=${qnaBoard.bstep}&bindent=${qnaBoard.bindent}"/>';">
+                                    답변하기
+                                </button>
+                            </sec:authorize>
+                            <sec:authorize access="isAuthenticated()">
+                                <c:if test="${authentication.name eq qnaBoard.userId}">
+                                    <sec:authorize access="!hasAnyRole('ADMIN', 'PROFESSOR')">
+                                        <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?boardIdx=${ qnaBoard.boardIdx }"/>';">
+                                            수정하기
+                                        </button>
+                                        <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.boardIdx }');">
+                                            삭제하기
+                                        </button>
+                                    </sec:authorize>
+                                </c:if>
+                            </sec:authorize>
+                        </c:if>
 
-                        <sec:authorize access="hasAnyRole('ADMIN', 'PROFESSOR')">
-                            <button type="button" onclick="location.href='<c:url value="/qnaboard/qnanswer.do?boardIdx=${ qnaBoardDTO.boardIdx }&bgroup=${qnaBoardDTO.bgroup}&bstep=${qnaBoardDTO.bstep}&bindent=${qnaBoardDTO.bindent}"/>';">
-                                답변하기
-                            </button>
-                        </sec:authorize>
                         <button type="button" class="list-button" onclick="location.href='<c:url value="/qnaboard/qnaboardlist.do"/>';">
                             목록으로 돌아가기
                         </button>
                     </td>
                 </tr>
             </table>
+            <h3>답변 목록</h3>
+            <div class="answers-section">
+                <c:choose>
+                    <c:when test="${not empty qnaBoard.answers}"> 
+                        <c:forEach var="answer" items="${qnaBoard.answers}">
+                            <c:if test="${answer.boardIdx ne qnaBoard.boardIdx}"> 
+                                <div class="answer-item" style="margin-left: ${answer.bindent * 20}px;"> 
+                                    <p>
+                                        <strong>
+                                            <c:if test="${answer.bindent > 0}">
+                                                RE:
+                                            </c:if>
+                                            ${answer.boardTitle}
+                                        </strong>
+                                        <small>(작성자: ${answer.userId}, 작성일: ${answer.boardPostdate})</small>
+                                    </p>
+                                    <p style="white-space: pre-wrap;">${answer.boardContent}</p>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p>등록된 답변이 없습니다.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
     </body>
 </html>

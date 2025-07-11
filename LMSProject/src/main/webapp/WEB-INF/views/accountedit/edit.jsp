@@ -7,6 +7,7 @@
         <meta charset="UTF-8">
         <title>회원수정</title>
         <style>
+            /* 기존 스타일 유지 (위에서 제안된 스타일 적용) */
             body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
             h2 { color: #333; text-align: center; margin-bottom: 30px; }
             form { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 600px; margin: 20px auto; box-sizing: border-box; }
@@ -15,7 +16,7 @@
             th, td { padding: 12px 15px; text-align: left; }
             th { background-color: #f2f2f2; color: #555; font-weight: bold; width: 30%; }
             input[type="text"], input[type="date"], input[type="password"], select {
-                width: calc(100% - 22px); /* 패딩 고려 */
+                width: calc(100% - 22px);
                 padding: 10px;
                 margin-top: 5px;
                 margin-bottom: 10px;
@@ -25,7 +26,7 @@
             }
             input[type="radio"] { margin-right: 5px; }
             label { margin-right: 15px; }
-            input[type="submit"] {
+            .submit-btn {
                 background-color: #007bff;
                 color: white;
                 padding: 12px 20px;
@@ -37,7 +38,7 @@
                 width: 100%;
                 transition: background-color 0.3s ease;
             }
-            input[type="submit"]:hover { background-color: #0056b3; }
+            .submit-btn:hover { background-color: #0056b3; }
             small { color: #777; font-size: 0.85em; }
 
             /* 추가된 스타일 */
@@ -45,77 +46,147 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 10px; /* 이미지와 입력 필드 사이 간격 */
+                gap: 10px;
                 margin-bottom: 15px;
             }
             .profile-img {
-                width: 100px; /* 프로필 이미지 크기 */
+                width: 100px;
                 height: 100px;
-                border-radius: 50%; /* 원형 이미지 */
-                object-fit: cover; /* 이미지가 잘리지 않고 채워지도록 */
+                border-radius: 50%;
+                object-fit: cover;
                 border: 1px solid #ddd;
             }
-            input[type="file"] {
-                width: calc(100% - 22px);
+            .file-input-wrapper {
+                 width: 100%;
+                 box-sizing: border-box;
+                 display: flex;
+                 align-items: center;
+                 gap: 10px;
+            }
+            #ofile {
+                flex-grow: 1;
                 padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
-                box-sizing: border-box;
                 background-color: #f8f8f8;
                 cursor: pointer;
             }
-            input[type="file"]::-webkit-file-upload-button {
-                background-color: #007bff;
+            #uploadProfileBtn {
+                background-color: #28a745;
                 color: white;
                 padding: 8px 15px;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
-                margin-right: 10px;
                 transition: background-color 0.3s ease;
             }
-            input[type="file"]::-webkit-file-upload-button:hover {
-                background-color: #0056b3;
+            #uploadProfileBtn:hover {
+                background-color: #218838;
+            }
+            .alert-message { /* 메시지 표시를 위한 스타일 */
+                color: green;
+                font-weight: bold;
+                margin-top: 10px;
+                text-align: center;
+            }
+            .error-message {
+                color: red;
+                font-weight: bold;
+                margin-top: 10px;
+                text-align: center;
             }
         </style>
         <script>
             function validateEditForm(form) {
-                // 기존 유효성 검사 (필요하다면 여기에 추가)
+                // 회원 정보 수정 폼에 대한 유효성 검사
                 if (form.userName.value.trim() === "") {
                     alert("이름을 입력하세요.");
                     form.userName.focus();
                     return false;
                 }
-                // ... 다른 필드에 대한 유효성 검사 ...
-
-                // 프로필 파일 유효성 검사 (선택 사항이므로 파일이 선택된 경우에만 검사)
-                const fileInput = form.ofile; // input name이 'ofile'로 가정
-                if (fileInput && fileInput.value !== "") { // 파일이 선택된 경우에만 검사
-                    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-                    const file = fileInput.files[0];
-
-                    if (file.size > MAX_FILE_SIZE) {
-                        alert("파일 크기가 너무 큽니다. 5MB 이하의 파일을 선택해주세요.");
-                        return false;
-                    }
-                    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-                    if (!allowedExtensions.exec(file.name)) {
-                        alert('허용되지 않는 이미지 확장자입니다. (허용: jpg, jpeg, png, gif)');
-                        fileInput.value = ''; // 선택된 파일 초기화
-                        return false;
-                    }
-                }
                 return true;
             }
+
+            // 프로필 파일 업로드 처리 함수 (비동기)
+            function uploadProfileImage() {
+                const fileInput = document.getElementById('ofile');
+                if (fileInput.files.length === 0) {
+                    alert("업로드할 프로필 이미지를 선택해주세요.");
+                    return;
+                }
+
+                const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+                const file = fileInput.files[0];
+
+                if (file.size > MAX_FILE_SIZE) {
+                    alert("파일 크기가 너무 큽니다. 5MB 이하의 파일을 선택해주세요.");
+                    return;
+                }
+                const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                if (!allowedExtensions.exec(file.name)) {
+                    alert('허용되지 않는 이미지 확장자입니다. (허용: jpg, jpeg, png, gif)');
+                    fileInput.value = ''; // 선택된 파일 초기화
+                    return;
+                }
+
+                const userId = document.getElementById('userIdHidden').value; 
+                const formData = new FormData();
+                formData.append('userId', userId);
+                formData.append('ofile', file);
+
+                fetch('/file/uploadProfileProcess.do', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+
+                    if (response.redirected) {
+                        window.location.href = response.url; 
+                    } else {
+                 
+                        alert('프로필 이미지 업로드 처리 중 예상치 못한 오류가 발생했습니다.');
+                        console.error('Unexpected response:', response);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                    alert('프로필 이미지 업로드 중 네트워크 오류가 발생했습니다.');
+                });
+            }
+
+            // 페이지 로드 시 URL 파라미터에서 메시지 가져와 표시
+            window.onload = function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const message = urlParams.get('message');
+                if (message) {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.textContent = decodeURIComponent(message);
+                    messageDiv.classList.add('alert-message'); // 성공 메시지 스타일
+                    if (message.includes("실패")) { // 실패 메시지라면
+                         messageDiv.classList.remove('alert-message');
+                         messageDiv.classList.add('error-message'); // 에러 메시지 스타일
+                    }
+                    document.body.prepend(messageDiv); // body의 맨 앞에 추가
+                    // 메시지 표시 후 URL에서 메시지 파라미터 제거 (선택 사항)
+                    setTimeout(() => {
+                        const newUrl = window.location.href.split('?')[0];
+                        window.history.replaceState({}, document.title, newUrl);
+                        messageDiv.remove(); // 메시지 사라지게 함
+                    }, 5000); // 5초 후 메시지 사라짐
+                }
+            };
         </script>
     </head>
     <body>
         <h2>회원수정</h2>
-        <form action="/admin/accountedit/edit.do" method="post"  onsubmit="return validateEditForm(this);">
+        <%-- 회원 정보 수정 폼 --%>
+        <form action="/admin/accountedit/edit.do" method="post" onsubmit="return validateEditForm(this);">
+            <input type="hidden" name="userId" value="${dto.userId }" /> <%-- userId를 숨겨진 필드로 전달 --%>
+            <input type="hidden" id="userIdHidden" value="${dto.userId }" /> <%-- JS에서 사용하기 위한 별도의 hidden 필드 --%>
             <table border="1">
                 <tr>
                     <th>아이디 (수정불가)</th>
-                    <td><input type="text" name="userId" value="${dto.userId }" readonly /></td>
+                    <td><input type="text" value="${dto.userId }" readonly /></td>
                 </tr>
                 <tr>
                     <th>패스워드</th>
@@ -136,13 +207,13 @@
                     <th>성별</th>
                     <td>
                         <input type="radio" id="genderM" name="userGender" value="남성"
-                               <c:if test="${dto.userGender eq '남성'}">checked</c:if>>
+                                <c:if test="${dto.userGender eq '남성'}">checked</c:if>>
                         <label for="genderM">남성</label>
-                        
+
                         <input type="radio" id="genderF" name="userGender" value="여성"
-                               <c:if test="${dto.userGender eq '여성'}">checked</c:if>>
+                                <c:if test="${dto.userGender eq '여성'}">checked</c:if>>
                         <label for="genderF">여성</label>
-                        
+
                     </td>
                 </tr>
                 <tr>
@@ -151,7 +222,7 @@
                 </tr>
                 <tr>
                     <th>연락처</th>
-                    <td><input type="text" name="userPhonenum" value="${dto.userPhonenum}" required /></td> 
+                    <td><input type="text" name="userPhonenum" value="${dto.userPhonenum}" required /></td>
                 </tr>
                 <tr>
                     <th>주소</th>
@@ -180,25 +251,33 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <th>프로필 이미지</th>
-                    <td>
-                        <div class="profile-img-container">
-                            <c:if test="${not empty dto.savefile}">
-                                <img src="C:/Devdata1111/CodeCampus/Uploadfile/${dto.savefile}" alt="현재 프로필 이미지" class="profile-img">
-                                <small>현재 프로필 이미지 (${dto.originalfile})</small>
-                            </c:if>
-                            <c:if test="${empty dto.savefile}">
-                                <img src="/images/default_profile.png" alt="기본 프로필 이미지" class="profile-img"> <%-- 기본 이미지 경로 --%>
-                                <small>등록된 프로필 이미지가 없습니다.</small>
-                            </c:if>
-                            <input type="file" id="ofile" name="ofile" accept="image/jpeg, image/png, image/gif" />
-                            <small>새 프로필 이미지를 선택하세요. (5MB 이하, JPG, PNG, GIF)</small>
-                        </div>
-                    </td>
-                </tr>
             </table>
-            <input type="submit" value="수정 완료" />
+            <input type="submit" value="회원 정보 수정 완료" class="submit-btn" />
         </form>
+
+        <hr style="margin: 40px auto; max-width: 600px; border-color: #eee;">
+
+        <%-- 프로필 이미지 업로드/변경 섹션 --%>
+        <div style="max-width: 600px; margin: 20px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h3>프로필 이미지 관리</h3>
+            <div class="profile-img-container">
+                <c:choose>
+                    <c:when test="${not empty dto.savefile}">
+                        <%-- WebConfig에서 매핑한 /upload/ 경로 사용 --%>
+                        <img id="currentProfileImage" src="/upload/user_profiles/${dto.savefile}" alt="현재 프로필 이미지" class="profile-img">
+                        <small>현재 프로필 이미지 (${dto.originalfile})</small>
+                    </c:when>
+                    <c:otherwise>
+                        <img id="currentProfileImage" src="/images/default_profile.png" alt="기본 프로필 이미지" class="profile-img">
+                        <small>등록된 프로필 이미지가 없습니다.</small>
+                    </c:otherwise>
+                </c:choose>
+                <div class="file-input-wrapper">
+                    <input type="file" id="ofile" name="ofile" accept="image/jpeg, image/png, image/gif" />
+                    <button type="button" id="uploadProfileBtn" onclick="uploadProfileImage()">프로필 이미지 업로드</button>
+                </div>
+                <small>새 프로필 이미지를 선택하세요. (5MB 이하, JPG, PNG, GIF)</small>
+            </div>
+        </div>
     </body>
 </html>

@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>강의 등록</title> <%-- 제목 변경 --%>
+		<title>강의 등록</title>
 		<script>
 		let validateForm = (frm) => {
 			if(frm.lectureName.value == ''){
@@ -42,9 +42,9 @@
 		</script>
 	</head>
 	<body>
-		<h2>강의 등록</h2> <%-- 제목 변경 --%>
+		<h2>강의 등록</h2>
 		<form name="writeFrm" method="post"
-			action="/lectureboard/lecturewrite.do" onsubmit="return validateForm(this);"> <%-- action URL 변경 --%>
+			action="/admin_lectureboard/lecturewrite.do" onsubmit="return validateForm(this);">
 		<table border="1" width="90%">
 		<tr>
 				<td>강의명</td>
@@ -86,7 +86,7 @@
 				<td colspan="2" align="center">	
 		            <button type="submit">등록</button>
 		            <button type="reset">초기화</button>
-		            <button type="button" onclick="location.href='/lectureboard/lecturelist.do';">
+		            <button type="button" onclick="location.href='/admin_lectureboard/lecturelist.do';">
 		                목록 바로가기
 		            </button>
 		        </td>

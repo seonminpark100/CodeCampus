@@ -67,8 +67,8 @@ public class QnaboardController {
         return null;
     }
 
-    // Q&A 목록 보기 (클래스 레벨 @RequestMapping("/qnaboard") 때문에 실제 경로는 "/qnaboard/qnaboardlist.do")
-    @GetMapping("/qnaboardlist.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    // Q&A 목록 보기 
+    @GetMapping("/qnaboardlist.do") 
     public String qnaList(Model model, HttpServletRequest req, ParameterDTO3 parameterDTO) {
 
         if (parameterDTO.getSearchField() != null && parameterDTO.getSearchField().isEmpty()) {
@@ -108,10 +108,9 @@ public class QnaboardController {
         maps.put("pageSize", pageSize);
         maps.put("pageNum", pageNum);
 
-        // PagingUtil에 전달하는 URL은 클래스 레벨 매핑을 고려한 최종 경로여야 합니다.
-        // req.getContextPath()는 "/프로젝트명"을 반환하므로, Spring Boot 내장 톰캣의 경우 대개 빈 문자열입니다.
-        // 따라서 절대 경로로 직접 지정하는 것이 안전합니다.
-        String reqUrl = "/qnaboard/qnaboardlist.do"; // ⭐⭐⭐ PagingUtil URL 통일 ⭐⭐⭐
+
+        // req.getContextPath()는 "/프로젝트명"을 반환하므로, Spring Boot 내장 톰캣의 경우 대개 빈 문자열
+        String reqUrl = "/qnaboard/qnaboardlist.do"; 
         StringBuilder paramBuilder = new StringBuilder();
         if (parameterDTO.getSearchField() != null) {
             paramBuilder.append("&searchField=").append(parameterDTO.getSearchField());
@@ -128,7 +127,7 @@ public class QnaboardController {
             pagingImg = PagingUtil.pagingImg(totalCount, pageSize, blockPage, pageNum, reqUrl);
         } else {
              // 첫 '&' 제거 및 ? 추가 (맨 앞에 &가 붙으므로)
-             // paramBuilder.substring(1) 대신 paramBuilder.insert(0, "?") 로 변경하면 더 직관적입니다.
+             // paramBuilder.substring(1) 대신 paramBuilder.insert(0, "?") 로 변경하면 더 직관적
              pagingImg = PagingUtil.pagingImg(totalCount, pageSize, blockPage, pageNum, reqUrl + "?" + paramBuilder.substring(1));
         }
 
@@ -143,7 +142,7 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 작성 (GET 요청) - 작성 폼을 보여줌
-    @GetMapping("/qnawrite.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @GetMapping("/qnawrite.do") 
     public String qnaWriteGet(RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
 
@@ -155,7 +154,7 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 작성 (POST 요청) - 데이터베이스에 저장
-    @PostMapping("/qnawrite.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @PostMapping("/qnawrite.do") 
     public String qnaWritePost(QnaboardDTO qnaboardDTO, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
 
@@ -177,18 +176,18 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 상세 보기
-    @GetMapping("/qnaboardview.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @GetMapping("/qnaboardview.do") 
     public String qnaView(Model model, @RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
     	 System.out.println("qnaView method called for boardIdx: " + boardIdx);
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
-
+        
         if (loggedInUserId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "로그인 후 이용 가능합니다.");
             return "redirect:/myLogin.do";
         }
 
-        // 조회수 증가 로직 (Service 계층에서 한 번만 호출되도록 구현되어야 함)
+       
         qnaService.updateVisitCount(boardIdx); // 이 부분에서 조회수가 증가합니다.
 
         QnaboardDTO qnaboardDTO = qnaService.viewQna(boardIdx); // 게시글 정보를 가져올 때 이미 조회수가 증가했으므로, 이 메서드 내부에서 또 증가시키지 않도록 Service Impl 확인
@@ -210,12 +209,13 @@ public class QnaboardController {
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        model.addAttribute("qnaBoardDTO", qnaboardDTO);
+        model.addAttribute("qnaBoardDTO", qnaboardDTO);     
+        
         return "qnaboard/qnaboardview";
     }
 
     // Q&A 답변 작성 폼 (GET 요청)
-    @GetMapping("/qnanswer.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @GetMapping("/qnanswer.do") 
     public String qnaAnswerGet(Model model,
                                @RequestParam("boardIdx") int boardIdx,
                                @RequestParam("bgroup") int bgroup,
@@ -252,7 +252,7 @@ public class QnaboardController {
     }
 
     // Q&A 답변 작성 (POST 요청)
-    @PostMapping("/qnanswer.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboardnswer.do" -> "/qnanswer.do" (오타 수정) ⭐⭐⭐
+    @PostMapping("/qnanswer.do") 
     public String qnaAnswerPost(QnaboardDTO qnaboardDTO,
                                 @RequestParam("parentBoardIdx") int parentBoardIdx,
                                 @RequestParam("parentBgroup") int parentBgroup,
@@ -296,7 +296,7 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 수정 폼 (GET 요청)
-    @GetMapping("/qnaedit.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @GetMapping("/qnaedit.do") 
     public String qnaEditGet(Model model, @RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
@@ -306,9 +306,7 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        // QnaService.viewQna(boardIdx)는 이미 조회수 증가 로직을 포함하고 있으므로, 수정 폼을 열 때는 조회수 증가를 원치 않을 수 있습니다.
-        // 만약 조회수 증가를 원치 않는다면, Service 계층에 조회수 증가 없이 게시글만 가져오는 별도의 메서드(예: getQnaById)를 만들고 사용해야 합니다.
-        // 현재는 viewQna가 호출되므로 수정 폼 열 때도 조회수가 증가합니다.
+
         QnaboardDTO qnaboardDTO = qnaService.viewQna(boardIdx);
 
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
@@ -333,7 +331,7 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 수정 (POST 요청)
-    @PostMapping("/qnaedit.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @PostMapping("/qnaedit.do") 
     public String qnaEditPost(QnaboardDTO qnaboardDTO, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
@@ -344,7 +342,6 @@ public class QnaboardController {
         }
 
         // 원본 게시글을 가져올 때 조회수가 또 증가하지 않도록 Service 계층에 별도의 메서드(예: getQnaByIdWithoutCounting)가 필요할 수 있습니다.
-        // 현재는 viewQna를 사용하므로, 수정 처리 시에도 원본 게시글 조회로 인해 조회수가 증가할 수 있습니다.
         QnaboardDTO originalBoard = qnaService.viewQna(qnaboardDTO.getBoardIdx());
 
         if (originalBoard == null || !"Q".equals(originalBoard.getCategory())) {
@@ -379,7 +376,7 @@ public class QnaboardController {
     }
 
     // Q&A 게시글 삭제
-    @PostMapping("/qnadelete.do") // ⭐⭐⭐ 매핑 경로 수정: "/qnaboard/" 중복 제거 ⭐⭐⭐
+    @PostMapping("/qnadelete.do") 
     public String qnaDeletePost(@RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();

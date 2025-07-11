@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>  
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -99,7 +98,7 @@
             tr:hover {
                 background-color: #f1f1f1; /* 마우스 오버 시 배경색 */
             }
-            
+
             /* 링크 스타일 */
             table a {
                 color: #007bff;
@@ -187,78 +186,126 @@
             .back-to-admin-button:hover {
                 background-color: #0056b3; /* 호버 시 진한 파란색 */
             }
-        </style>
+            /* 목록 테이블 내 버튼 스타일 */
+            .table-action-buttons {
+                display: flex;
+                gap: 5px; /* 버튼 사이 간격 */
+                justify-content: center; /* 버튼을 셀 중앙으로 */
+            }
+            .table-action-buttons button {
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.85em; /* 작은 폰트 크기 */
+                transition: background-color 0.2s ease;
+                white-space: nowrap;
+            }
+            .table-action-buttons .edit-btn {
+                background-color: #ffc107; /* 주황색 */
+                color: #333;
+            }
+            .table-action-buttons .edit-btn:hover {
+                background-color: #e0a800;
+            }
+            .table-action-buttons .delete-btn {
+                background-color: #dc3545; /* 빨간색 */
+                color: white;
+            }
+            .table-action-buttons .delete-btn:hover {
+                background-color: #c82333;
+            }
+		</style>
+        <script>
+            function confirmDelete(lectureIdx) {
+                if (confirm("정말로 이 강의를 삭제하시겠습니까?")) {
+                    var form = document.createElement('form');
+                    form.setAttribute('method', 'post');
+                    form.setAttribute('action', '/admin_lectureboard/lecturedelete.do');
+
+                    var hiddenField = document.createElement('input');
+                    hiddenField.setAttribute('type', 'hidden');
+                    hiddenField.setAttribute('name', 'lectureIdx');
+                    hiddenField.setAttribute('value', lectureIdx);
+
+                    form.appendChild(hiddenField);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            }
+        </script>
 	</head>
 	<body>
-		<h2>강의 목록(MyBatis)</h2> 
+		<h2>강의 목록(MyBatis)</h2>
 		 <a href="<c:url value='/admin'/>" class="back-to-admin-button">관리자 페이지로</a>
-		<form method="get" action="/lectureboard/lecturelist.do"> 
+		<form method="get" action="/admin_lectureboard/lecturelist.do">
 		<table border="1" width="90%">
 		<tr>
 			<td>
 				<select name="searchField">
-					<option value="LECTURE_NAME">강의명</option> 
-					<option value="PROF_ID">교수ID</option>   
-				</select>
-				<input type="text" name="searchKeyword" />
+					<option value="LECTURE_NAME" ${param.searchField == 'LECTURE_NAME' ? 'selected' : ''}>강의명</option>
+					<option value="PROF_ID" ${param.searchField == 'PROF_ID' ? 'selected' : ''}>교수ID</option>
+					</select>
+				<input type="text" name="searchKeyword" value="${param.searchKeyword}" />
 				<input type="submit" value="검색하기" />
 			</td>
 		</tr>
-		</table>		
+		</table>
 		</form>
-		
+
 		<table border="1" width="90%">
-	        <tr>
-	            <th width="10%">강의 번호</th>      
-	            <th width="*">강의명</th>             
-	            <th width="15%">교수ID</th>          
-	            <th width="10%">강의 코드</th>        
-	            <th width="15%">강의 시작일</th>     
-                <th width="15%">강의 종료일</th>     
-                <th width="10%">전공ID</th>         
-	        </tr>
-	<c:choose>
-	    <c:when test="${ empty lists }"> 
-	        <tr>
-	            <td colspan="7" align="center"> 
-	                등록된 강의가 없습니다^^*
-	            </td>
-	        </tr>
-	    </c:when> 
-	    <c:otherwise> 
-	        <c:forEach items="${ lists }" var="row" varStatus="loop">    
-	        <tr align="center">
-	            <td> 
-	            <c:set var="vNum" value="${ maps.totalCount - 
-	                (((maps.pageNum-1) * maps.pageSize)	+ loop.index)}" />
-	            	${vNum} 
-	            </td>
-	            <td align="left"> 
-	               
-	                <a href="/lectureboard/lectureview.do?lectureIdx=${row.lectureIdx}&vNum=${vNum}">${ row.lectureName }</a> 
-	            </td> 
-	            <td>${ row.profId }</td>       <%-- 교수 ID 출력 --%>
-	            <td>${ row.lectureCode }</td>  <%-- 강의 코드 출력 --%>
-	            <td>${ row.lectureStartDate }</td> <%-- 강의 시작일 출력 --%>
-                <td>${ row.lectureEndDate }</td>   <%-- 강의 종료일 출력 --%>
-                <td>${ row.majorId }</td>          <%-- 전공 ID 출력 (선택 사항) --%>
-	        </tr>
-	        </c:forEach>        
-	    </c:otherwise>    
-	</c:choose>
-	    </table>
-	    
-	    <table border="1" width="90%">
-	        <tr align="center">
-	            <td>
-	                ${ pagingImg }
-	            </td>
-	            <td width="100">
-                    <button type="button" onclick="location.href='/lectureboard/lecturewrite.do';"> 
-                        강의 등록 
-                    </button>
-                </td>
-	        </tr>
-	    </table>
+		<tr>
+		<th width="8%">강의 번호</th>
+		<th width="*">강의명</th>
+		<th width="12%">교수ID</th>
+		<th width="10%">강의 코드</th>
+		<th width="12%">강의 시작일</th>
+		<th width="12%">강의 종료일</th>
+			<th width="8%">전공ID</th>
+            <th width="15%">관리</th> 
+        </tr>
+	<%-- c:choose 태그 내부의 불필요한 공백 및 줄바꿈 제거 --%>
+	<c:choose><c:when test="${ empty lists }">
+	    <tr>
+			<td colspan="9" align="center">
+	            등록된 강의가 없습니다^^*
+	        </td>
+		</tr>
+	</c:when><c:otherwise>
+	    <c:forEach items="${ lists }" var="row" varStatus="loop">
+	    <tr align="center">
+			<td>
+	            <c:set var="vNum" value="${ maps.totalCount - (((maps.pageNum-1) * maps.pageSize) + loop.index) }" />
+	            ${vNum}
+	        </td>
+			<td align="left">
+	            <a href="/admin_lectureboard/lectureview.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}">${ row.lectureName }</a>
+	        </td>
+			<td>${ row.profId }</td>
+			<td>${ row.lectureCode }</td>
+			<td>${ row.lectureStartDate }</td>
+			<td>${ row.lectureEndDate }</td>
+			<td>${ row.majorId }</td>
+			<td>
+                <div class="table-action-buttons">
+                    <button type="button" class="edit-btn" onclick="location.href='/admin_lectureboard/lectureedit.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}';">수정</button>
+                    <button type="button" class="delete-btn" onclick="confirmDelete('${row.lectureIdx}');">삭제</button>
+                </div>
+            </td>
+           </tr>
+	    </c:forEach>
+	</c:otherwise></c:choose>
+
+	</table>
+	    <div class="bottom-section">
+            <div class="pagination">
+	            ${ pagingImg }
+	        </div>
+            <div>
+	            <button type="button" class="action-button" onclick="location.href='/admin_lectureboard/lecturewrite.do';">
+	                강의 등록
+	            </button>
+	        </div>
+        </div>
 	</body>
 </html>

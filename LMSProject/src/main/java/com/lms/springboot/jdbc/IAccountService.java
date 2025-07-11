@@ -3,7 +3,7 @@ package com.lms.springboot.jdbc;
 import java.util.List;
 
 
-public interface IMemberService {
+public interface IAccountService {
 	public List<AccountDTO> select();
 	public int insert(AccountDTO accountDTO);
 	public AccountDTO selectOne(AccountDTO accountDTO);
@@ -13,4 +13,6 @@ public interface IMemberService {
     
     public List<AccountDTO> searchMembers(AccountDTO accountDTO);
     int updateEnableStatus(String userId, int enable);
+    
+    public int updateProfileImage(String userId, String saveFileName, String originalFileName);
 }

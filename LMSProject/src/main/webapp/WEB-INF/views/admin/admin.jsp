@@ -145,9 +145,11 @@
         padding: 30px;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        width: calc(100% - 40px); /* 패딩 제외한 너비 */
-        max-width: 900px; /* 적절한 최대 너비 설정 */
-        margin-top: 20px; /* 상단 로그인/로그아웃과의 간격 */
+        /* ★★★ 변경된 부분 시작 ★★★ */
+        width: 70vw; /* 뷰포트 너비의 70%를 차지 */
+        max-width: 1200px; /* 최대 너비 설정 (너무 커지지 않게) */
+        margin: 20px auto; /* 상단 간격 유지, 좌우 마진 auto로 중앙 정렬 */
+        /* ★★★ 변경된 부분 끝 ★★★ */
         box-sizing: border-box;
         text-align: left; /* 텍스트 정렬은 왼쪽으로 변경 */
     }
@@ -199,15 +201,17 @@
 </style>
 </head>
 <body>
-    <div class="admin-sidebar">
+	    <div class="admin-sidebar">
         <a href="<c:url value='/admin/dashboard'/>" class="admin-title-link">관리자 시스템</a>
         <ul>
+        	<li><a href="<c:url value='/'/>"
+                class="btn btn-blue">홈 화면으로</a></li>
             <li><a href="<c:url value='/admin/accountedit/list.do'/>"
                 class="btn btn-blue">회원 관리 화면</a></li>
             <li><a href="<c:url value='/admin/create'/>"
                 class="btn btn-blue">계정 생성</a></li>
             <li>
-                <a href="<c:url value='/lectureboard/lecturelist.do'/>" class="btn btn-blue">전체 강의/과목 관리</a>
+                <a href="<c:url value='/admin_lectureboard/lecturelist.do'/>" class="btn btn-blue">전체 강의/과목 관리</a>
             </li>
             <li>
                 <a href="<c:url value='/noticeboard/noticelist.do'/>" class="btn btn-blue">공지사항 등록/수정/삭제</a>
@@ -255,7 +259,7 @@
 			            <c:forEach var="lecture" items="${newLectures}"> 
 			                <tr>			                    
 			                    <td>${lecture.lectureName}</td>
-			                    <td>${lecture.profId}</td>
+			                    <td>${lecture.profName}</td>
 			                    <td>${lecture.lectureStartDate}</td>
 			                    <td>${lecture.lectureEndDate}</td>
 			                </tr>

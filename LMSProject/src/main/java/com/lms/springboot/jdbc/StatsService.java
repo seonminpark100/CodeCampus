@@ -15,8 +15,9 @@ public class StatsService {
 
     private final JdbcTemplate jdbcTemplate;
     
+    // PROF_ID를 이름으로 매핑해줌
     private static final Map<String, String> PROF_ID_TO_NAME_MAP = new HashMap<>();
-
+    
     static {
         PROF_ID_TO_NAME_MAP.put("PROF001", "카리나");
         PROF_ID_TO_NAME_MAP.put("PROF002", "윈터");

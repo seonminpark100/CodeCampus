@@ -189,4 +189,11 @@
     <update id="updateVisitCount" parameterType="int">
         UPDATE BOARDS SET VISITCOUNT = VISITCOUNT + 1 WHERE BOARD_IDX = #{boardIdx}
     </update>
+     <select id="listAnswersByBgroup" parameterType="int" resultType="com.lms.springboot.jdbc.QnaboardDTO">
+	        SELECT BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
+	               BGROUP, BSTEP, BINDENT, BOARD_LIKE
+	        FROM BOARDS
+	        WHERE BGROUP = #{bgroup}
+	        ORDER BY BGROUP DESC, BSTEP ASC, BINDENT ASC
+    	</select>
 </mapper>

@@ -167,7 +167,7 @@
 	<body>
 		<h2>강의 정보 수정(Mybatis)</h2> 
 		<form name="writeFrm" method="post"
-			action="/lectureboard/lectureedit.do" onsubmit="return validateForm(this);"> 
+			action="/admin_lectureboard/lectureedit.do" onsubmit="return validateForm(this);"> 
 		<input type="hidden" name="lectureIdx" value="${lectureBoardDTO.lectureIdx }" /> 
 		<table border="1" width="90%">
 		    <tr>
@@ -221,7 +221,7 @@
 		        <td colspan="2" align="center">
 		            <button type="submit">수정 완료</button> 
 		            <button type="reset">초기화</button> 
-		            <button type="button" onclick="location.href='/lectureboard/lecturelist.do';"> 
+		            <button type="button" onclick="location.href='/admin_lectureboard/lecturelist.do';"> 
 		                목록 바로가기
 		            </button>
 		        </td>
