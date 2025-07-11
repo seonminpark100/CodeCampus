@@ -37,7 +37,7 @@
 			    xhr.send(JSON.stringify({ data: selectedValue }));
 			}
 		  
-		  function insertId(selectedValue) {
+		 /*  function insertId(selectedValue) {
 			    var xhr = new XMLHttpRequest();
 			    xhr.open("POST", "/prof/absentProc.do", true);
 			    xhr.setRequestHeader("Content-Type", "application/json");
@@ -49,7 +49,7 @@
 			    };
 
 			    xhr.send(JSON.stringify({ data_2: selectedValue }));
-			}
+			} */
 		</script>
 	</head>
 	<body>
