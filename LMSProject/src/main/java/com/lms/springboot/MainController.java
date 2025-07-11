@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +47,7 @@ public class MainController
 		return "admin/admin";
 	}
 	
-//	커스텀 로그인 페이지 매핑
+//	Custom Login Page
 	@RequestMapping("/myLogin.do")
 	public String login1(Principal principal, Model model) {
 		try

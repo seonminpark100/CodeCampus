@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 	<html>
 	<head>
@@ -65,16 +66,15 @@
 		<%@ include file = "../sidebars.jsp" %>
 		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
 		<h2>출결 수동 관리</h2>
-		
-		
 		<!-- 검색 폼 -->
-		<form method="get">
-		<table class="table table-hover" border="1" width="90%">
+		<form method="get" action="/prof/absentboard.do">
+		<input type="hidden" name="lectureCode" value="${ lectureCode }" />
+		<table class="table table-hover" border="1" style="width: 90%">
 		<tr>
 			<td>
 				<select name="searchField">
 					<option value="user_id">학번</option>
-					<option value="content">내용</option>
+					<option value="user_name">이름</option>
 				</select>
 				<input type="text" name="searchKeyword" />
 				<input type="submit" value="검색하기" />
@@ -86,7 +86,7 @@
 		<form name="writeFrm" method="post" enctype="multipart/form-data"
 			action="./absentProc.do?lectureCode=${ lectureCode }" onsubmit="return validateForm(this);">
 		
-		<input type="date" id="lecture_date" name="lecture_date" onchange="checkValue()">
+		출석 날짜: <input type="date" id="lecture_date" name="lecture_date" onchange="checkValue()">
 		<!-- 목록 테이블 -->
 	    <table class="table table-hover" border="1" style="width: 90%;">
 	    	<tr>

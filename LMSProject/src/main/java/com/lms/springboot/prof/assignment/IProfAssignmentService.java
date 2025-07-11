@@ -11,7 +11,7 @@ import com.lms.springboot.prof.ProfDTO;
 public interface IProfAssignmentService
 {
 
-//	과제(assignment) - 교수
+//	Assignment - Proffessor's side
 	public int getAssignmentTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> assignmentBoardListPage(ProfDTO profDTO);
 	public ProfDTO assignmentView(ProfDTO profDTO);
@@ -21,7 +21,7 @@ public interface IProfAssignmentService
 	(@Param("_title") String title, @Param("_content") String content,
 			@Param("_deadline") String deadline, @Param("_lectureCode") String lecture_code);
 		
-//	과제(assignment) - 학생 제출
+//	Assignment - Student's side
 	public int getSubmittedAssignmentTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> submittedAssignmentBoardListPage(ProfDTO profDTO);
 	public ProfDTO submittedAssignmentView(ProfDTO profDTO);

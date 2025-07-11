@@ -10,7 +10,7 @@ import com.lms.springboot.prof.ProfDTO;
 @Mapper
 public interface IProfAbsentService
 {
-//	출석부
+//	For Attendance
 	public int absentProcProf
 	(@Param("_user_id") String user_id, @Param("_absent_state") String absent_state,
 			@Param("_lecture_date") String lecture_date, 

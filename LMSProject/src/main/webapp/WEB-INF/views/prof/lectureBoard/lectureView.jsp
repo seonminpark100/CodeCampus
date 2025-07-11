@@ -28,7 +28,7 @@
 	           <form name="writeFrm">
 	           <input type="hidden" name="board_idx" value="${result.board_idx }" />
 	           <input type="hidden" name="lectureCode" value="${ result.lecture_code }" />
-				<table class="table table-hover" border="1" width="90%">
+				<table class="table table-hover" border="1" style="width: 90%">
 				    <colgroup>
 				        <col width="15%"/> <col width="35%"/>
 				        <col width="15%"/> <col width="*"/>
@@ -53,7 +53,7 @@
 			    <c:when test="${ empty myFileLists }"> 
 			        <tr>
 			            <td colspan="5" align="center">
-			                등록된 게시물이 없습니다^^*
+			                등록된 첨부파일이 없습니다.
 			            </td>
 			        </tr>
 			    </c:when> 
@@ -62,11 +62,12 @@
 			        <tr align="center">
 			         <tr>
 				        <c:if test="${fn:endsWith(row.sfile, '.mov') || fn:endsWith(row.sfile, '.mp4')}">
-					        <td colspan="3"> <video src="./../uploads/${row.sfile }" controls="controls" width="500"></video> <br/><br/> </td>
+					        <td colspan="3"> <td><video src="./../uploads/${row.sfile }" controls="controls" width="500"></video></td> <br/><br/>
 				        </c:if>
 				        <c:if test="${fn:endsWith(row.sfile, '.png') || fn:endsWith(row.sfile, '.jpg')}">
-					        <td colspan="3"> <img src="./../uploads/${row.sfile }" width="200"></img> <br/><br/> </td>
+					        <td colspan="3"> <td><img src="./../uploads/${row.sfile }" width="200"></img></td> <br/><br/>
 				        </c:if>
+				        
 				    </tr>
 			        </c:forEach>        
 			    </c:otherwise>    

@@ -10,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lms.springboot.prof.IProfService;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.PagingUtil;
 
@@ -24,11 +22,11 @@ public class ProfAbsentController
 	@Autowired
 	IProfAbsentService dao;
 	
-//	출석
 	@RequestMapping("/prof/absentboard.do")
 	public String absentBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) {
 		String lectureCode = req.getParameter("lectureCode");
 		profDTO.setLecture_code(lectureCode);
+		
 		
 		int totalCount = dao.getStudentTotalCount(profDTO);
 		int pageSize = 50; 
@@ -62,9 +60,9 @@ public class ProfAbsentController
 		System.out.println("lecture_date" + lecture_date);
 		String[] parts = absent_states.split("\\.");
 
-		String absent_state = parts[0]; //출결상태
-		String user_id = parts[1]; // 사용자 아이디
-		String lectureCode = parts[2]; // 강의코드
+		String absent_state = parts[0]; // the state of attendance
+		String user_id = parts[1]; // user id
+		String lectureCode = parts[2]; // lecture code
 		
 		
 		int result_prof = dao.absentProcProf(user_id, absent_state, lecture_date, lectureCode);

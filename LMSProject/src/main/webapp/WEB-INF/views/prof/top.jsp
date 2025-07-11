@@ -16,24 +16,12 @@
    width: 100px;
    height: 100px;
  }
- .btn-group {
-	width: 300px;
-   height: 50px;
- }
+
  .login {
  	float: right;
  }
 </style>
 
-<script type="text/javascript">
-function disableOtherButtons(clickedId) {
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.disabled = false; // 모든 버튼 활성화
-    });
-    document.getElementById(clickedId).disabled = true; // 클릭된 버튼 비활성화
-}
-</script>
 <div class="container" align="center">
 	<div class="login">
 		<c:choose>
@@ -59,10 +47,6 @@ function disableOtherButtons(clickedId) {
 	 	<img class="img-concert" src="../images/logo.jpeg" />
 	</a>
 	<br/><br/>
-	<div class="btn-group">
-		   <button class="btn btn-primary" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
-		   <button class="btn btn-primary" id="button2" onclick="disableOtherButtons('button2'); location.href = '#'">커뮤니티</button>&nbsp;&nbsp;
-		   <button class="btn btn-primary" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
-	</div>
+	
 	<br/><br/><br/>
 </div>

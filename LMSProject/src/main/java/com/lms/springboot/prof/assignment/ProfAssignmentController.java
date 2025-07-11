@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lms.springboot.prof.ProfDTO;
-import com.lms.springboot.prof.assignment.IProfAssignmentService;
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ public class ProfAssignmentController
 	IProfAssignmentService dao;
 	
 	
-//	과제 목록 관리(교수)
+//	Manage for the list of the submitted assignment by students (Professor view)
 	@GetMapping("/prof/assignmentList.do")
 	public String assignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
 		String lectureCode = req.getParameter("lectureCode");
@@ -47,11 +46,9 @@ public class ProfAssignmentController
 		
 		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
 		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
 		ArrayList<ProfDTO> lists = dao.assignmentBoardListPage(profDTO);
 		model.addAttribute("lists", lists);
-		
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
+
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,
@@ -60,13 +57,13 @@ public class ProfAssignmentController
 		model.addAttribute("lectureCode", lectureCode);
 		return "prof/assignmentBoard/assignmentList";
 	}
-//	과제 업로드(교수) - 화면보기
+//	Upload page for noticing assignment
 	@RequestMapping("/prof/assignmentUpload.do")
 	public String lectureUpload (@RequestParam String lectureCode, Model model) {
 		model.addAttribute("lectureCode", lectureCode);
 		return "prof/assignmentBoard/assignmentUpload";
 	}
-//	과제 업로드(교수) - action
+//	Upload page for noticing assignment - Processing
 	@PostMapping("/prof/assignmentUpload.do")
 	public String lectureUploadProc(Model model, HttpServletRequest req) {
 		String title = req.getParameter("assignment_title");
@@ -77,7 +74,7 @@ public class ProfAssignmentController
 		int result_prof = dao.assignmentlectureUploadProcProf(title, content, deadline, lectureCode);
 		return "redirect:assignmentList.do?lectureCode="+lectureCode;
 	}
-//	과제 상세보기(교수)
+//	Detail view for the uploaded notice assignment
 	@RequestMapping("/prof/assignmentView.do")
 	public String assignmentView(HttpServletRequest req, Model model, ProfDTO profDTO) {
 		String lectureCode = req.getParameter("lectureCode");
@@ -90,20 +87,20 @@ public class ProfAssignmentController
 		
 		return "prof/assignmentBoard/assignmentView";
 	}
-//	과제 수정하기(교수) - 내용가져오기
+//	Edit noticed assignment - Read
 	@GetMapping("/prof/assignmentEdit.do")
 	public String assignmentEditGet(Model model, ProfDTO profDTO) {
 		profDTO = dao.assignmentView(profDTO);
 		model.addAttribute("profDTO", profDTO);
 		return "prof/assignmentBoard/assignmentEdit";
 	}
-//	과제 수정하기(교수) - action
+//	Edit noticed assignment - Processing
 	@PostMapping("/prof/assignmentEdit.do")
 	public String assignmentEditPost(Model model, ProfDTO profDTO) {
 		int result = dao.assignmentEdit(profDTO);
 		return "redirect:assignmentView.do?lectureCode=" + profDTO.getLecture_code()+"&assignment_idx=" +profDTO.getAssignment_idx();
 	}
-//	과제 삭제하기(교수)
+//	Delete assignment
 	@PostMapping("/prof/assignmentDelete.do")
 	public String assignmentDelete(HttpServletRequest req) {
 		int result = dao.assignmentDelete(req.getParameter("assignment_idx"));
@@ -111,7 +108,7 @@ public class ProfAssignmentController
 		return "redirect:assignmentList.do?lectureCode="+ lectureCode;
 	}
 	
-//	과제 목록 관리(학생이 올린 과제 보기)
+//	Uploaded Assignment Lists by Students
 	@GetMapping("/prof/submittedAssignmentList.do")
 	public String submittedAssignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
 		String lectureCode = req.getParameter("lectureCode");
@@ -126,11 +123,9 @@ public class ProfAssignmentController
 		
 		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
 		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
 		ArrayList<ProfDTO> lists = dao.submittedAssignmentBoardListPage(profDTO);
 		model.addAttribute("lists", lists);
 		
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,

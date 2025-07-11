@@ -10,13 +10,12 @@ import com.lms.springboot.prof.ProfDTO;
 public interface IProfLectureService
 {
 
-//	강의
+//	Lecture
 	public int getLectureTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> lectureBoardListPage(ProfDTO profDTO);
 	public ProfDTO lectureUploadPage(ProfDTO profDTO);
 	public int insertLectureWithFile(ProfDTO profDTO);
 	public int insertLectureWithoutFile(ProfDTO profDTO);
-//	public ProfDTO lectureView(ProfDTO profDTO);
 	public ProfDTO lectureViewWithoutFile(ProfDTO profDTO);
 	public ArrayList<ProfDTO> lectureViewWithFile(ProfDTO profDTO);
 	public int lectureEditBoards(ProfDTO profDTO);

@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProfController
@@ -19,16 +18,16 @@ public class ProfController
 	@Autowired
 	IProfService dao;
 	
-//	강의 메인 화면
-	@RequestMapping("/prof/submain.do")
+//	Lecture main page
+	@GetMapping("/prof/submain.do")
 	public String profSubMain(HttpServletRequest req, Model model) {
 		String lectureCode = req.getParameter("lectureCode");
 		model.addAttribute("lectureCode" , lectureCode);
 		return "prof/submain";
 	}
 	
-//	수강생 리스트
-	@RequestMapping("/prof/studentList.do")
+//	Students List
+	@GetMapping("/prof/studentList.do")
 	public String studentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
 		String lectureCode = req.getParameter("lectureCode");
 		profDTO.setLecture_code(lectureCode);
@@ -42,11 +41,11 @@ public class ProfController
 		
 		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
 		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
+		// Saved DB dates at Model Object
 		ArrayList<ProfDTO> lists = dao.studentBoardListPage(profDTO);
 		model.addAttribute("lists", lists);
 		model.addAttribute("lectureCode", lectureCode);
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
+		// Page Number Stuff
 		String pagingImg =
 			PagingUtil.pagingImg(totalCount, pageSize, 
 				blockPage, pageNum,

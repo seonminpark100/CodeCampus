@@ -16,10 +16,6 @@
    width: 100px;
    height: 100px;
  }
- .btn-group {
-	width: 300px;
-   height: 50px;
- }
  .login {
  	float: right;
  }
@@ -41,6 +37,9 @@ function disableOtherButtons(clickedId) {
 		        <ul class="navbar-nav">
 		            <li class="nav-item"><a class="nav-link" href="/myLogin.do">로그인</a></li>
 		        </ul>
+		        <ul class="navbar-nav">
+			        <li class="nav-item"><a class="nav-link" href="/prof/index.do">내 강의실</a></li>
+		        </ul>
 		    </c:when>
 		    <c:otherwise>
 		        <ul class="navbar-nav">
@@ -55,14 +54,7 @@ function disableOtherButtons(clickedId) {
 		    </c:otherwise>
 	    </c:choose>
 	</div>
-	<a href="/prof/index.do">
+	<a href="/">
 	 	<img class="img-concert" src="images/logo.jpeg" />
 	</a>
-	<br/><br/>
-	<div class="btn-group">
-		   <button class="btn btn-primary" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
-		   <button class="btn btn-primary" id="button2" onclick="disableOtherButtons('button2'); location.href = '#'">커뮤니티</button>&nbsp;&nbsp;
-		   <button class="btn btn-primary" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
-	</div>
-	<br/><br/><br/>
 </div>

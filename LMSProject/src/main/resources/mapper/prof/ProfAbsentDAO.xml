@@ -35,19 +35,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.lms.springboot.prof.ProfDTO">
 			SELECT COUNT(*) FROM 
 			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
-			    WHERE e.lecture_code = #{lecture_code}
+			    WHERE e.lecture_code = #{lecture_code} AND authority = 'ROLE_USER'
+			    <if test="searchKeyword!=null and !searchKeyword.equals('')">
+					AND u.${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
 
 	</select>
 	<select id="studentBoardListPage" resultType="com.lms.springboot.prof.ProfDTO" >
-			<!-- SELECT * FROM 
-			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
-			    WHERE e.lecture_code = #{lecture_code} -->
 			    
 			    SELECT * FROM (
 					SELECT Tb.*, rownum rNum FROM (
 						SELECT * FROM 
 							user_info u LEFT JOIN enroll e on u.user_id = e.user_id
-					    WHERE e.lecture_code = #{lecture_code}
+					    WHERE e.lecture_code = #{lecture_code} AND authority = 'ROLE_USER'
+					    <if test="searchKeyword!=null and !searchKeyword.equals('')">
+							AND u.${searchField} LIKE '%'||#{searchKeyword}||'%'
+						</if>
 						ORDER BY u.user_id DESC
 					) Tb
 				)
@@ -59,10 +62,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
 		VALUES
 		(seq_serial_num.nextval, #{_lectureCode}, #{_user_id}, #{_absent_state} , #{_lecture_date} , sysdate)
-		
-		<!-- INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
-		  VALUES (seq_serial_num.nextval, #{_lectureCode}, #{_user_id},#{_absent_state} ,sysdate ,sysdate)
-		  	ON DUPLICATE KEY UPDATE
-			    absent_state = #{_absent_state} -->
+
 	</insert>	
 </mapper>
