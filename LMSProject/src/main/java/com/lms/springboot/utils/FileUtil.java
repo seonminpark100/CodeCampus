@@ -10,11 +10,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.util.ResourceUtils;
 
-import com.lms.springboot.jdbc.UserDTO;
+import com.lms.springboot.user.jdbc.UserAssignmentDTO;
+import com.lms.springboot.user.jdbc.UserDTO;
+import com.lms.springboot.user.jdbc.UserFileDTO;
+import com.lms.springboot.user.jdbc.UserLMSBoardDTO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,10 +49,11 @@ public class FileUtil
 		return newFileName;
 	}
 	
-	public static UserDTO singleFileUpload(HttpServletRequest req, UserDTO dto, String partName, String category) throws IOException, ServletException
+	public static Map<String, String> singleFileUpload(HttpServletRequest req, String partName, String category) throws IOException, ServletException
 	{
+		Map<String, String> result = new HashMap<>();
 		String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-		System.out.println("물리적경로 : " + uploadDir);
+//		System.out.println("물리적경로 : " + uploadDir);
 		
 		Part part = req.getPart(partName);
 		String partHeader = part.getHeader("content-disposition");
@@ -60,23 +66,26 @@ public class FileUtil
 		String savedFileName = FileUtil.renameFile(uploadDir, originalFileName);
 		
 //		System.out.println(originalFileName + " : " + savedFileName);
-		if(category.equals("User")) {
-			dto.setOriginalFile(originalFileName);
-			dto.setSaveFile(savedFileName);
-		} else if(category.equals("Assignment")) {
-			dto.setAssignment_ofile(originalFileName);
-			dto.setAssignment_sfile(savedFileName);
-		}
 		
-		return dto;
+//		if(category.equals("User")) {
+//			dto.setOriginalFile(originalFileName);
+//			dto.setSaveFile(savedFileName);
+//		} else if(category.equals("Assignment")) {
+//			dto.setAssignment_ofile(originalFileName);
+//			dto.setAssignment_sfile(savedFileName);
+//		}
+//		System.out.println(dto.getOfile() + ":" + dto.getSfile());
+		result.put("oFile", originalFileName);
+		result.put("sFile", savedFileName);
+		return result;
 	}
 	
-	public static ArrayList<UserDTO> boardFileUpload(HttpServletRequest req, UserDTO dto, String partName) throws IOException, ServletException {
+	public static ArrayList<UserFileDTO> boardFileUpload(HttpServletRequest req, UserLMSBoardDTO dto, String partName) throws IOException, ServletException {
 		String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 //		System.out.println("물리적경로 : " + uploadDir);
 		
 //		Map<String, String> saveFileMaps = new HashMap<>();
-		ArrayList<UserDTO> list = new ArrayList<>();
+		ArrayList<UserFileDTO> list = new ArrayList<>();
 		
 		Collection<Part> parts = req.getParts();
 		for(Part part : parts) {
@@ -91,10 +100,10 @@ public class FileUtil
 				part.write(uploadDir + File.separator + originalFileName);
 			}
 			String savedFileName = renameFile(uploadDir, originalFileName);
-			list.add(UserDTO.builder()
+			list.add(UserFileDTO.builder()
 					.board_idx(dto.getBoard_idx())
-					.ofile(originalFileName)
-					.sfile(savedFileName)
+					.oFile(originalFileName)
+					.sFile(savedFileName)
 					.build());
 		}
 		
@@ -132,18 +141,18 @@ public class FileUtil
 		}
 	}
 	
-	public static String getFiles(ArrayList<UserDTO> list) {
+	public static String getFiles(ArrayList<UserFileDTO> list) {
 		String result = "";
 		String uploadDir;
 		try
 		{
 			uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			for(UserDTO dto : list) {
+			for(UserFileDTO dto : list) {
 //				System.out.println(uploadDir + dto.getSfile()); 
 				if(list.getLast().equals(dto))
-					result += "<span>" + dto.getOfile() +  "&nbsp;&nbsp;<a href='download.do?fileName=" + dto.getSfile() + "'>Download</a></span> &nbsp;&nbsp;";
+					result += "<span>" + dto.getOFile() +  "&nbsp;&nbsp;<a href='/user/download.do?fileName=" + dto.getSFile() + "'>Download</a></span> &nbsp;&nbsp;";
 				else
-					result += "<span>" + dto.getOfile() +  "&nbsp;&nbsp;<a href='download.do?fileName=" + dto.getSfile() + "'>Download</a></span> &nbsp;&nbsp;";
+					result += "<span>" + dto.getOFile() +  "&nbsp;&nbsp;<a href='/user/download.do?fileName=" + dto.getSFile() + "'>Download</a></span> &nbsp;&nbsp;";
 			}
 		} catch (FileNotFoundException e)
 		{
@@ -160,7 +169,7 @@ public class FileUtil
 		try
 		{
 			uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			result += "<span>" + dto.getOfile() +  "&nbsp;&nbsp;<a href='download.do?fileName=" + dto.getSfile() + "'>Download</a></span> &nbsp;&nbsp;";
+			result += "<span>" + dto.getOfile() +  "&nbsp;&nbsp;<a href='/user/download.do?fileName=" + dto.getSfile() + "'>Download</a></span> &nbsp;&nbsp;";
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("파일 받기 실패");
@@ -170,7 +179,7 @@ public class FileUtil
 		return result;
 	}
 	
-	public static String getAssignFile(String ofile, String sfile) {
+	public static String getAssignFile(String ofile, String sfile, int submit_idx) {
 		String result = "";
 		if(ofile == null)
 			return result;
@@ -179,7 +188,7 @@ public class FileUtil
 		try
 		{
 			uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			result += "<span>" + ofile +  "&nbsp;&nbsp;<a href='assignDownload.do?fileName=" + sfile + "'>Download</a></span> &nbsp;&nbsp;";
+			result += "<span>" + ofile +  "&nbsp;&nbsp;<a href='assignDownload.do?fileName=" + sfile + "&assignment_submit_idx=" + submit_idx + "'>Download</a></span> &nbsp;&nbsp;";
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("파일 받기 실패");
@@ -189,15 +198,15 @@ public class FileUtil
 		return result;
 	}
 	
-	public static int deleteFiles(ArrayList<UserDTO> list) {
+	public static int deleteFiles(ArrayList<UserFileDTO> list) {
 		if(list.size() < 1)
 			return 0;
 		int deleteCount = 0;
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			for(UserDTO dto : list) {
-				Path filePath = Paths.get(uploadDir + "\\" + dto.getSfile());
+			for(UserFileDTO dto : list) {
+				Path filePath = Paths.get(uploadDir + "\\" + dto.getSFile());
 				
 				if(Files.exists(filePath)) {
 					Files.delete(filePath);
@@ -215,7 +224,29 @@ public class FileUtil
 		return deleteCount;
 	}
 	
-	public static int deleteAssignmentFile(UserDTO dto) {
+	public static int deleteOneFile(String sFile) {
+		try
+		{
+			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
+			Path filePath = Paths.get(uploadDir + "\\" + sFile);
+				
+			if(Files.exists(filePath)) {
+				Files.delete(filePath);
+			}
+		} catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+			return 0;
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return 1;
+	}
+	
+	public static int deleteAssignmentFile(UserAssignmentDTO dto) {
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
@@ -237,12 +268,12 @@ public class FileUtil
 		return 1;
 	}
 	
-	public static String getVideoFile(ArrayList<UserDTO> list) {
+	public static String getVideoFile(ArrayList<UserFileDTO> list) {
 		String result = "";
-		for (UserDTO dto : list) {
+		for (UserFileDTO dto : list) {
 			result += "<video height='400' controls>";
-			result += "<source src='" + "../uploads/" + "" + dto.getSfile() + "' type='video/"
-					+ dto.getSfile().substring(dto.getSfile().lastIndexOf(".") + 1) + "'>";
+			result += "<source src='" + "/uploads/" + "" + dto.getSFile() + "' type='video/"
+					+ dto.getSFile().substring(dto.getSFile().lastIndexOf(".") + 1) + "'>";
 			result += "이 브라우저는 동영상을 재생할 수 없습니다.";
 			result += "</video><br/>";
 		}
