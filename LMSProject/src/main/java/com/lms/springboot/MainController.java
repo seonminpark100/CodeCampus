@@ -32,15 +32,7 @@ public class MainController
 		return "user/user";
 	}
 	
-	@RequestMapping("/prof/index.do")
-	public String welcome2(@AuthenticationPrincipal UserDetails user, Model model, ProfDTO profDTO) {
-		String user_id = user.getUsername();
-		ArrayList<ProfDTO> lists = dao.userList(profDTO, user_id);
-		model.addAttribute("lists", lists);
-		model.addAttribute("user_id", user_id);
 
-		return "prof/prof";
-	}
 
 	@RequestMapping("/admin/index.do")
 	public String welcome3() {

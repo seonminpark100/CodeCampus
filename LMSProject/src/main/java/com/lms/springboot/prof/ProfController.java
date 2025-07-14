@@ -3,6 +3,8 @@ package com.lms.springboot.prof;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,15 @@ public class ProfController
 	@Autowired
 	IProfService dao;
 	
+	@RequestMapping("/prof/index.do")
+	public String welcome2(@AuthenticationPrincipal UserDetails user, Model model, ProfDTO profDTO) {
+		String user_id = user.getUsername();
+		ArrayList<ProfDTO> lists = dao.userList(profDTO, user_id);
+		model.addAttribute("lists", lists);
+		model.addAttribute("user_id", user_id);
+
+		return "prof/prof";
+	}
 //	Lecture main page
 	@GetMapping("/prof/submain.do")
 	public String profSubMain(HttpServletRequest req, Model model, NoticeBoardDTO DTO) {
