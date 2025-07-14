@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID; // MyFunctions 대신 UUID 사용 예시
+import java.util.UUID; 
 
 @Controller
 @RequestMapping("/file")
@@ -29,7 +29,7 @@ public class ProfileFileController {
     @Value("${file.upload-dir}")
     private String uploadBaseDir;
 
-    private final IAccountService iaccountService; // 여기가 IMemberService 타입
+    private final IAccountService iaccountService;
 
     public ProfileFileController(@Value("${file.upload-dir}") String uploadBaseDir,
 		            @Qualifier("accountDAO") IAccountService iaccountService) {
@@ -45,7 +45,7 @@ public class ProfileFileController {
     @GetMapping("/uploadProfile.do")
     public String uploadProfileForm(@RequestParam("userId") String userId, Model model) {
         model.addAttribute("userId", userId);
-        return "user/profileUpload"; // 이 경로는 현재 사용되지 않을 수 있음 (accountedit/edit.jsp에서 직접 처리)
+        return "user/profileUpload"; 
     }
 
     @PostMapping("/uploadProfileProcess.do")
@@ -54,7 +54,7 @@ public class ProfileFileController {
             @RequestParam("ofile") MultipartFile ofile,
             RedirectAttributes redirectAttributes) {
 
-        String uploadSubDir = uploadBaseDir + "user_profiles/"; // 프로필 이미지 저장 전용 서브 디렉토리
+        String uploadSubDir = uploadBaseDir + "user_profiles/"; 
         File subDir = new File(uploadSubDir);
         if (!subDir.exists()) {
             subDir.mkdirs();
@@ -65,8 +65,7 @@ public class ProfileFileController {
 
         try {
             if (ofile.isEmpty()) {
-                // 비동기 요청이므로 alert 메시지를 반환하거나, JavaScript에서 처리할 수 있는 방식으로 변경
-                return "redirect:/admin/accountedit/edit.do?userId=" + userId + "&message=첨부할 파일이 없습니다."; // 이 메시지는 RedirectAttributes 대신 직접 URL에 추가
+                return "redirect:/admin/accountedit/edit.do?userId=" + userId + "&message=첨부할 파일이 없습니다.";
             }
 
             final long MAX_FILE_SIZE = 5 * 1024 * 1024;

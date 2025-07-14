@@ -30,7 +30,6 @@ public class NoticeBoardController {
     // 공지사항 목록
     @GetMapping("/noticeboard/noticelist.do")
     public String noticeboardList(Model model, HttpServletRequest req, ParameterDTO2 parameterDTO) {
-        // 이 부분은 변경 없음
         int totalCount = dao.getTotalNoticeCount(parameterDTO);
         int pageSize = 10;
         int blockPage = 2;
@@ -60,9 +59,6 @@ public class NoticeBoardController {
     // 공지사항 작성 폼
     @GetMapping("/noticeboard/noticewrite.do")
     public String boardWriteGet(Model model) { // HttpServletRequest, HttpSession 관련 파라미터 제거
-        // ★★★ 로그인 관련 로직 모두 제거 (주석처리된 부분 포함) ★★★
-        // 이제 로그인 여부와 관계없이 작성 폼을 바로 보여줍니다.
-        // model.addAttribute("loggedInUserId", "guest"); // 필요하다면 고정된 작성자 ID를 전달
         return "noticeboard/noticewrite";
     }
 
@@ -101,7 +97,6 @@ public class NoticeBoardController {
     // 공지사항 수정 처리
     @PostMapping("/noticeboard/noticeedit.do")
     public String boardEditPost(NoticeBoardDTO noticeBoardDTO) {
-        // 이 부분은 변경 없음
         int result = dao.updateNotice(noticeBoardDTO);
         return "redirect:/noticeboard/noticeview.do?boardIdx=" + noticeBoardDTO.getBoardIdx();
     }
@@ -109,7 +104,6 @@ public class NoticeBoardController {
     // 공지사항 삭제 처리
     @PostMapping("/noticeboard/noticedelete.do")
     public String boardDeletePost(@RequestParam("boardIdx") int boardIdx) {
-        // 이 부분은 변경 없음
         int result = dao.deleteNotice(boardIdx);
         return "redirect:/noticeboard/noticelist.do";
     }

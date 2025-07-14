@@ -28,7 +28,7 @@ import com.lms.springboot.utils.PagingUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/qnaboard") // ⭐ 클래스 레벨 매핑: 모든 메서드의 경로 앞에 "/qnaboard"가 붙습니다. ⭐
+@RequestMapping("/qnaboard") // ⭐ 클래스 레벨 매핑: 모든 메서드의 경로 앞에 "/qnaboard"가 붙습니다
 public class QnaboardController {
 
     private static final String ROLE_ADMIN = "ADMIN";

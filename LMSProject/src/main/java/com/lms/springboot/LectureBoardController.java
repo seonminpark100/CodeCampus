@@ -66,49 +66,43 @@ public class LectureBoardController {
 	}
 
 	@GetMapping("/admin_lectureboard/lecturewrite.do")
-	public String boardWriteGet(Model model)
-	{
+	public String boardWriteGet(Model model){
 		return "admin_lectureboard/lecturewrite";
 	}
 
 
 	@PostMapping("/admin_lectureboard/lecturewrite.do")
-	public String boardWritePost(LectureBoardDTO lectureBoardDTO) 
-	{
+	public String boardWritePost(LectureBoardDTO lectureBoardDTO){
 		
-		int result = dao.insertLecture(lectureBoardDTO); // 메서드명 변경 및 DTO 객체 전달
+		int result = dao.insertLecture(lectureBoardDTO); 
 		return "redirect:/admin_lectureboard/lecturelist.do";
 	}
 
 	@RequestMapping("/admin_lectureboard/lectureview.do")
 	public String boardView(Model model, LectureBoardDTO lectureBoardDTO) {
 	    lectureBoardDTO = dao.viewLecture(lectureBoardDTO);
-	    model.addAttribute("lectureBoardDTO", lectureBoardDTO); // 이 이름이 JSP와 일치해야 합니다.
+	    model.addAttribute("lectureBoardDTO", lectureBoardDTO); 
 	    return "admin_lectureboard/lectureview";
 	}
 
 	@GetMapping("/admin_lectureboard/lectureedit.do")
-	public String boardEditGet(Model model, LectureBoardDTO lectureBoardDTO) // boardDTO -> lectureBoardDTO
-	{
-		lectureBoardDTO = dao.viewLecture(lectureBoardDTO); // 메서드명 변경
-		model.addAttribute("lectureBoardDTO", lectureBoardDTO); // 모델 속성명 boardDTO -> lectureBoardDTO
+	public String boardEditGet(Model model, LectureBoardDTO lectureBoardDTO){
+		lectureBoardDTO = dao.viewLecture(lectureBoardDTO); 
+		model.addAttribute("lectureBoardDTO", lectureBoardDTO); 
 		return "admin_lectureboard/lectureedit";
 	}
 
 
 	@PostMapping("/admin_lectureboard/lectureedit.do")
-	public String boardEditPost(LectureBoardDTO lectureBoardDTO) // boardDTO -> lectureBoardDTO
-	{
-		int result = dao.updateLecture(lectureBoardDTO); // 메서드명 변경
+	public String boardEditPost(LectureBoardDTO lectureBoardDTO){
+		int result = dao.updateLecture(lectureBoardDTO); 
 
-		return "redirect:/admin_lectureboard/lectureview.do?lectureIdx="+lectureBoardDTO.getLectureIdx(); // 파라미터명 idx -> lectureIdx
+		return "redirect:/admin_lectureboard/lectureview.do?lectureIdx="+lectureBoardDTO.getLectureIdx(); 
 	}
 
-	//삭제 : @RequestParam으로 폼값 받음
 	@PostMapping("/admin_lectureboard/lecturedelete.do")
-	public String boardDeletePost(@RequestParam("lectureIdx") String lectureIdx) // HttpServletRequest 대신 @RequestParam, idx -> lectureIdx
-	{
-		int result = dao.deleteLecture(lectureIdx); // 메서드명 변경
+	public String boardDeletePost(@RequestParam("lectureIdx") String lectureIdx) {
+		int result = dao.deleteLecture(lectureIdx); 
 		return "redirect:/admin_lectureboard/lecturelist.do";
 	}
 }
