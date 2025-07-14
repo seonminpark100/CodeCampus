@@ -12,9 +12,16 @@
         <div class="pt-3">
            <h2>수강생 목록</h2>
             <p class="text-success">
+<<<<<<< HEAD
              <table border="1" width="90%">
 	        <tr align="center">
 	            <th width="10%">번호</th>
+=======
+             <table class="table table-hover" border="1" width="90%">
+	        <tr align="center">
+	            <th width="10%">번호</th>
+	            <th width="15%">학과</th>
+>>>>>>> origin/master
 	            <th width="25%">수강생학번</th>
 	            <th width="25%">수강생이름</th>
 	            <th width="*">생성날짜</th>
@@ -37,14 +44,31 @@
 			                (((maps.pageNum-1) * maps.pageSize)	+ loop.index)}" />
 			            	${vNum}
 			            </td>
+<<<<<<< HEAD
 			            <td>${ row.USER_ID }</td> 
 			            <td>${ row.USER_NAME }</td> 
 			            <td>${ row.JOINDATE }</td> 
+=======
+			            <td>${ row.major_id }</td> 
+			            <td>${ row.user_id }</td> 
+			            <td>${ row.user_name }</td> 
+			            <td>${ row.joindate }</td> 
+>>>>>>> origin/master
 			        </tr>
 			        </c:forEach>        
 			    </c:otherwise>    
 			</c:choose>
 			</table>
+<<<<<<< HEAD
+=======
+			<table class="table table-hover" border="1" width="90%">
+		        <tr align="center">
+		            <td>
+		                ${ pagingImg }
+		            </td>
+		        </tr>
+	   	 	</table>
+>>>>>>> origin/master
         </div>
     </main>
 	

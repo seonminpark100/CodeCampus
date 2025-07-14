@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.user.jdbc.IUserLectureService">
+	<select id="selectAllMyLecture" resultType="com.lms.springboot.user.jdbc.UserLectureDTO"
+		parameterType="String">
+		SELECT 
+			lecture_idx,
+			lecture_name,
+			prof_id,
+			lecture_start_date,
+			lecture_end_date,
+			l.lecture_code,
+			u.major_id,
+			u.user_name
+		FROM lecture l, user_info u,
+        (SELECT lecture_code, u.user_id, u.user_name 
+          FROM enroll e, user_info u
+          WHERE e.user_id = u.user_id
+          ) s
+		WHERE l.prof_id = u.user_id
+         AND l.lecture_code = s.lecture_code
+         AND s.user_id = #{ user_id }
+	</select>
+	
+	<select id="selectLectureSessionList" resultType="com.lms.springboot.user.jdbc.UserLectureDTO"
+		parameterType="String">
+		SELECT * FROM boards 
+		 WHERE category='L' AND lecture_code=#{ lecture_code }
+	</select>
+	
+	<select id="selectOneLecture" resultType="com.lms.springboot.user.jdbc.UserLectureDTO"
+		parameterType="String">
+		SELECT 
+			lecture_idx,
+			lecture_name,
+			prof_id,
+			lecture_start_date,
+			lecture_end_date,
+			lecture_code,
+			u.major_id,
+			u.user_name
+		FROM lecture l, user_info u
+		WHERE l.prof_id = u.user_id AND lecture_code=#{lecture_code}
+	</select>
+	
+	<update id="increaseVisitCount" parameterType="int">
+		UPDATE boards
+		 SET
+		  visitCount=visitCount+1
+		WHERE board_idx=#{ board_idx }
+	</update>
+	
+	<select id="selectOneBoard" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserLectureDTO">
+		SELECT 
+			board_idx,
+			b.user_id,
+			user_name,
+			lecture_code,
+			category,
+			board_title,
+			board_content,
+			board_postdate,
+			visitCount
+		FROM boards b, user_info u
+		 WHERE b.user_id = u.user_id
+		  AND board_idx=#{ board_idx }
+	</select>
+	
+	<select id="selectFiles" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserFileDTO">
+		SELECT * FROM files
+		 WHERE board_idx=#{ board_idx }	
+	</select>
+</mapper>

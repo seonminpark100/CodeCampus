@@ -11,6 +11,7 @@
 		.bl-right{ position:relative; float:right; width:50%; height:300px; display: flex; justify-content: center; align-items: center; }
 		</style>
 	</head>
+<<<<<<< HEAD
 	<body>
 	<div class="container">
 	<%@ include file = "top.jsp" %>
@@ -59,5 +60,42 @@
 			</div>
 		</div>
 		
+=======
+	
+	<body>
+	<div class="container">
+	<%@ include file = "top.jsp" %>
+		<div class="row">
+		  <div class="leftcolumn">
+		  
+		    <div class="card">
+		      <h2>내 강의 목록</h2>
+		      <c:choose>
+			  	<c:when test="${ empty lists }"> 
+			        <tr>
+			            <td colspan="5" align="center">
+			                등록된 게시물이 없습니다^^*
+			            </td>
+			        </tr>
+			    </c:when> 
+			    <c:otherwise> 
+			        <c:forEach items="${ lists }" var="row" varStatus="loop">    
+			            <p><a href="./submain.do?lectureCode=${row.lecture_code}">${ row.lecture_name }</a></p><br/>
+			        </c:forEach>        
+			    </c:otherwise>    
+			  </c:choose>
+		    </div>
+		    
+		    <div class="card">
+		      <h2>공지사항</h2>
+		      <p>Some text..</p>
+		      <p>Some text..</p>
+		      <p>Some text..</p>
+		    </div>
+		    
+		  	</div>
+		 </div>
+	  </div>
+>>>>>>> origin/master
 	</body>
 </html>
