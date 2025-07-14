@@ -1,0 +1,38 @@
+package com.lms.springboot.utils;
+
+import java.io.File;
+import java.util.UUID;
+
+
+public class MyFunctions
+{
+	/*
+		UUID(Universally Unique IDentifier) : a 128 bit number
+	 */
+	public static String getUuid()
+	{
+		String  uuid = UUID.randomUUID().toString();
+		uuid = uuid.replace("-", "");
+		System.out.println("생성된 UUID :" + uuid);
+		return uuid;
+	}
+	
+	// filerename 
+	public static String renameFile(String sDirectory, String fileName)
+	{
+		// Split the filename extension 
+		String ext = fileName.substring(fileName.lastIndexOf("."));
+		// get the new file name(UUID)
+		String now = getUuid();
+		// Save as new file name + ext
+		String newFileName = now + ext;
+		
+		//기존파일과 새로운파일의 객체를 만든 후 이름을 변경한다. 
+		File oldFile = new File(sDirectory + File.separator + fileName);
+		File newFile = new File(sDirectory + File.separator + newFileName);
+		oldFile.renameTo(newFile);
+		
+		//변경된 파일명을 반환한다. 
+		return newFileName;
+	}	
+}

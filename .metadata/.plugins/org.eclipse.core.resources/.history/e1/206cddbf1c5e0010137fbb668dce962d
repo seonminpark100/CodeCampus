@@ -1,0 +1,108 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="s" %>  
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>OO대학교 eCampus</title>
+		<style type="text/css">
+		.bl-left { position:relative; float:left; width:50%; height:300px; display: flex; justify-content: center; align-items: center; }
+		.bl-right{ position:relative; float:right; width:50%; height:300px; display: flex; justify-content: center; align-items: center; }
+		</style>
+		<script>
+		function gotoList(){
+	        let pageMoveForm = document.createElement('form');
+	        /* // 인수값넣을경우
+	        let obj = document.createElement('input');
+	   		 obj.setAttribute('type', 'hidden');
+	  		 obj.setAttribute('name', 'userid');
+	  		 obj.setAttribute('value', userid);
+	         pageMoveForm.appendChild(obj);
+	        */
+	        pageMoveForm.setAttribute('method', 'post');
+	        pageMoveForm.setAttribute('action', '/test/list.do');
+	        document.body.appendChild(pageMoveForm);
+	        pageMoveForm.submit(); 
+	    }
+		</script>
+	</head>
+	<body>
+	<div class="container">
+	<%@ include file = "top.jsp" %>
+	<div class="row">
+  <div class="leftcolumn">
+    <div class="card">
+      <h2>TITLE HEADING</h2>
+      <h5>Title description, Dec 7, 2017</h5>
+      <div class="fakeimg" style="height:200px;">Image</div>
+      <p>Some text..</p>
+      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+    </div>
+    <div class="card">
+      <h2>TITLE HEADING</h2>
+      <h5>Title description, Sep 2, 2017</h5>
+      <div class="fakeimg" style="height:200px;">Image</div>
+      <p>Some text..</p>
+      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+    </div>
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      <h2>About Me</h2>
+      <div class="fakeimg" style="height:100px;">Image</div>
+      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+    </div>
+    <div class="card">
+      <h3>Popular Post</h3>
+      <div class="fakeimg"><p>Image</p></div>
+      <div class="fakeimg"><p>Image</p></div>
+      <div class="fakeimg"><p>Image</p></div>
+    </div>
+    <div class="card">
+      <h3>Follow Me</h3>
+      <p>Some text..</p>
+    </div>
+  </div>
+</div>
+
+
+		<div class="container">
+				<div class="bl-left">
+				    <span class="bluelight">
+				        <h2>강의목록</h2>
+				        <c:choose>
+					    <c:when test="${ empty lists }"> 
+					        <tr>
+					            <td colspan="5" align="center">
+					                등록된 게시물이 없습니다^^*
+					            </td>
+					        </tr>
+					    </c:when> 
+					    <c:otherwise> 
+					        <c:forEach items="${ lists }" var="row" varStatus="loop">    
+ 					        <tr align="center">
+					            <a href="./submain.do?lectureCode=${row.lecture_code}">${ row.lecture_name }</a> <br/>
+					        </tr>
+					        </c:forEach>        
+					    </c:otherwise>    
+					</c:choose>
+				    </span>
+				</div>
+<%-- 		       	<div class="bl-right">
+		            <span class="bluelight">
+		                <h2>Quick Menu(임시메뉴임)</h2>
+		                <a href="/prof/lectureboard.do"><button>강의</button></a>
+		                <a href="/prof/noticeboard.do"><button>공지사항</button></a>
+		                <a href="/prof/absentboard.do"><button>출석부</button></a>
+		                <button>메뉴3</button>
+		                <button>메뉴4</button>
+		                <button>메뉴5</button>
+		                <button>메뉴6</button>
+		            </span>
+		        </div> --%>
+			</div>
+		</div>
+		
+	</body>
+</html>

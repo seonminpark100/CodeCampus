@@ -1,0 +1,91 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>대학교 eCampus</title>
+		<script>
+		function validateForm(writeFrm){
+
+			if(writeFrm.board_title.value==''){
+				alert("강의명을 입력해주세요.");
+				writeFrm.board_title.focus();
+				return false;
+			}
+			if(writeFrm.board_content.value==''){
+				alert("강의내용을 입력해주세요.");
+				writeFrm.board_content.focus();
+				return false;
+			}
+		}
+		</script>
+	</head>
+	<body>
+	 <%@ include file = "../sidebars.jsp" %>
+	 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		<h2>강의 업로드</h2>
+		<form name="writeFrm" method="post"
+			action="./lectureUpload.do" onsubmit="return validateForm(this);">
+		<table class="table table-hover" border="1" width="90%">
+		    <tr>
+		        <td>교수명</td>
+		        <td>
+		            <input type="text" name="lecture_name" style="width:150px;" value="${ profDTO.user_name }" readonly="readonly"/>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td>강의코드</td>
+		        <td>
+		            <input type="text" name="user_name" style="width:90%;" value="${ profDTO.lecture_code }" readonly="readonly"/>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td>강의명</td>
+		        <td>
+		            <input type="text" name="user_name" style="width:90%;" value="${ profDTO.lecture_name }" readonly="readonly"/>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td>카테고리</td>
+		        <td>
+			        <input type="checkbox" name="category" value="사진" checked />사진
+					<input type="checkbox" name="category" value="과제"/>과제
+					<input type="checkbox" name="category" value="워드"/>워드 
+		           <select>
+		           		<option name="category">강의
+		           		<option name="category">공지사항
+		           		<option name="category">커뮤니티
+		           </select>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td>제목</td>
+		        <td><input type="text" name="board_title"></td>
+		    </tr>
+		    <tr>
+		        <td>내용</td>
+		        <td>
+		        	<textarea name="board_content" style="width:90%;height:100px;"></textarea>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td>첨부파일</td>
+		        <td><input type="file"> </td>
+		    </tr>
+		    
+		    <tr>
+		        <td colspan="2" align="center">
+		            <button type="submit">작성 완료</button>
+		            <button type="reset">RESET</button>
+		            <button type="button" onclick="location.href='lectureboard.do';">
+		                목록 바로가기
+		            </button>
+		        </td>
+		    </tr>
+		    
+		</table>    
+		</form>
+		</main>
+	</body>
+</html>

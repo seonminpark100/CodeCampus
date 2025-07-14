@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.user.jdbc.IUserAssignmentService">
+	<select id="selectAllMyAssignmentList" resultType="com.lms.springboot.user.jdbc.UserAssignmentDTO"
+		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
+		SELECT 
+			assignment_idx,
+			a.lecture_code,
+			l.lecture_name,
+			p.user_name,
+			assignment_title,
+			deadline
+		 FROM assignment a, lecture l, user_info p, 
+         (SELECT l.lecture_code FROM LECTURE l, enroll e
+                WHERE l.lecture_code = e.lecture_code
+                 AND e.user_id = #{ user_id }
+
+                 ) s
+		 WHERE a.lecture_code = l.lecture_code
+            AND l.prof_id = p.user_id
+            AND l.lecture_code = s.lecture_code
+         <if test="searchKeyword!=null and !searchKeyword.equals('')">
+			AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
+		 </if>
+	</select>
+	
+	<select id="submitCheck" parameterType="com.lms.springboot.user.jdbc.UserAssignmentDTO"
+		resultType="int">
+		SELECT COUNT(*)
+		 FROM assignment_submit
+		 WHERE 
+		  user_id=#{ user_id }
+		  AND assignment_idx=#{ assignment_idx }
+	</select>
+	
+	<select id="selectOneAssignment" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserAssignmentDTO">
+		SELECT 
+			assignment_idx,
+			assignment_title,
+			assignment_content,
+			uploaded_date,
+			deadline,
+			a.lecture_code,
+			lecture_name,
+			user_name
+		 FROM assignment a, lecture l, user_info u
+		 WHERE
+		 	a.lecture_code = l.lecture_code
+		 	AND l.prof_id = u.user_id
+		 	AND assignment_idx=#{ assignment_idx }
+	</select>
+	
+	<insert id="insertAssignmentSubmit" parameterType="com.lms.springboot.user.jdbc.UserAssignmentDTO">
+		INSERT INTO assignment_submit 
+			(
+				assignment_idx,
+				assignment_submit_idx,
+				assignment_content_s,
+				assignment_ofile,
+				assignment_sfile,
+				submitted_date,
+				user_id
+			)
+			VALUES
+			(
+				#{ assignment_idx },
+				seq_serial_num.nextval,
+				#{ assignment_content_s },
+				<choose>
+				  	<when test="assignment_ofile!=null and !assignment_ofile.equals('')">
+				  		#{ assignment_ofile },
+				  		#{ assignment_sfile },
+				  	</when>
+				  	<otherwise>
+				  		null,
+				  		null,
+				  	</otherwise>
+		  		</choose>
+				sysdate,
+				#{ user_id }
+			)
+	</insert>
+	
+	<select id="selectOneAssignmentSubmit" parameterType="com.lms.springboot.user.jdbc.UserAssignmentDTO"
+		resultType="com.lms.springboot.user.jdbc.UserAssignmentDTO">
+		SELECT 
+		 a.assignment_idx,
+		 assignment_submit_idx,
+		 lecture_name,
+		 user_name, 
+		 assignment_title,
+		 assignment_content,
+		 assignment_content_s,
+		 assignment_ofile,
+		 assignment_sfile,
+		 score
+		FROM assignment a, assignment_submit s, lecture l, user_info u
+		WHERE
+			a.assignment_idx = s.assignment_idx
+			AND a.lecture_code = l.lecture_code
+			AND l.prof_id = u.user_id
+			AND a.assignment_idx=#{ assignment_idx }
+		 	AND s.user_id = #{ user_id }
+	</select>
+	
+	<select id="selectOneAssignmentSubmitBySubmitIdx" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserAssignmentDTO">
+		SELECT 
+		 a.assignment_idx,
+		 assignment_submit_idx,
+		 lecture_name,
+		 user_name, 
+		 assignment_title,
+		 assignment_content,
+		 assignment_content_s,
+		 assignment_ofile,
+		 assignment_sfile,
+		 score
+		FROM assignment a, assignment_submit s, lecture l, user_info u
+		WHERE
+			a.assignment_idx = s.assignment_idx
+			AND a.lecture_code = l.lecture_code
+			AND l.prof_id = u.user_id
+			AND assignment_submit_idx=#{ assignment_submit_idx }
+	</select>
+	
+	<update id="updateAssignmentSubmit" parameterType="com.lms.springboot.user.jdbc.UserAssignmentDTO">
+		UPDATE assignment_submit
+		 SET
+		  assignment_content_s=#{ assignment_content_s },
+		  <choose>
+		  	<when test="assignment_ofile!=null and !assignment_ofile.equals('')">
+		  		assignment_ofile=#{ assignment_ofile },
+		  		assignment_sfile=#{ assignment_sfile },
+		  	</when>
+		  	<otherwise>
+		  		assignment_ofile=null,
+		  		assignment_sfile=null,
+		  	</otherwise>
+		  </choose>
+		  submitted_date=sysdate
+		WHERE assignment_idx=#{ assignment_idx } 
+			AND user_id=#{ user_id }
+	</update>
+	
+	<select id="canSubmit" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM assignment
+		 WHERE assignment_idx=#{ assignment_idx }
+		 	AND sysdate <![CDATA[<=]]> deadline
+		 
+	</select>
+</mapper>

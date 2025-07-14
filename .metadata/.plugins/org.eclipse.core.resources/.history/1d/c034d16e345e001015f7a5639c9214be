@@ -1,0 +1,190 @@
+package com.lms.springboot.prof.assignment;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lms.springboot.prof.ProfDTO;
+import com.lms.springboot.utils.PagingUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+public class ProfAssignmentController
+{
+	@Autowired
+	IProfAssignmentService dao;
+	
+	
+//	Manage for the list of the submitted assignment by professor
+	@GetMapping("/prof/assignmentList.do")
+	public String assignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
+		int totalCount = dao.getAssignmentTotalCount(profDTO);
+		int pageSize = 3; 
+		int blockPage = 20; 
+		int pageNum = (req.getParameter("pageNum")==null 
+			|| req.getParameter("pageNum").equals("")) 
+			? 1 : Integer.parseInt(req.getParameter("pageNum"));
+		
+		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		
+		//DB에서 인출한 게시물의 목록을 Model에 저장 
+		ArrayList<ProfDTO> lists = dao.assignmentBoardListPage(profDTO);
+		model.addAttribute("lists", lists);
+		
+		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
+		String pagingImg =
+			PagingUtil.pagingImg(totalCount, pageSize, 
+				blockPage, pageNum,
+				req.getContextPath()+"/prof/assignmentList.do?lectureCode="+lectureCode+"&");
+		model.addAttribute("pagingImg", pagingImg);
+		model.addAttribute("lectureCode", lectureCode);
+		return "prof/assignmentBoard/assignmentList";
+	}
+//	과제 업로드(교수) - 화면보기
+	@RequestMapping("/prof/assignmentUpload.do")
+	public String lectureUpload (@RequestParam String lectureCode, Model model) {
+		model.addAttribute("lectureCode", lectureCode);
+		return "prof/assignmentBoard/assignmentUpload";
+	}
+//	과제 업로드(교수) - action
+	@PostMapping("/prof/assignmentUpload.do")
+	public String lectureUploadProc(Model model, HttpServletRequest req) {
+		String title = req.getParameter("assignment_title");
+		String content = req.getParameter("assignment_content");
+		String deadline = req.getParameter("deadline");
+		String lectureCode = req.getParameter("lectureCode");
+		
+		int result_prof = dao.assignmentlectureUploadProcProf(title, content, deadline, lectureCode);
+		return "redirect:assignmentList.do?lectureCode="+lectureCode;
+	}
+//	과제 상세보기(교수)
+	@RequestMapping("/prof/assignmentView.do")
+	public String assignmentView(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
+		profDTO = dao.assignmentView(profDTO);
+		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
+		model.addAttribute("profDTO", profDTO);
+		model.addAttribute("lectureCode", lectureCode);
+		
+		return "prof/assignmentBoard/assignmentView";
+	}
+//	과제 수정하기(교수) - 내용가져오기
+	@GetMapping("/prof/assignmentEdit.do")
+	public String assignmentEditGet(Model model, ProfDTO profDTO) {
+		profDTO = dao.assignmentView(profDTO);
+		model.addAttribute("profDTO", profDTO);
+		return "prof/assignmentBoard/assignmentEdit";
+	}
+//	과제 수정하기(교수) - action
+	@PostMapping("/prof/assignmentEdit.do")
+	public String assignmentEditPost(Model model, ProfDTO profDTO) {
+		int result = dao.assignmentEdit(profDTO);
+		return "redirect:assignmentView.do?lectureCode=" + profDTO.getLecture_code()+"&assignment_idx=" +profDTO.getAssignment_idx();
+	}
+//	과제 삭제하기(교수)
+	@PostMapping("/prof/assignmentDelete.do")
+	public String assignmentDelete(HttpServletRequest req) {
+		int result = dao.assignmentDelete(req.getParameter("assignment_idx"));
+		String lectureCode = req.getParameter("lectureCode");
+		return "redirect:assignmentList.do?lectureCode="+ lectureCode;
+	}
+	
+//	과제 목록 관리(학생이 올린 과제 보기)
+	@GetMapping("/prof/submittedAssignmentList.do")
+	public String submittedAssignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
+		int totalCount = dao.getSubmittedAssignmentTotalCount(profDTO);
+		int pageSize = 3; 
+		int blockPage = 20; 
+		int pageNum = (req.getParameter("pageNum")==null 
+			|| req.getParameter("pageNum").equals("")) 
+			? 1 : Integer.parseInt(req.getParameter("pageNum"));
+		
+		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		
+		//DB에서 인출한 게시물의 목록을 Model에 저장 
+		ArrayList<ProfDTO> lists = dao.submittedAssignmentBoardListPage(profDTO);
+		model.addAttribute("lists", lists);
+		
+		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
+		String pagingImg =
+			PagingUtil.pagingImg(totalCount, pageSize, 
+				blockPage, pageNum,
+				req.getContextPath()+"/prof/submittedAssignmentList.do?lectureCode="+lectureCode+"&");
+		model.addAttribute("pagingImg", pagingImg);
+		model.addAttribute("lectureCode", lectureCode);
+		return "prof/assignmentBoard/submittedAssignmentList";
+	}
+	
+	@RequestMapping("/prof/submittedAssignmentView.do")
+	public String submittedAssignmentView(Model model, ProfDTO profDTO, HttpServletRequest req) {
+		String lectureCode = req.getParameter("lectureCode");
+		profDTO.setLecture_code(lectureCode);
+		
+		profDTO = dao.submittedAssignmentView(profDTO);
+		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
+		String assignment_submit_idx = req.getParameter("assignment_submit_idx");
+		profDTO.setAssignment_submit_idx(assignment_submit_idx);
+		model.addAttribute("profDTO", profDTO);
+		model.addAttribute("lectureCode", lectureCode);
+		
+		return "prof/assignmentBoard/submittedAssignmentView";
+	}
+	
+	@RequestMapping("/prof/submittedAssignmentGetSocreProc.do")
+	public String submittedAssignmentGetSocreProc(HttpServletRequest req) {
+		String lectureCode = req.getParameter("lectureCode");
+		String score = req.getParameter("score");
+		String assignment_submit_idx = req.getParameter("assignment_submit_idx");
+		
+		int result = dao.submittedAssignmentGetSocreProc(score, lectureCode, assignment_submit_idx);
+		
+		return "redirect:submittedAssignmentList.do?lectureCode="+lectureCode;
+	}
+	
+	@Value("${file.upload-dir}")
+	private String FILE_DIRECTORY;
+	
+	@GetMapping("/download.do/{fileName:.+}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileName) throws IOException {
+        File file = new File(FILE_DIRECTORY + fileName);
+
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE); // Generic binary stream
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .body(resource);
+    }
+}

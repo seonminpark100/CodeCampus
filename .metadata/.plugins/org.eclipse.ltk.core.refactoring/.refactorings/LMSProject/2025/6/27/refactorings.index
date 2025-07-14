@@ -1,0 +1,4 @@
+1751245133892	Rename package 'com.lms.springboot.jdbc'
+1751245180722	Rename package 'com.lms.springboot.prof.jdbc'
+1751247649320	Rename resource 'list.jsp'
+1751247880859	Move 'noticeBoardList.jsp' to 'noticeBoard'

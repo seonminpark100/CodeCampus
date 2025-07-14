@@ -1,0 +1,9 @@
+package model2.mvcboard;
+
+import jakarta.servlet.annotation.WebServlet;
+
+@WebServlet("/mvcboard/lecture.do")
+public class LectureController
+{
+
+}

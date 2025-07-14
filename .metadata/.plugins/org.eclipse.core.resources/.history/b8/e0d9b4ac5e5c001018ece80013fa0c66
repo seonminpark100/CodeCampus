@@ -1,0 +1,51 @@
+package com.lms.springboot.jdbc;
+
+import java.util.ArrayList;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+@Mapper
+public interface IProfService
+{
+//	수강생 목록
+	public ArrayList<ProfDTO> userList(ProfDTO profDTO, String user_id);
+	
+//	과제(assignment) - 교수
+	public int getAssignmentTotalCount(ProfDTO profDTO);
+	public ArrayList<ProfDTO> assignmentBoardListPage(ProfDTO profDTO);
+	public ProfDTO assignmentView(ProfDTO profDTO);
+	public int assignmentEdit(ProfDTO profDTO);
+	public int assignmentDelete(String assignment_idx);
+	public int assignmentlectureUploadProcProf
+	(@Param("_title") String title, @Param("_content") String content,
+			@Param("_deadline") String deadline, @Param("_lectureCode") String lecture_code);
+		
+//	과제(assignment) - 학생 제출
+	public int getSubmittedAssignmentTotalCount(ProfDTO profDTO);
+	public ArrayList<ProfDTO> submittedAssignmentBoardListPage(ProfDTO profDTO);
+	public ProfDTO submittedAssignmentView(ProfDTO profDTO);
+	public int submittedAssignmentGetSocreProc(@Param("_score") String score,@Param("_lectureCode") String lecture_code,
+			@Param("_assignment_submit_idx") String assignment_submit_idx);
+	
+// 	수강생
+	public int getStudentTotalCount(ProfDTO profDTO);
+	public ArrayList<ProfDTO> studentBoardListPage(ProfDTO profDTO);
+	
+//	강의
+	public int getLectureTotalCount(ProfDTO profDTO);
+	public ArrayList<ProfDTO> lectureBoardListPage(ProfDTO profDTO);
+	public ProfDTO lectureUploadPage(ProfDTO profDTO);
+	public int insertLectureWithFile(ProfDTO profDTO);
+	public int insertLectureWithoutFile(ProfDTO profDTO);
+//	public ProfDTO lectureView(ProfDTO profDTO);
+	public ProfDTO lectureViewWithoutFile(ProfDTO profDTO);
+	public ArrayList<ProfDTO> lectureViewWithFile(ProfDTO profDTO);
+	public int lectureEdit(ProfDTO profDTO);
+	public int lectureDelete(String board_idx);
+	
+//	출석부
+	public int absentProcProf
+	(@Param("_user_id") String user_id, @Param("_absent_state") String absent_state, 
+			@Param("_attendance_time") String attendance_time, @Param("_lectureCode") String lecture_code);
+}

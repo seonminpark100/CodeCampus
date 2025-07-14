@@ -1,0 +1,39 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>OO대학교 eCampus</title><title>home 화면</title>
+		<!-- 정적 리소스인 js와 css파일이 링크 -->
+		<script src="./js/commons.js"></script>
+		<!-- <link rel="stylesheet" href="./css/main.css" /> -->
+		<!-- FULL CALENDAR -->
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+		<script>
+	    document.addEventListener('DOMContentLoaded', function() {
+	    var calendarEl = document.getElementById('calendar');
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	      initialView: 'dayGridMonth',
+	      aspectRatio: 1.5,
+	      events: [
+	    	  {title: '테스트 일정1', start: '2025-07-03'},
+	    	  {title: '테스트 일정2', start: '2025-07-05'}
+	      ]
+	      });
+	    calendar.render();
+	    });
+	  </script>
+		
+	</head>
+	<body>
+	<%@ include file = "top.jsp" %>
+		<div class="container" id="calendar"></div>
+		<div class="bl-left">
+            <span class="bluelight">
+                <a href="#">일정 or 맵</a>
+            </span>
+        </div>
+	        
+	</body>
+</html>

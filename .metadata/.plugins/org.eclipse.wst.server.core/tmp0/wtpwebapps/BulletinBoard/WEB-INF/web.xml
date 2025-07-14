@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" version="5.0">
+  <display-name>BulletinBoard</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  
+  <context-param>
+   <param-name>INIT_PARAM</param-name>
+   <param-value>web.xml에 저장한 초기화 매개변수</param-value>
+  </context-param>
+  
+  <!-- 개발 완료 후 주석처리하기  -->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/02ImplicitObject/Exception.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>405</error-code>
+    <location>/02ImplicitObject/Exception.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/02ImplicitObject/Exception.jsp</location>
+  </error-page>
+  
+  <!-- 오라클 접속 정보를 컨테스트 초기화 파라미터로 설정함  -->
+ <context-param>
+   <param-name>OracleDriver</param-name>
+   <param-value>oracle.jdbc.OracleDriver</param-value>
+ </context-param>
+ 
+ <context-param>
+   <param-name>OracleURL</param-name>
+   <param-value>jdbc:oracle:thin:@localhost:1521:xe</param-value>
+ </context-param>
+ 
+ <context-param>
+   <param-name>OracleId</param-name>
+   <param-value>musthave</param-value>
+ </context-param>
+ 
+ <context-param>
+   <param-name>OraclePwd</param-name>
+   <param-value>1234</param-value>
+ </context-param>
+  
+  <!-- 세션 유지 시간 20분으로 설정  -->
+  <session-config>
+   <session-timeout>20</session-timeout>
+  </session-config>
+  
+  <!-- 한글 깨짐에 대한 필터 설정 -->
+   <filter>
+    <filter-name>SetCharEncoding</filter-name>
+    <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+      <init-param>
+        <param-name>encoding</param-name>
+        <param-value>utf-8</param-value>
+      </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>SetCharEncoding</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  
+  <!-- 게시물 10개씩 출력 -->
+  <context-param>
+		<param-name>POSTS_PER_PAGE</param-name>
+		<param-value>10</param-value>
+	</context-param>
+	<!-- 5개 블럭씩 출력 -->
+	<context-param>
+		<param-name>PAGES_PER_BLOCK</param-name>
+		<param-value>5</param-value>
+	</context-param>
+  
+  
+  <servlet>  <!-- HelloServlet 서블릿 등록 -->
+		<servlet-name>HelloServlet</servlet-name>	<!-- 서블릿 참조할 때 사용할 이름 -->
+		<servlet-class>servlet.HelloServlet</servlet-class>	<!-- 서블릿을 패키지포함 명시 -->
+	</servlet>	
+	<servlet-mapping>   <!-- 서블릿과 요청명(요청 URL) 매핑 -->
+		<servlet-name>HelloServlet</servlet-name>	<!-- <servlet>에서 사용할 이름과 동일 -->
+		<url-pattern>/12Servlet/HelloServlet.do</url-pattern>	<!-- 요청명으로 사용할 경로 -->
+	</servlet-mapping>
+  
+    
+  <servlet>  <!-- DirectServletPrint 서블릿 등록 -->
+		<servlet-name>DirectServletPrint</servlet-name>	<!-- 서블릿 참조할 때 사용할 이름 -->
+		<servlet-class>servlet.DirectServletPrint</servlet-class>	<!-- 서블릿을 패키지포함 명시 -->
+	</servlet>	
+	<servlet-mapping>   <!-- 서블릿과 요청명(요청 URL) 매핑 -->
+		<servlet-name>DirectServletPrint</servlet-name>	<!-- <servlet>에서 사용할 이름과 동일 -->
+		<url-pattern>/12Servlet/DirectServletPrint.do</url-pattern>	<!-- 요청명으로 사용할 경로 -->
+	</servlet-mapping>
+	
+
+	  <servlet>  <!-- MemberAuth 서블릿 등록 -->
+		<servlet-name>MemberAuth</servlet-name>	<!-- 서블릿 참조할 때 사용할 이름 -->
+		<servlet-class>servlet.MemberAuth</servlet-class>	<!-- 서블릿을 패키지포함 명시 -->
+		<init-param>
+			<param-name>admin_id</param-name>
+			<param-value>nakja</param-value>
+		</init-param>
+	</servlet>	
+	<servlet-mapping>   <!-- 서블릿과 요청명(요청 URL) 매핑 -->
+		<servlet-name>MemberAuth</servlet-name>	<!-- <servlet>에서 사용할 이름과 동일 -->
+		<url-pattern>/12Servlet/MemberAuth.mvc</url-pattern>	<!-- 요청명으로 사용할 경로 -->
+	</servlet-mapping>
+  
+  
+    <servlet>  <!-- MVCBoardList 서블릿 등록 -->
+		<servlet-name>MVCBoardList</servlet-name>	<!-- 서블릿 참조할 때 사용할 이름 -->
+		<servlet-class>model2.mvcboard.ListController</servlet-class>	<!-- 서블릿을 패키지포함 명시 -->
+	</servlet>	
+	<servlet-mapping>   <!-- 서블릿과 요청명(요청 URL) 매핑 -->
+		<servlet-name>MVCBoardList</servlet-name>	<!-- <servlet>에서 사용할 이름과 동일 -->
+		<url-pattern>/mvcboard/list.do</url-pattern>	<!-- 요청명으로 사용할 경로 -->
+	</servlet-mapping>
+	
+	
+	  <servlet>  <!-- MVCBoardWrite 서블릿 등록 -->
+		<servlet-name>MVCBoardWrite</servlet-name>	<!-- 서블릿 참조할 때 사용할 이름 -->
+		<servlet-class>model2.mvcboard.WriteController</servlet-class>	<!-- 서블릿을 패키지포함 명시 -->
+			<multipart-config>
+				<max-file-size>1048576</max-file-size>
+				<max-request-size>10485760</max-request-size>
+			</multipart-config>
+	</servlet>	
+	<servlet-mapping>   <!-- 서블릿과 요청명(요청 URL) 매핑 -->
+		<servlet-name>MVCBoardWrite</servlet-name>	<!-- <servlet>에서 사용할 이름과 동일 -->
+		<url-pattern>/mvcboard/write.do</url-pattern>	<!-- 요청명으로 사용할 경로 -->
+	</servlet-mapping>
+	
+</web-app>

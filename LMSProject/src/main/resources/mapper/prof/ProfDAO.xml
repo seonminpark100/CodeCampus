@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lms.springboot.prof.IProfService">
+
+	<!-- 강의 목록 출력-->
+	<select id="userList" resultType="com.lms.springboot.prof.ProfDTO" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+		SELECT user_id, user_name, lecture_name, lecture_code FROM 
+		    user_info u INNER JOIN lecture l
+		    ON u.user_id = l.prof_id
+		    WHERE prof_id =#{user_id}
+	</select>
+	
+	<!-- 수강생 리스트 -->
+	<select id="getStudentTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+			SELECT COUNT(*) FROM 
+			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+			    WHERE e.lecture_code = #{lecture_code} AND authority = 'ROLE_USER'
+
+	</select>
+	<select id="studentBoardListPage" resultType="com.lms.springboot.prof.ProfDTO" >
+
+			    
+			    SELECT * FROM (
+					SELECT Tb.*, rownum rNum FROM (
+						SELECT * FROM 
+							user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+					    WHERE e.lecture_code = #{lecture_code} AND authority = 'ROLE_USER'
+						ORDER BY u.user_id DESC
+					) Tb
+				)
+				WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	<select id="selectNoticeBoardList" resultType="com.lms.springboot.prof.NoticeBoardDTO" 
+		parameterType="com.lms.springboot.prof.NoticeBoardDTO">
+			SELECT *
+			FROM (SELECT * FROM boards ORDER BY board_idx DESC)
+			WHERE ROWNUM &lt;= 5 AND category = 'N'
+	</select>
+	<select id="selectCommunityList" resultType="com.lms.springboot.prof.NoticeBoardDTO" 
+		parameterType="com.lms.springboot.prof.NoticeBoardDTO">
+			SELECT *
+			FROM (SELECT * FROM boards ORDER BY board_idx DESC)
+			WHERE ROWNUM &lt;= 5 AND category = 'C'
+	</select>
+	
+</mapper>

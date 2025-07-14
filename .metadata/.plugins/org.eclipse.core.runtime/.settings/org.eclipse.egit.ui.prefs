@@ -1,0 +1,5 @@
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\n<messages>\n<message>ID Validation</message>\n<message>~ ID Validation</message>\n<message>\uD68C\uC6D0\uAC00\uC785 \uC544\uC774\uB514 \uC911\uBCF5 \uAC80\uC0AC</message>\n<message>\uD68C\uC6D0\uAC00\uC785 \uC544\uC774\uB514 \uC911\uBCF5\uD655\uC778 \uC7AC\uC218\uC815</message>\n<message>\uD68C\uC6D0\uAC00\uC785 \uC544\uC774\uB514\uC911\uBCF5\uD655\uC778\uAE4C\uC9C0</message>\n<message>Check Sign-UP validation</message>\n<message>Add Logout Function on this project.</message>\n<message>\uD68C\uC6D0\uC804\uC6A9 \uAC8C\uC2DC</message>\n<message>\uD68C\uC6D0\uAC00\uC785(\uC911\uBCF5\uD655\uC778 \uC81C\uC678)</message>\n<message>Bulletin Board System</message>\n</messages>
+eclipse.preferences.version=1
+repositories_view_filters=<?xml version\="1.0" encoding\="UTF-8"?>\n<FilterCache/>
+resourcehistory_graph_split=500,500
+resourcehistory_rev_split=700,300

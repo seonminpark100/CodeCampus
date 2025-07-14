@@ -1,0 +1,8 @@
+package model2.lecture;
+
+import common.DBConnPool;
+
+public class LectureDAO extends DBConnPool
+{
+
+}

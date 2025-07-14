@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lms.springboot.prof.absent.IProfAbsentService">
+
+	<!-- 출석부 -->
+	<select id="getAbsentBoardTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+		SELECT COUNT(*) FROM ABSENTS
+		<if test="searchKeyword!=null and !searchKeyword.equals('')">
+			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	<select id="absentBoardListPage" resultType="com.lms.springboot.prof.ProfDTO" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM ABSENTS
+				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+					WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY USER_ID ASC
+			) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+
+
+	<!-- 수강생 리스트 -->
+	<select id="getStudentTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+			SELECT COUNT(*) FROM 
+			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+			    WHERE e.lecture_code = #{lecture_code}
+
+	</select>
+	<select id="studentBoardListPage" resultType="com.lms.springboot.prof.ProfDTO" >
+			<!-- SELECT * FROM 
+			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+			    WHERE e.lecture_code = #{lecture_code} -->
+			    
+			    SELECT * FROM (
+					SELECT Tb.*, rownum rNum FROM (
+						SELECT * FROM 
+							user_info u LEFT JOIN enroll e on u.user_id = e.user_id
+					    WHERE e.lecture_code = #{lecture_code}
+						ORDER BY u.user_id DESC
+					) Tb
+				)
+				WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	
+    <!-- 출석 -->
+	<insert id="absentProcProf">
+		INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
+		VALUES
+		(seq_serial_num.nextval, #{_lectureCode}, #{_user_id},#{_absent_state} ,#{} ,sysdate)
+		
+		<!-- INSERT INTO absents (ABSENT_IDX, LECTURE_CODE, USER_ID, absent_state, LECTURE_DATE, ATTENDANCE_TIME)
+		  VALUES (seq_serial_num.nextval, #{_lectureCode}, #{_user_id},#{_absent_state} ,sysdate ,sysdate)
+		  	ON DUPLICATE KEY UPDATE
+			    absent_state = #{_absent_state} -->
+	</insert>	
+</mapper>

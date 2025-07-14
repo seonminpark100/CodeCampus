@@ -1,0 +1,21 @@
+package com.lms.springboot.prof.absent;
+
+import java.util.ArrayList;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.lms.springboot.prof.ProfDTO;
+
+@Mapper
+public interface IProfAbsentService
+{
+//	출석부
+	public int absentProcProf
+	(@Param("_user_id") String user_id, @Param("_absent_state") String absent_state,
+			@Param("_absent_state") String absent_state, 
+			@Param("_lectureCode") String lecture_code);
+	
+	public int getStudentTotalCount(ProfDTO profDTO);
+	public ArrayList<ProfDTO> studentBoardListPage(ProfDTO profDTO);
+}

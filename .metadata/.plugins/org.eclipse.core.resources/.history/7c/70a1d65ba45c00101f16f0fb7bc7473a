@@ -1,0 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>마이페이지</title>
+	</head>
+	<body>
+	<%@ include file = "sidebars.jsp" %>
+	<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+        <div class="pt-3">
+	<h2>마이페이지</h2>
+	
+	</body>
+</html>

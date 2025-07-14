@@ -1,0 +1,21 @@
+1750996370068	Move 'admin.jsp' to 'admin'
+1750996469744	Rename resource 'guest.jsp'
+1750996475589	Rename resource 'member.jsp'
+1750996481134	Move 'user.jsp' to 'user'
+1750996482364	Move 'instructor.jsp' to 'instructor'
+1750997167381	Delete element
+1750997424692	Delete element
+1751027260185	Rename resource 'instructor'
+1751027270115	Rename resource 'instructor.jsp'
+1751027577541	Copy compilation unit
+1751028496173	Copy file
+1751028518023	Delete element
+1751066363060	Copy file
+1751066663242	Delete element
+1751069240364	Delete element
+1751069244313	Delete element
+1751074128032	Rename package 'com.lms.springboot.prof.jdbc'
+1751074141595	Copy compilation unit
+1751074144574	Copy compilation unit
+1751074151312	Delete element
+1751074154952	Delete element

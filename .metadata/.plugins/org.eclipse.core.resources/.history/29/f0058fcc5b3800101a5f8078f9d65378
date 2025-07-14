@@ -1,0 +1,79 @@
+package model2.mvcboard;
+
+import java.io.Console;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import utils.JSFunction;
+
+@WebServlet("/mvcboard/login.do")
+public class LoginController extends HttpServlet
+{
+	private static final long serialVersionUID = 1L; // 없으면 경고 뜸
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
+		req.getRequestDispatcher("/14MVCBoard/Login.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    try {
+	        // 입력 값 추출
+//	        String id = req.getParameter("id");
+//	        String pass = req.getParameter("pass");
+//
+//	        // DAO 호출
+//	        MVCBoardDAO dao = new MVCBoardDAO();
+//	        MVCBoardDTO result = dao.getMVCBoardDTO(id, pass); // 메서드명 가정
+//	        dao.close();
+//	        
+//	        if (result.getId() != null) {
+//	            // 로그인 성공 → 목록 페이지로 리다이렉트
+//	        	HttpSession session = req.getSession();
+//	        	session.setAttribute("id", id);
+//	        	JSFunction.alertLocation(resp, id + "님 로그인 하셨습니다.", "../mvcboard/list.do");
+//	        } else {
+//	            // 실패 → 경고 후 다시 로그인 페이지로 이동
+//	            JSFunction.alertLocation(resp, "로그인에 실패했습니다.", "../mvcboard/login.do");
+//	        }
+	        
+	    	/* 로그인 폼에서 입력한 아이디, 패스워드를 받는다. */
+	    	String userId = request.getParameter("user_id");
+	    	String userPwd = request.getParameter("user_pw");
+
+	    	String oracleDriver = application.getInitParameter("OracleDriver");
+	    	String oracleUrl = application.getInitParameter("OracleURL");
+	    	String oracleId = application.getInitParameter("OracleId");
+	    	String oraclePwd = application.getInitParameter("OraclePwd");
+
+	    	/* 위 정보를 통해 DAO 객체를 생성하고, 이때 오라클에 연결됨. */
+	    	MemberDAO dao = new MemberDAO(oracleDriver, oracleUrl, oracleId, oraclePwd);
+	    	MemberDTO memberDTO = dao.getMemberDTO(userId, userPwd);
+
+	    	dao.close();
+
+	    	if(memberDTO.getId() != null){
+	    		/* 로그인이 성공하면 세션영역에 회원 아이디와 이름을 저장함. */
+	    		session.setAttribute("UserId", memberDTO.getId());
+	    		session.setAttribute("UserName", memberDTO.getName());
+	    		
+	    		/* 그리고 로그인 페이지로 이동한다. */
+	    		response.sendRedirect("/mvcboard/login.do");
+	    	} else{
+	    		request.setAttribute("LoginErrMsg", "로그인 오류입니다.");
+	    		request.getRequestDispatcher("/mvcboard/login.do").forward(request, response);
+	    	}
+	    	
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+}

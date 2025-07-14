@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lms.springboot.prof.assignment.IProfAssignmentService">
+
+	<!-- 과제(교수) -->
+	<select id="getAssignmentTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.prof.ProfDTO">
+		SELECT COUNT(*) FROM assignment
+		WHERE lecture_code = #{lecture_code}
+	</select>
+	<select id="assignmentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		<!-- SELECT * FROM 
+		    assignment a LEFT JOIN lecture l ON a.lecture_code = l.lecture_code
+		    WHERE a.lecture_code =  #{lectureCode}
+		    ORDER BY ASSIGNMENT_IDX desc -->
+		    SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT * FROM 
+					assignment a LEFT JOIN lecture l ON a.lecture_code = l.lecture_code
+					WHERE a.lecture_code =  #{lecture_code}
+					ORDER BY ASSIGNMENT_IDX desc
+				) Tb
+			)
+			WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	<insert id="assignmentlectureUploadProcProf">
+		INSERT INTO assignment (ASSIGNMENT_IDX, ASSIGNMENT_TITLE, ASSIGNMENT_CONTENT, UPLOADED_DATE, DEADLINE, LECTURE_CODE)
+		VALUES
+		(seq_serial_num.nextval, #{_title}, #{_content}, sysdate, #{_deadline} ,#{_lectureCode})
+	</insert>
+	<select id="assignmentView" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM assignment WHERE assignment_idx = #{assignment_idx}
+	</select>
+	<update id="assignmentEdit" parameterType="com.lms.springboot.jdbc.ProfDTO">
+		UPDATE assignment SET
+		assignment_title=#{assignment_title}, assignment_content=#{assignment_content}, deadline=#{deadline}
+		WHERE assignment_idx=#{assignment_idx}
+	</update>
+	<delete id="assignmentDelete">
+    	DELETE FROM assignment WHERE assignment_idx=#{param1}
+    </delete>
+    
+    <!-- 과제(학생 제출) -->
+    <select id="getSubmittedAssignmentTotalCount" resultType="int" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT COUNT(*) FROM 
+        assignment a INNER JOIN assignment_submit aa
+        ON a.assignment_idx = aa.assignment_idx WHERE lecture_code = #{lecture_code}
+	</select>
+	<select id="submittedAssignmentBoardListPage" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		
+		SELECT * FROM (
+			SELECT Tb.*, rownum rNum FROM (
+
+				SELECT * FROM 
+			        assignment a INNER JOIN assignment_submit aa
+			        ON a.assignment_idx = aa.assignment_idx WHERE lecture_code = #{lecture_code}
+				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+					AND b.${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY assignment_submit_idx DESC
+			) Tb
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	<select id="submittedAssignmentView" resultType="com.lms.springboot.jdbc.ProfDTO" 
+		parameterType="com.lms.springboot.jdbc.ProfDTO">
+		SELECT * FROM 
+	        assignment a INNER JOIN assignment_submit aa
+	        ON a.assignment_idx = aa.assignment_idx WHERE lecture_code = #{lecture_code} AND assignment_submit_idx = #{assignment_submit_idx}
+	</select>
+	<update id="submittedAssignmentGetSocreProc" parameterType="com.lms.springboot.jdbc.ProfDTO">
+		<!-- UPDATE assignment_submit SET
+			score = #{_score}
+			WHERE 
+			(SELECT * FROM  assignment a INNER JOIN assignment_submit aa
+        		ON a.assignment_idx = aa.assignment_idx
+			WHERE assignment_submit_idx = #{_assignment_submit_idx} AND lecture_code =#{_lectureCode} ) -->
+			UPDATE 
+			    assignment_submit 
+			SET
+			    score = #{_score}
+			    WHERE assignment_submit_idx IN (
+			        SELECT assignment_submit_idx
+			        FROM  assignment a 
+			            INNER JOIN assignment_submit aa
+			            ON a.assignment_idx = aa.assignment_idx
+			        WHERE assignment_submit_idx = #{_assignment_submit_idx} AND lecture_code = #{_lectureCode}
+			    )
+	</update>
+	
+</mapper>

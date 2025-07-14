@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;templates&apos; to &apos;P01Security/src/main/resources&apos;&#x0A;- Original project: &apos;B07dMybatisBoard&apos;&#x0A;- Destination element: &apos;P01Security/src/main/resources&apos;&#x0A;- Original element: &apos;B07dMybatisBoard/src/main/resources/templates&apos;" description="Copy package" destination="=P01Security/src\/main\/resources=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/" element1="/src\/main\/resources=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;templates" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1750669515736" version="1.0"/>
+</session>
