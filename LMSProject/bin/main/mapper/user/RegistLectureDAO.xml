@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.user.jdbc.IRegistLectureService">
+	<select id="getTotalLectureCount" resultType="int"
+		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
+			SELECT COUNT(*) FROM lecture l, majors m
+				WHERE l.major_id = m.major_id
+			<if test="searchKeyword != null and !searchKeyword.equals('')">
+				AND #{ searchField } LIKE '%'||#{searchKeyword}||'%'
+			</if>
+	</select>
+	
+	<select id="selectAllLecturePage" resultType="com.lms.springboot.user.jdbc.RegistLectureDTO" 
+		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
+		SELECT 
+			lecture_idx,
+			lecture_name,
+			prof_id,
+			lecture_start_date,
+			lecture_end_date,
+			lecture_code,
+			major_name,
+			user_name
+		FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT
+				 lecture_idx,
+				 lecture_name,
+				 prof_id,
+				 lecture_start_date,
+				 lecture_end_date,
+				 lecture_code,
+				 l.major_id,
+                 major_name,
+				 u.user_name
+				FROM lecture l, user_info u, majors m
+				WHERE l.prof_id = u.user_id
+                AND l.major_id = m.major_id
+                <if test="searchKeyword!=null and !searchKeyword.equals('')">
+					AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY lecture_idx DESC
+			) Tb	
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	
+	<select id="duplicationEnrollCheck" parameterType="com.lms.springboot.user.jdbc.RegistLectureDTO"
+		resultType="int">
+		SELECT COUNT(*) FROM enroll
+		 WHERE user_id=#{ user_id } AND lecture_code=#{ lecture_code }
+	</select>
+	
+	<insert id="insertEnroll" parameterType="com.lms.springboot.user.jdbc.RegistLectureDTO">
+		INSERT INTO enroll (user_id, lecture_code, enroll_idx)
+			VALUES(
+				#{ user_id },
+				#{ lecture_code },
+				seq_serial_num.nextval
+			)
+	</insert>
+</mapper>
