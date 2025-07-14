@@ -38,8 +38,8 @@ public class ProfAssignmentController
 		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getAssignmentTotalCount(profDTO);
-		int pageSize = 3; 
-		int blockPage = 20; 
+		int pageSize = 10; 
+		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
@@ -71,7 +71,7 @@ public class ProfAssignmentController
 		String deadline = req.getParameter("deadline");
 		String lectureCode = req.getParameter("lectureCode");
 		
-		int result_prof = dao.assignmentlectureUploadProcProf(title, content, deadline, lectureCode);
+		dao.assignmentlectureUploadProcProf(title, content, deadline, lectureCode);
 		return "redirect:assignmentList.do?lectureCode="+lectureCode;
 	}
 //	Detail view for the uploaded notice assignment
@@ -97,13 +97,13 @@ public class ProfAssignmentController
 //	Edit noticed assignment - Processing
 	@PostMapping("/prof/assignmentEdit.do")
 	public String assignmentEditPost(Model model, ProfDTO profDTO) {
-		int result = dao.assignmentEdit(profDTO);
+		dao.assignmentEdit(profDTO);
 		return "redirect:assignmentView.do?lectureCode=" + profDTO.getLecture_code()+"&assignment_idx=" +profDTO.getAssignment_idx();
 	}
 //	Delete assignment
 	@PostMapping("/prof/assignmentDelete.do")
 	public String assignmentDelete(HttpServletRequest req) {
-		int result = dao.assignmentDelete(req.getParameter("assignment_idx"));
+		dao.assignmentDelete(req.getParameter("assignment_idx"));
 		String lectureCode = req.getParameter("lectureCode");
 		return "redirect:assignmentList.do?lectureCode="+ lectureCode;
 	}
@@ -115,8 +115,8 @@ public class ProfAssignmentController
 		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getSubmittedAssignmentTotalCount(profDTO);
-		int pageSize = 3; 
-		int blockPage = 20; 
+		int pageSize = 10; 
+		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
@@ -154,9 +154,10 @@ public class ProfAssignmentController
 	public String submittedAssignmentGetSocreProc(HttpServletRequest req) {
 		String lectureCode = req.getParameter("lectureCode");
 		String score = req.getParameter("score");
+		String assignment_comment = req.getParameter("assignment_comment");
 		String assignment_submit_idx = req.getParameter("assignment_submit_idx");
 		
-		int result = dao.submittedAssignmentGetSocreProc(score, lectureCode, assignment_submit_idx);
+		dao.submittedAssignmentGetSocreProc(score, lectureCode, assignment_comment, assignment_submit_idx);
 		
 		return "redirect:submittedAssignmentList.do?lectureCode="+lectureCode;
 	}

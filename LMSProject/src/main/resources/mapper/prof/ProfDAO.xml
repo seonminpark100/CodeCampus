@@ -37,6 +37,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				)
 				WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
-	
+	<select id="selectNoticeBoardList" resultType="com.lms.springboot.prof.NoticeBoardDTO" 
+		parameterType="com.lms.springboot.prof.NoticeBoardDTO">
+			SELECT *
+			FROM (SELECT * FROM boards ORDER BY board_idx DESC)
+			WHERE ROWNUM &lt;= 5 AND category = 'N'
+	</select>
+	<select id="selectCommunityList" resultType="com.lms.springboot.prof.NoticeBoardDTO" 
+		parameterType="com.lms.springboot.prof.NoticeBoardDTO">
+			SELECT *
+			FROM (SELECT * FROM boards ORDER BY board_idx DESC)
+			WHERE ROWNUM &lt;= 5 AND category = 'C'
+	</select>
 	
 </mapper>

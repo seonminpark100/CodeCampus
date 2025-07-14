@@ -3,8 +3,6 @@ package com.lms.springboot.prof.lecture;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.MyFunctions;
@@ -35,7 +34,7 @@ public class ProfLectureController
 		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getLectureTotalCount(profDTO);
-		int pageSize = 5; 
+		int pageSize = 10; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 					|| req.getParameter("pageNum").equals("")) 
@@ -57,8 +56,8 @@ public class ProfLectureController
 	}
 
 	@RequestMapping("/prof/lectureUpload.do")
-	public String lectureUpload(HttpServletRequest req, Model model, ProfDTO profDTO) {
-		String lectureCode = req.getParameter("lectureCode");
+	public String lectureUpload(@RequestParam String lectureCode, Model model, ProfDTO profDTO) {
+//		String lectureCode = req.getParameter("lectureCode");
 		profDTO.setLecture_code(lectureCode);
 		
 		profDTO = dao.lectureUploadPage(profDTO);
@@ -78,15 +77,13 @@ public class ProfLectureController
 		model.addAttribute("board_title", req.getParameter("board_title"));
 		model.addAttribute("board_content", req.getParameter("board_content"));
 		model.addAttribute("category", req.getParameter("category"));
-		int result =  dao.insertLectureWithoutFile(profDTO);	// Insert into a Boards table
+		dao.insertLectureWithoutFile(profDTO);	// Insert into a Boards table
 		
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 			System.out.println("물리적 경로: "+uploadDir);
 			
-			Map<String, String> saveFileMaps = new HashMap<>();
-
 			Collection<Part> parts = req.getParts();
 			for(Part part: parts) {
 				if(!part.getName().equals("ofile"))
@@ -174,8 +171,6 @@ public class ProfLectureController
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 			System.out.println("물리적 경로: "+uploadDir);
 			
-			Map<String, String> saveFileMaps = new HashMap<>();
-
 			Collection<Part> parts = req.getParts();
 			for(Part part: parts) {
 				if(!part.getName().equals("ofile"))
@@ -188,6 +183,7 @@ public class ProfLectureController
 					part.write(uploadDir + File.separator + originalFileName);
 				}
 			String savedFileName = MyFunctions.renameFile(uploadDir, originalFileName);
+			
 			model.addAttribute("originalFileName", originalFileName);
 			model.addAttribute("savedFileName", savedFileName);			
 			
@@ -209,8 +205,8 @@ public class ProfLectureController
 //	Delete Lecture
 	@RequestMapping("/prof/lectureDelete.do")
 	public String lectureDelete(HttpServletRequest req) {
-		int result_boards = dao.lectureDeleteBoards(req.getParameter("board_idx"));
-		int result_files = dao.lectureDeleteFiles(req.getParameter("board_idx"));
+		dao.lectureDeleteBoards(req.getParameter("board_idx"));
+		dao.lectureDeleteFiles(req.getParameter("board_idx"));
 		String lectureCode = req.getParameter("lectureCode");
 		return "redirect:lectureList.do?lectureCode="+ lectureCode;
 	}

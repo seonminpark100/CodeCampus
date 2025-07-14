@@ -25,7 +25,10 @@ public interface IProfAssignmentService
 	public int getSubmittedAssignmentTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> submittedAssignmentBoardListPage(ProfDTO profDTO);
 	public ProfDTO submittedAssignmentView(ProfDTO profDTO);
-	public int submittedAssignmentGetSocreProc(@Param("_score") String score,@Param("_lectureCode") String lecture_code,
-			@Param("_assignment_submit_idx") String assignment_submit_idx);
+	public int submittedAssignmentGetSocreProc(@Param("_score") String score, @Param("_lectureCode") String lecture_code,
+			@Param("_assignment_comment") String assignment_comment, @Param("_assignment_submit_idx") String assignment_submit_idx);
+	
+	
+	
 	
 }

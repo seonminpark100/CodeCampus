@@ -70,14 +70,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="submittedAssignmentView" resultType="com.lms.springboot.prof.ProfDTO" 
 		parameterType="com.lms.springboot.prof.ProfDTO">
 		SELECT * FROM 
-	        assignment a INNER JOIN assignment_submit aa
-	        ON a.assignment_idx = aa.assignment_idx WHERE lecture_code = #{lecture_code} AND assignment_submit_idx = #{assignment_submit_idx}
+	    assignment a LEFT JOIN lecture l on a.lecture_code = l.lecture_code
+	                 LEFT JOIN assignment_submit aa on a.assignment_idx = aa.assignment_idx
+	                 LEFT JOIN user_info u on u.user_id = aa.user_id
+	        
+	        WHERE l.lecture_code = #{lecture_code} AND aa.assignment_submit_idx = #{assignment_submit_idx}
 	</select>
 	<update id="submittedAssignmentGetSocreProc" parameterType="com.lms.springboot.prof.ProfDTO">
 			UPDATE 
 			    assignment_submit 
 			SET
-			    score = #{_score}
+			    score = #{_score},
+			    assignment_comment = #{_assignment_comment}
 			    WHERE assignment_submit_idx IN (
 			        SELECT assignment_submit_idx
 			        FROM  assignment a 

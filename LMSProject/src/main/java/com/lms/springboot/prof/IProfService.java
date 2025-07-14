@@ -11,4 +11,6 @@ public interface IProfService
 	public ArrayList<ProfDTO> userList(ProfDTO profDTO, String user_id);
 	public int getStudentTotalCount(ProfDTO profDTO);
 	public ArrayList<ProfDTO> studentBoardListPage(ProfDTO profDTO);
+	public ArrayList<ProfDTO> selectNoticeBoardList(NoticeBoardDTO DTO); 
+	public ArrayList<ProfDTO> selectCommunityList(NoticeBoardDTO DTO); 
 }

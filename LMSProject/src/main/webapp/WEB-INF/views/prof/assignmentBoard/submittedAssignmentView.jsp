@@ -14,6 +14,11 @@
 				writeFrm.score.focus();
 				return false;
 			}
+			if(writeFrm.assignment_comment.value==''){
+				alert("학생을 위한 과제 피드백을 입력해주세요.");
+				writeFrm.assignment_comment.focus();
+				return false;
+			}
 		}
 		</script>
 	</head>
@@ -38,7 +43,8 @@
 				    </colgroup>	
 				    <!-- 게시글 정보 -->
 				    <tr>
-				        <td>번호</td> <td>${ profDTO.assignment_submit_idx }</td>
+				        <td>학생 학번</td> <td>${ profDTO.user_id }</td>
+				        <td>학생 이름</td> <td>${ profDTO.user_name }</td>
 				    </tr>
 				    <tr>
 				        <td>제출일</td> <td>${ profDTO.submitted_date }</td>
@@ -61,6 +67,11 @@
 				    </tr>
 				    <tr>
 				        <td>점수</td> <td> <input type="number" name="score" value="${profDTO.score}"> </td>
+				    </tr>
+				    <tr>
+				        <td>피드백</td><td> 
+				        <textarea name="assignment_comment" style="width:90%;height:100px;">${profDTO.assignment_comment}</textarea>
+				        </td>
 				    </tr>
 				    <!-- 하단 메뉴(버튼) -->
 				    <tr>

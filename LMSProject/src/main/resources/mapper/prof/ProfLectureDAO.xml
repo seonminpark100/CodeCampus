@@ -31,18 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			) Tb
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
-<!-- 		SELECT * FROM (
-			SELECT Tb.*, rownum rNum FROM (
-				SELECT * FROM boards b
-				    LEFT JOIN Lecture l ON b.lecture_code = l.lecture_code
-				    WHERE l.lecture_code =#{lecture_code} AND category = 'L'
-				<if test="searchKeyword!=null and !searchKeyword.equals('')">
-					AND b.${searchField} LIKE '%'||#{searchKeyword}||'%'
-				</if>
-				ORDER BY board_idx DESC
-			) Tb
-		)
-		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end} -->
+
 	</select>
 	<select id="lectureUploadPage" resultType="com.lms.springboot.prof.ProfDTO" 
 		parameterType="com.lms.springboot.prof.ProfDTO">
@@ -61,14 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertLectureWithFile" parameterType="com.lms.springboot.prof.ProfDTO">
 			INSERT INTO files (BOARD_IDX, OFILE, SFILE, FILE_IDX)
 			VALUES (#{board_idx}, #{ofile}, #{sfile}, seq_serial_num.nextval)
-<!-- 	<choose>
-		<when test="sfile!=null and !sfile.equals('')">
-		</when>
-		<otherwise>
-			INSERT INTO boards (BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, CATEGORY)
-			VALUES (seq_serial_num.nextval, #{user_id}, #{lecture_code}, #{board_title}, #{board_content} , #{category})
-		</otherwise>
-	</choose> -->
+
 	</insert>
 	<select id="lectureViewWithFile" resultType="com.lms.springboot.prof.ProfDTO" 
 		parameterType="com.lms.springboot.prof.ProfDTO">

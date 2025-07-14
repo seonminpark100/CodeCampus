@@ -56,8 +56,6 @@ public class ProfAbsentController
 		String lecture_date = profDTO.getDate();
 		String absent_states = profDTO.getData();
 		
-		System.out.println("absent_states" + absent_states);
-		System.out.println("lecture_date" + lecture_date);
 		String[] parts = absent_states.split("\\.");
 
 		String absent_state = parts[0]; // the state of attendance
@@ -65,7 +63,7 @@ public class ProfAbsentController
 		String lectureCode = parts[2]; // lecture code
 		
 		
-		int result_prof = dao.absentProcProf(user_id, absent_state, lecture_date, lectureCode);
+		dao.absentProcProf(user_id, absent_state, lecture_date, lectureCode);
 		
 		return new ResponseEntity<>("Data inserted successfully", HttpStatus.OK);
 

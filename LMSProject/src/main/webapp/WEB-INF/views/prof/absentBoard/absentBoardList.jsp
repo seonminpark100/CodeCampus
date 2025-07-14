@@ -6,60 +6,25 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>대학교 eCampus</title>
-		<!-- css -->
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 		 <script>
-		  function checkValue() {
-		    const inputValue = document.getElementById("lecture_date").value;
-		    insertDate(inputValue);
-		    console.log("입력 값:", inputValue);
-		  }
-		  
-		  /* function validateForm(writeFrm){
-				const attendanceTime = document.getElementById("attendance_time").value;
-				if(attendanceTime === ''){
-					alert("날짜를 입력해주세요.");
-					document.getElementById("attendance_time").focus();
-					return false;
-				}
-				return true;
-			} */
-		  function insertData(selectedValue) {
-
-				const attendanceTime = document.getElementById("lecture_date").value;
-				if(attendanceTime === ''){
-					alert("날짜를 입력해주세요.");
-					document.getElementById("lecture_date").focus();
-					return false;
-				}
-				
+			function insertData(selectedValue) {
+			    const attendanceTime = document.getElementById("lecture_date").value;
+			    if(attendanceTime === ''){
+			        alert("날짜를 입력해주세요.");
+			        document.getElementById("lecture_date").focus();
+			        return false;
+			    }
 			    var xhr = new XMLHttpRequest();
 			    xhr.open("POST", "/prof/absentProc.do", true);
 			    xhr.setRequestHeader("Content-Type", "application/json");
-
 			    xhr.onreadystatechange = function() {
 			        if (xhr.readyState === 4 && xhr.status === 200) {
-			            alert("저장 성공!"); // 성공 메시지 표시
+			            alert("저장 성공!");
 			        }
 			    };
-
-			    xhr.send(JSON.stringify({ data: selectedValue }));
+			    xhr.send(JSON.stringify({ data: selectedValue, date: attendanceTime }));
 			}
-		  function insertDate(selectedValue) {
-
-			    var xhr = new XMLHttpRequest();
-			    xhr.open("POST", "/prof/absentProc.do", true);
-			    xhr.setRequestHeader("Content-Type", "application/json");
-
-			    xhr.onreadystatechange = function() {
-			        if (xhr.readyState === 4 && xhr.status === 200) {
-			            alert("저장 성공!"); // 성공 메시지 표시
-			        }
-			    };
-
-			    xhr.send(JSON.stringify({ date: selectedValue }));
-			}
-		  
 		</script>
 	</head>
 	<body>
@@ -86,7 +51,7 @@
 		<form name="writeFrm" method="post" enctype="multipart/form-data"
 			action="./absentProc.do?lectureCode=${ lectureCode }" onsubmit="return validateForm(this);">
 		
-		출석 날짜: <input type="date" id="lecture_date" name="lecture_date" onchange="checkValue()">
+		출석 날짜: <input type="date" id="lecture_date" name="lecture_date">
 		<!-- 목록 테이블 -->
 	    <table class="table table-hover" border="1" style="width: 90%;">
 	    	<tr>

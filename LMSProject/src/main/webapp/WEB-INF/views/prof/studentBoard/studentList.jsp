@@ -15,6 +15,7 @@
              <table class="table table-hover" border="1" width="90%">
 	        <tr align="center">
 	            <th width="10%">번호</th>
+	            <th width="15%">학과</th>
 	            <th width="25%">수강생학번</th>
 	            <th width="25%">수강생이름</th>
 	            <th width="*">생성날짜</th>
@@ -37,6 +38,7 @@
 			                (((maps.pageNum-1) * maps.pageSize)	+ loop.index)}" />
 			            	${vNum}
 			            </td>
+			            <td>${ row.major_id }</td> 
 			            <td>${ row.user_id }</td> 
 			            <td>${ row.user_name }</td> 
 			            <td>${ row.joindate }</td> 

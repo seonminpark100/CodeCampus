@@ -20,9 +20,15 @@ public class ProfController
 	
 //	Lecture main page
 	@GetMapping("/prof/submain.do")
-	public String profSubMain(HttpServletRequest req, Model model) {
+	public String profSubMain(HttpServletRequest req, Model model, NoticeBoardDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
 		model.addAttribute("lectureCode" , lectureCode);
+		
+		ArrayList<ProfDTO> lists = dao.selectNoticeBoardList(DTO);
+		ArrayList<ProfDTO> lists_c = dao.selectCommunityList(DTO);
+		model.addAttribute("lists", lists);
+		model.addAttribute("lists_c", lists_c);
+		
 		return "prof/submain";
 	}
 	
