@@ -32,4 +32,8 @@ public class MyAuthSuccessHandler implements AuthenticationSuccessHandler
         }
     }
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master
