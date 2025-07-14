@@ -12,9 +12,9 @@
 	</head>
 	<body>
 		<div class="container" style="text-align: center; max-width: 100%;">
-			<div class="row">
-				<%@ include file="../user/navBar/navBar.jsp" %>
-			</div>
+<!-- 			<div class="row"> -->
+<%-- 				<%@ include file="../navBar/navBar.jsp" %> --%>
+<!-- 			</div> -->
 		    <div class="row m-3 p-5 border border-3 border-warning rounded" style="height: 540px;">
 		    	<div class="col-4 border border-3 border-primary mx-4 rounded">
 		    		<img src="images/image.PNG" alt="login" class="img-fluid" />
@@ -45,8 +45,8 @@
 		    	</div>
 		    </div>
 		</div>		
-		<footer>
-			<%@ include file="../user/footer.jsp" %>
-		</footer>
+<!-- 		<footer> -->
+<%-- 			<%@ include file="../footer.jsp" %> --%>
+<!-- 		</footer> -->
 	</body>
 </html>
