@@ -10,6 +10,11 @@ public class LmsProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LmsProjectApplication.class, args);
+		
+//		String passwd = 
+//				PasswordEncoderFactories.createDelegatingPasswordEncoder()
+//				.encode("1234");
+//		System.out.println(passwd);
 	}
 	@Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

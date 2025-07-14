@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lms.springboot.user.jdbc.IUserLMSBoardService">
+	<select id="getTotalBoardCount" resultType="int"
+		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
+			SELECT COUNT(*) 
+			 FROM boards b, user_info u
+			 WHERE b.user_id = u.user_id
+			 	AND category=#{ category } 
+			<if test="searchKeyword != null and !searchKeyword.equals('')">
+				AND ${ searchField } LIKE '%'||#{searchKeyword}||'%'
+			</if>
+	</select>
+	
+	<select id="selectAllBoardListPage" resultType="com.lms.springboot.user.jdbc.UserLMSBoardDTO"
+		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
+		SELECT 
+			board_idx,
+			user_id,
+			user_name,
+			category,
+			board_title,
+			board_postdate,
+			visitCount,
+			bGroup,
+			bStep,
+			bIndent
+		 FROM (
+			SELECT Tb.*, rownum rNum FROM (
+				SELECT
+				 board_idx,
+				 b.user_id,
+				 user_name,
+				 category,
+				 board_title,
+				 board_postdate,
+				 visitCount,
+				 bGroup,
+				 bStep,
+				 bIndent
+				FROM boards b, user_info u
+				WHERE b.user_id = u.user_id
+					AND category=#{ category }
+                <if test="searchKeyword!=null and !searchKeyword.equals('')">
+					AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
+				</if>
+				ORDER BY bGroup DESC, bStep ASC
+			) Tb	
+		)
+		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
+	</select>
+	
+	<update id="increaseVisitCount" parameterType="int">
+		UPDATE boards
+		 SET
+		  visitCount=visitCount+1
+		WHERE board_idx=#{ board_idx }
+	</update>
+	
+	<select id="selectOneBoard" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserLMSBoardDTO">
+		SELECT 
+			board_idx,
+			b.user_id,
+			user_name,
+			lecture_code,
+			category,
+			board_title,
+			board_content,
+			board_postdate,
+			visitCount,
+			bGroup,
+			bStep,
+			bIndent
+		FROM boards b, user_info u
+		 WHERE b.user_id = u.user_id
+		  AND board_idx=#{ board_idx }
+	</select>
+	
+	<select id="selectFiles" parameterType="int"
+		resultType="com.lms.springboot.user.jdbc.UserFileDTO">
+		SELECT * FROM files
+		 WHERE board_idx=#{ board_idx }	
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.lms.springboot.user.jdbc.UserLMSBoardDTO">
+		INSERT INTO boards 
+			(
+				board_idx,
+				user_id,
+				lecture_code,
+				board_title,
+				board_content,
+				board_postdate,
+				downCount,
+				visitCount,
+				category,
+				bGroup,
+				bStep,
+				bIndent,
+				board_like		
+			)
+			VALUES
+			(
+				seq_serial_num.nextval,
+				#{ user_id },
+				<choose>
+					<when test='lecture_code != null'>
+						#{ lecture_code },					
+					</when>
+					<otherwise>
+						null,
+					</otherwise>
+				</choose>
+				#{ board_title },
+				#{ board_content },
+				sysdate,
+				0,
+				0,
+				#{ category },
+				seq_serial_num.currval,
+				0,
+				0,
+				0
+			)
+			<selectKey keyProperty="board_idx" resultType="int" order="AFTER">
+				SELECT seq_serial_num.currval FROM dual
+			</selectKey>
+	</insert>
+	
+	<insert id="insertFiles" parameterType="java.util.List">
+			INSERT INTO files (
+				board_idx,
+				oFile,
+				sFile,
+				file_idx
+			)
+			SELECT Tb.*, seq_serial_num.nextval as file_idx 
+			FROM(
+				<foreach collection="list" item="row" separator="UNION ALL">
+					SELECT 
+						#{ row.board_idx } as board_idx,
+						#{ row.oFile } as oFile,
+						#{ row.sFile } as sFile
+					FROM dual
+				</foreach>
+			) Tb
+	</insert>
+	
+	<update id="updateBoard" parameterType="com.lms.springboot.user.jdbc.UserLMSBoardDTO">
+		UPDATE boards
+		 SET
+		  board_title=#{ board_title },
+		  board_content=#{ board_content }
+		WHERE board_idx=#{ board_idx }
+	</update>
+	
+	<select id="getTotalFilesCount" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*) FROM files
+		 WHERE board_idx=#{ board_idx }	
+	</select>
+	
+	<delete id="deleteFiles" parameterType="int">
+		DELETE FROM files
+		 WHERE board_idx=#{ board_idx }
+	</delete>
+	
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM boards
+		 WHERE board_idx=#{ board_idx }
+	</delete>
+	
+	<update id="updateBStep" parameterType="com.lms.springboot.user.jdbc.UserLMSBoardDTO">
+		UPDATE boards
+		 SET
+		  bStep=bStep+1
+		 WHERE bGroup=#{ bGroup } AND bStep<![CDATA[>=]]>#{ bStep }
+	</update>
+	
+	<insert id="insertReply" parameterType="com.lms.springboot.user.jdbc.UserLMSBoardDTO">
+		INSERT INTO boards 
+			(
+				board_idx,
+				user_id,
+				lecture_code,
+				board_title,
+				board_content,
+				board_postdate,
+				downCount,
+				visitCount,
+				category,
+				bGroup,
+				bStep,
+				bIndent,
+				board_like		
+			)
+			VALUES
+			(
+				seq_serial_num.nextval,
+				#{ user_id },
+				<choose>
+					<when test='lecture_code != null'>
+						#{ lecture_code },					
+					</when>
+					<otherwise>
+						null,
+					</otherwise>
+				</choose>
+				#{ board_title },
+				#{ board_content },
+				sysdate,
+				0,
+				0,
+				#{ category },
+				#{ bGroup },
+				#{ bStep },
+				#{ bIndent },
+				0
+			)
+			<selectKey keyProperty="board_idx" resultType="int" order="AFTER">
+				SELECT seq_serial_num.currval FROM dual
+			</selectKey>
+	</insert>
+	
+	<select id="getTotalReplyCount" parameterType="int" 
+		resultType="int">
+		SELECT COUNT(*) FROM boards
+		 WHERE category='C' 
+		 	AND bGroup=#{ bGroup }	
+	</select>
+	
+	<select id="isReplied" parameterType="com.lms.springboot.user.jdbc.UserLMSBoardDTO"
+		resultType="int">
+		SELECT COUNT(*) FROM boards
+		 WHERE bGroup=#{ bGroup} 
+		 	AND bStep=#{ bStep }+1 
+		 	AND bIndent<![CDATA[>]]>#{ bIndent }
+	</select>
+</mapper>
