@@ -13,7 +13,7 @@
 		<div class="container" style="text-align: center; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="row row-cols-3">
@@ -21,13 +21,14 @@
 					<c:forEach items="${ list }" var="row">						
 		    			<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">
 							<a href="lectureList.do?lecture_code=${ row.lecture_code }">${ row.lecture_name }</a>
+							<br/>기간 : ${ row.lecture_start_date } ~ ${ row.lecture_end_date }
 			    		</div>
 		    		</c:forEach>
 		    	</div>
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

@@ -21,7 +21,7 @@
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="row d-flex justify-content-center border border-3 border-primary rounded" style="height: 90%; text-align: center;">
@@ -59,7 +59,7 @@
 										<c:forEach items="${ list }" var="row">																			
 											<tr>
 <%-- 												<td style="width: 60%;"><a href="javascript:sendBoard_idx('${ row.board_idx }')">${ row.board_title }</a></td> --%>
-												<td align="left" style="width: 60%; padding-left: ${ row.BIndent * 20 }px;">
+												<td align="left" style="width: 60%; padding-left: ${ row.BIndent * 20 + 10 }px;">
 													<c:if test="${ row.BIndent > 0 }"><img src="images/paging3.gif" /></c:if>
 													<a href="lmsBoardView.do?board_idx=${ row.board_idx }">${ row.board_title }</a></td>
 												<td>${ row.user_name }</td>
@@ -84,7 +84,7 @@
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

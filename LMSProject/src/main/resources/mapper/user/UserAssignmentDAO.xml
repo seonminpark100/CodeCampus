@@ -147,4 +147,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE assignment_idx=#{ assignment_idx } 
 			AND user_id=#{ user_id }
 	</update>
+	
+	<select id="canSubmit" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM assignment
+		 WHERE assignment_idx=#{ assignment_idx }
+		 	AND sysdate <![CDATA[<=]]> deadline
+		 
+	</select>
 </mapper>

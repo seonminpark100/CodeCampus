@@ -14,4 +14,5 @@ public interface IUserAssignmentService
 	public UserAssignmentDTO selectOneAssignmentSubmit(UserAssignmentDTO dto);
 	public UserAssignmentDTO selectOneAssignmentSubmitBySubmitIdx(int assignment_submit_idx);
 	public int updateAssignmentSubmit(UserAssignmentDTO dto);
+	public int canSubmit(int assignment_idx);
 }

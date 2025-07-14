@@ -23,7 +23,7 @@
 	<body>
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="m-3 p-3 border border-3 border-warning rounded" style="height: 540px; text-align: center;">
 			    <h3>정보 수정</h3>	  
@@ -52,7 +52,7 @@
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

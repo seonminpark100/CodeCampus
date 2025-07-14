@@ -7,9 +7,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.lms.springboot.user.jdbc.IRegistLectureService">
 	<select id="getTotalLectureCount" resultType="int"
 		parameterType="com.lms.springboot.user.jdbc.UserListParameterDTO">
-			SELECT COUNT(*) FROM lecture
+			SELECT COUNT(*) FROM lecture l, majors m
+				WHERE l.major_id = m.major_id
 			<if test="searchKeyword != null and !searchKeyword.equals('')">
-				WHERE #{ searchField } LIKE '%'||#{searchKeyword}||'%'
+				AND #{ searchField } LIKE '%'||#{searchKeyword}||'%'
 			</if>
 	</select>
 	

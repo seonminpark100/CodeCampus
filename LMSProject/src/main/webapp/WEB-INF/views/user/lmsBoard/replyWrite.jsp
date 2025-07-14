@@ -13,7 +13,7 @@
 	<body>
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 		    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
@@ -37,7 +37,7 @@
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

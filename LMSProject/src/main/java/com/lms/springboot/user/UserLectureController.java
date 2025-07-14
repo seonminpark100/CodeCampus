@@ -35,9 +35,6 @@ public class UserLectureController
 	
 	@GetMapping("/lectureList.do")
 	public String lecture(Model model, UserLectureDTO dto, @AuthenticationPrincipal UserDetails ud, HttpServletResponse resp) {
-		// 수강중인거 체크하기
-//		InterfaceUtil.alertLocation(resp, "잘못된 접근입니다.", "index.do");
-		
 		ArrayList<UserLectureDTO> list = dao.selectLectureSessionList(dto.getLecture_code());
 		model.addAttribute("list", list);
 		UserLectureDTO lecture = dao.selectOneLecture(dto.getLecture_code());

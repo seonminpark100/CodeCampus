@@ -12,6 +12,14 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<script>
+		window.onload = () => {
+			message = '${ message }';
+			if(message != ''){
+				alert(message);
+			}
+		}
+	</script>
+	<script>
 		function sendAssignment(idx) {
 			let f = document.createElement('form');
 			    
@@ -33,7 +41,7 @@
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 740px">
 			    <h3>수강신청</h3>	    	
@@ -95,7 +103,7 @@
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

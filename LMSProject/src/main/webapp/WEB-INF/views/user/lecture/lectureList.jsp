@@ -13,7 +13,7 @@
 	<body>
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
 			    <h3>${ lecture_name } | ${ user_name }</h3>	    	
@@ -22,17 +22,19 @@
 <!-- 			    		실제 값을 받을땐 foreach문을 사용 -->
 						<c:forEach items="${ list }" var="row">	
 <%-- 			    			<div class="border border-3 border-success rounded my-1 h-25"><button class="btn btn-primary" onclick="sendLectureCode('${ row.category }', ${ row.board_idx });">${ row.board_title }</button></div> --%>
-			    			<div class="border border-3 border-success rounded my-1 h-25"><button class="btn btn-primary" onclick="location.href='lectureView.do?board_idx=${ row.board_idx }'">${ row.board_title }</button></div>
+			    			<div class="border border-3 border-success rounded my-1 h-25">
+			    				<button class="btn btn-primary" onclick="location.href='lectureView.do?board_idx=${ row.board_idx }'">${ row.board_title }</button>
+			    			</div>
 			    		</c:forEach>
 			    	</div>
+			    	<div style="text-align: center;">
+	 					<button type="button" class="btn btn-primary" onclick="location.href='myLectureList.do'">내 강의로</button>
+					</div>
 		    	</div>
-		    	<div class="border border-3 border-primary rounded"  style="text-align: center;">
- 					<button type="button" class="btn btn-primary" onclick="location.href='myLectureList.do'">내 강의로</button>
-				</div>
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>

@@ -16,7 +16,7 @@
 		<div class="container" style="text-align: center; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../navBar/navBar.jsp" %>
+				<%@ include file="navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 border border-3 border-warning rounded" style="height: 540px">
 <%-- 		    	<input type="hidden" id="user_id" value="${ principal.username }" /> --%>
@@ -39,7 +39,7 @@
 		  	</div>
 		</div>
 		<footer style="height: 50px">
-			<%@ include file="../footer.jsp" %>
+			<%@ include file="footer.jsp" %>
 		</footer>
 	</body>
 </html>

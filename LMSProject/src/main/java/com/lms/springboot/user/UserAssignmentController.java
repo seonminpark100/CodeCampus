@@ -12,8 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lms.springboot.user.jdbc.IUserAssignmentService;
 import com.lms.springboot.user.jdbc.UserAssignmentDTO;
@@ -41,8 +43,8 @@ public class UserAssignmentController
 	int propBlockPage;
 	
 	@RequestMapping("/assignmentList.do")
-	public String assignmentList(Model model, HttpServletRequest req, UserListParameterDTO param, 
-			@AuthenticationPrincipal UserDetails ud) {
+	public String assignmentList(Model model, @ModelAttribute("message") String message, 
+			HttpServletRequest req, UserListParameterDTO param, @AuthenticationPrincipal UserDetails ud) {
 		param.setUser_id(ud.getUsername());
 		int pageSize = this.propPageSize;
 		int blockPage = this.propBlockPage;
@@ -68,18 +70,26 @@ public class UserAssignmentController
 		
 		String pagingImg = PagingUtil.pagingImg(totalCount, pageSize, blockPage, pageNum, req.getContextPath() + "assignmentList.do?");
 		model.addAttribute("pagingImg", pagingImg);
+		model.addAttribute("message", message);
+		
 		return "user/assignment/assignmentList";
 	}
 	
 	@RequestMapping("assignmentSubmitWrite.do")
-	public String assignmentWrite(Model model, UserAssignmentDTO dto, @AuthenticationPrincipal UserDetails ud) {
+	public String assignmentWrite(Model model, UserAssignmentDTO dto, RedirectAttributes redirectAttributes,
+			@AuthenticationPrincipal UserDetails ud) {
 		dto.setUser_id(ud.getUsername());
 		int result = dao.submitCheck(dto);
 		if(result == 0) {
-			dto = dao.selectOneAssignment(dto.getAssignment_idx());
-			dto.setAssignment_content(dto.getAssignment_content().replaceAll("\r\n", "<br/>"));
-			model.addAttribute("dto", dto);
-			return "user/assignmentSubmitWrite";	
+			if(dao.canSubmit(dto.getAssignment_idx()) == 1) {
+				dto = dao.selectOneAssignment(dto.getAssignment_idx());
+				dto.setAssignment_content(dto.getAssignment_content().replaceAll("\r\n", "<br/>"));
+				model.addAttribute("dto", dto);
+				return "user/assignmentSubmitWrite";	
+			} else {
+				redirectAttributes.addFlashAttribute("message", "강의 제출 기간이 아닙니다.");
+				return "redirect:assignmentList.do";	
+			}
 		}
 		return "redirect:assignmentSubmitView.do?assignment_idx=" + dto.getAssignment_idx();
 	}

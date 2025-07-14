@@ -40,7 +40,7 @@
 		<div class="container" style="text-align:left; max-width: 100%;">
 			<div class="row">
 <%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../../navBar/navBar.jsp" %>
+				<%@ include file="../navBar/navBar.jsp" %>
 			</div>
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 740px">
 			    <h3>수강신청</h3>	    	
@@ -49,7 +49,8 @@
 				    	<div class="row-4 input-group border border-3 border-primary rounded w-50" style="height: 50px;">
 							<select class="form-select" id="searchField" name="searchField">
 								<option value="lecture_name" selected>강의명</option>
-								<option value="user_name">교수</option>
+								<option value="user_name">교수명</option>
+								<option value="major_name">전공명</option>
 							</select> 
 							<input type="text" class="form-control w-75" id="searchKeyword" name="searchKeyword">
 							<button class="btn btn-primary" type="submit">검색</button>
@@ -100,7 +101,7 @@
 		  	</div>
 		</div>
 		<footer>
-			<%@ include file="../../footer.jsp" %>
+			<%@ include file="../footer.jsp" %>
 		</footer>
 	</body>
 </html>
