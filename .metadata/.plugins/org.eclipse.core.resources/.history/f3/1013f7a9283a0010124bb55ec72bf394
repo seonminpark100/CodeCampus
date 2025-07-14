@@ -1,9 +1,0 @@
-package model2.mvcboard;
-
-import jakarta.servlet.annotation.WebServlet;
-
-@WebServlet("/mvcboard/uploadlecture.do")
-public class UploadLectureController
-{
-
-}

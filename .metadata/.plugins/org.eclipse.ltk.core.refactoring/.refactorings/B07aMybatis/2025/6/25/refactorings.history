@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy package &apos;mybatis.mapper&apos; to &apos;B06JdbcTemplateQuiz/src/main/resources&apos;&#x0A;- Original project: &apos;B07aMybatis&apos;&#x0A;- Destination element: &apos;B06JdbcTemplateQuiz/src/main/resources&apos;&#x0A;- Original element: &apos;B07aMybatis/src/main/resources/mybatis.mapper&apos;" description="Copy package" destination="=B06JdbcTemplateQuiz/src\/main\/resources=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/" element1="/src\/main\/resources=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;mybatis.mapper" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1749992694642" version="1.0"/>
-</session>

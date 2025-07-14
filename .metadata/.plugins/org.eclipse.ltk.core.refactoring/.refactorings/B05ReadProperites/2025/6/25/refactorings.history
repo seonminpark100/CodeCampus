@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;PropertyConfig.java&apos; to &apos;B07dMybatisBoardQuiz/src/main/java/com.edu.springboot&apos;&#x0A;- Original project: &apos;B05ReadProperites&apos;&#x0A;- Destination element: &apos;B07dMybatisBoardQuiz/src/main/java/com.edu.springboot&apos;&#x0A;- Original element: &apos;com.edu.springboot.PropertyConfig.java&apos;" description="Copy compilation unit" destination="=B07dMybatisBoardQuiz/src\/main\/java=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;com.edu.springboot" element1="/src\/main\/java=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;com.edu.springboot{PropertyConfig.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1750043498854" units="1" version="1.0"/>
-</session>
