@@ -64,6 +64,7 @@
 									<th style="width: 10%">교수명</th>
 									<th style="width: 60%;">과제명</th>
 									<th>마감날</th>
+									<th>점수</th>
 									<th>과제보기</th>
 								</tr>
 							</thead>
@@ -84,6 +85,16 @@
 												<td style="height: 10px; vertical-align: middle; ">${ row.user_name }</td>
 												<td style="height: 10px; vertical-align: middle; ">${ row.assignment_title }</td>
 												<td style="height: 10px; vertical-align: middle; ">${ row.deadline }</td>
+												<td style="height: 10px; vertical-align: middle; ">
+													<c:choose>
+												    	<c:when test="dto.score != null">
+												     		${ row.score }
+												    	</c:when>
+												    	<c:otherwise>
+												    		-
+												    	</c:otherwise>
+												    </c:choose>	
+												</td>
 												<td style="height: 10px; vertical-align: middle; "><button class="btn btn-success" onclick="sendAssignment(${ row.assignment_idx });">GO!</button></td>
 											</tr>
 										</c:forEach>

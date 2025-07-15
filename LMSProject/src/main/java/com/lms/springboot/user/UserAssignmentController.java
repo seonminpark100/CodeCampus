@@ -1,6 +1,8 @@
 package com.lms.springboot.user;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -101,17 +105,31 @@ public class UserAssignmentController
 		dto.setUser_id(ud.getUsername());
 
 		try {
-			Map<String, String> file = FileUtil.singleFileUpload(req, "assignmentFile", "Assignment");
-			dto.setAssignment_ofile(file.get("oFile"));
-			dto.setAssignment_sfile(file.get("sFile"));
-			int result = dao.insertAssignmentSubmit(dto);
-			
-			if (result == 1)
-				System.out.println("성공");
-			else
-				System.out.println("실패");
-		} catch (IOException | ServletException e){
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					Map<String, String> file = null;
+					try
+					{
+						file = FileUtil.singleFileUpload(req, "assignmentFile", "Assignment");
+					} catch (IOException | ServletException e)
+					{
+						e.printStackTrace();
+						System.out.println("파일 업로드 실패 Rollback");
+					}
+					dto.setAssignment_ofile(file.get("oFile"));
+					dto.setAssignment_sfile(file.get("sFile"));
+					int result = dao.insertAssignmentSubmit(dto);
+					
+					if (result == 1)
+						System.out.println("성공");
+					else
+						System.out.println("실패");
+				}
+			});
+		} catch (Exception e){
 			e.printStackTrace();
+			System.out.println("assignmentWriteAction RollBack");
 		}
 
 		return "redirect:assignmentSubmitView.do?assignment_idx=" + dto.getAssignment_idx();
@@ -124,6 +142,12 @@ public class UserAssignmentController
 		dto = dao.selectOneAssignmentSubmit(dto);
 		dto.setAssignment_content(dto.getAssignment_content().replaceAll("\r\n", "<br/>"));
 		dto.setAssignment_content_s(dto.getAssignment_content_s().replaceAll("\r\n", "<br/>"));
+		Date today = Date.valueOf(LocalDate.now());
+		if(dao.selectOneAssignment(dto.getAssignment_idx()).getDeadline().after(today)) {
+			model.addAttribute("canEdit", true);
+		} else {
+			model.addAttribute("canEdit", false);
+		}
 		model.addAttribute("dto", dto);
 		model.addAttribute("file", FileUtil.getAssignFile(dto.getAssignment_ofile(), dto.getAssignment_sfile(), dto.getAssignment_submit_idx()));
 		return "user/assignment/assignmentSubmitView";
@@ -142,20 +166,34 @@ public class UserAssignmentController
 	public String assignmentSubmitEditAction(UserAssignmentDTO dto, HttpServletRequest req, @AuthenticationPrincipal UserDetails ud) {
 		dto.setUser_id(ud.getUsername());
 		try {
-			if(!dto.getAssignment_sfile().equals(""))
-			{
-				FileUtil.deleteAssignmentFile(dto);
-			}
-			Map<String, String> file = FileUtil.singleFileUpload(req, "assignmentFile", "Assignment"); 
-			dto.setUser_id(ud.getUsername());
-			dto.setAssignment_ofile(file.get("oFile"));
-			dto.setAssignment_sfile(file.get("sFile"));
-			int result = dao.updateAssignmentSubmit(dto);
-			if(result != 1) {
-				int error = 10 / 0;
-			}
-		} catch (IOException | ServletException e) {
+			transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+				@Override
+				protected void doInTransactionWithoutResult(TransactionStatus status) {
+					if(!dto.getAssignment_sfile().equals(""))
+					{
+						FileUtil.deleteAssignmentFile(dto);
+					}
+					Map<String, String> file = null;
+					try
+					{
+						file = FileUtil.singleFileUpload(req, "assignmentFile", "Assignment");
+					} catch (IOException | ServletException e)
+					{
+						e.printStackTrace();
+						System.out.println("파일 삭제 실패 RollBack");
+					} 
+					dto.setUser_id(ud.getUsername());
+					dto.setAssignment_ofile(file.get("oFile"));
+					dto.setAssignment_sfile(file.get("sFile"));
+					int result = dao.updateAssignmentSubmit(dto);
+					if(result != 1) {
+						int error = 10 / 0;
+					}
+				}
+			});
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("assignmentSubmitEditAction RollBack");
 		}
 		
 		return "redirect:assignmentSubmitView.do?assignment_idx=" + dto.getAssignment_idx();

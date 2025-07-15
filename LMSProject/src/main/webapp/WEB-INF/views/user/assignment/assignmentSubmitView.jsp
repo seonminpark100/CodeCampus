@@ -17,7 +17,16 @@
 			</div>
 			
 		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>${ dto.lecture_name } | ${ dto.user_name }</h3>	    
+			    <h3>${ dto.lecture_name } | ${ dto.user_name } | 점수 : 
+			    <c:choose>
+			    	<c:when test="dto.score != null">
+			     		${ dto.score }
+			    	</c:when>
+			    	<c:otherwise>
+			    		미채점
+			    	</c:otherwise>
+			    </c:choose>
+			    </h3>	    
 		    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
 		    		<div class="border border-3 border-primary rounded" style="height: 10%;">
 		    			${ dto.assignment_title }
@@ -30,7 +39,9 @@
 		    			${ file }
 		    		</div>
 		    		<div class="border border-3 border-primary rounded" style="text-align: center;">
-			    		<button class="btn btn-primary" onclick="location.href='assignmentSubmitEdit.do?assignment_idx=${ dto.assignment_idx }'">수정</button>
+		    			<c:if test="${ canEdit }">
+			    			<button class="btn btn-primary" onclick="location.href='assignmentSubmitEdit.do?assignment_idx=${ dto.assignment_idx }'">수정</button>
+			    		</c:if>
 			    		<button class="btn btn-primary" onclick="location.href='assignmentList.do'">목록으로</button>
 		    		</div>
 		    	</div>
