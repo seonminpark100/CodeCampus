@@ -61,7 +61,7 @@ public class ProfController
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
+		Paging.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
 		int start = (pageNum-1) * pageSize + 1;
 		int end = pageNum * pageSize;

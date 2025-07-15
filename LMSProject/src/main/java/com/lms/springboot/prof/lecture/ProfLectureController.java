@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lms.springboot.prof.LectureDTO;
+import com.lms.springboot.prof.Paging;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.MyFunctions;
 import com.lms.springboot.utils.PagingUtil;
@@ -41,7 +42,7 @@ public class ProfLectureController
 					|| req.getParameter("pageNum").equals("")) 
 					? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
+		Paging.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
 		int start = (pageNum-1) * pageSize + 1;
 		int end = pageNum * pageSize;

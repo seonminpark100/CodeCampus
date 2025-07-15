@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lms.springboot.prof.AbsentDTO;
+import com.lms.springboot.prof.Paging;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.PagingUtil;
 
@@ -36,7 +37,7 @@ public class ProfAbsentController
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
+		Paging.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
 		int start = (pageNum-1) * pageSize + 1;
 		int end = pageNum * pageSize;
