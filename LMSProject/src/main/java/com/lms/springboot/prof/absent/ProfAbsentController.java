@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.lms.springboot.prof.AbsentDTO;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.PagingUtil;
 
@@ -23,21 +24,27 @@ public class ProfAbsentController
 	IProfAbsentService dao;
 	
 	@RequestMapping("/prof/absentboard.do")
-	public String absentBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) {
+	public String absentBoardList(Model model, HttpServletRequest req, AbsentDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
 		
-		int totalCount = dao.getStudentTotalCount(profDTO);
+		int totalCount = dao.getStudentTotalCount(DTO);
 		int pageSize = 50; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
-		ArrayList<ProfDTO> lists = dao.studentBoardListPage(profDTO);
+		int start = (pageNum-1) * pageSize + 1;
+		int end = pageNum * pageSize;
+		
+		DTO.setStart(start);
+		DTO.setEnd(end);
+		
+		ArrayList<ProfDTO> lists = dao.studentBoardListPage(DTO);
 		model.addAttribute("lists", lists);
 		
 		String pagingImg =
@@ -51,10 +58,10 @@ public class ProfAbsentController
 	}
 	
 	@PostMapping("/prof/absentProc.do")
-	public ResponseEntity<String> insertData(@RequestBody ProfDTO profDTO, Model model, HttpServletRequest req) {
+	public ResponseEntity<String> insertData(@RequestBody AbsentDTO DTO, Model model, HttpServletRequest req) {
 		
-		String lecture_date = profDTO.getDate();
-		String absent_states = profDTO.getData();
+		String lecture_date = DTO.getDate();
+		String absent_states = DTO.getData();
 		
 		String[] parts = absent_states.split("\\.");
 

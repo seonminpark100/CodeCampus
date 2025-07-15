@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lms.springboot.prof.LectureDTO;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.MyFunctions;
 import com.lms.springboot.utils.PagingUtil;
@@ -28,21 +29,27 @@ public class ProfLectureController
 
 //	Lecture Lists
 	@RequestMapping("/prof/lectureList.do")
-	public String lectureBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) 
+	public String lectureBoardList(Model model, HttpServletRequest req, LectureDTO DTO) 
 	{
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		int totalCount = dao.getLectureTotalCount(profDTO);
+		int totalCount = dao.getLectureTotalCount(DTO);
 		int pageSize = 10; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 					|| req.getParameter("pageNum").equals("")) 
 					? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
-		ArrayList<ProfDTO> lists = dao.lectureBoardListPage(profDTO);
+		int start = (pageNum-1) * pageSize + 1;
+		int end = pageNum * pageSize;
+		
+		DTO.setStart(start);
+		DTO.setEnd(end);
+		
+		ArrayList<LectureDTO> lists = dao.lectureBoardListPage(DTO);
 		model.addAttribute("lists", lists);
 		model.addAttribute("lectureCode", lectureCode);
 		String pagingImg =
@@ -56,28 +63,28 @@ public class ProfLectureController
 	}
 
 	@RequestMapping("/prof/lectureUpload.do")
-	public String lectureUpload(@RequestParam String lectureCode, Model model, ProfDTO profDTO) {
+	public String lectureUpload(@RequestParam String lectureCode, Model model, LectureDTO DTO) {
 //		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		profDTO = dao.lectureUploadPage(profDTO);
-		model.addAttribute("profDTO", profDTO);
+		DTO = dao.lectureUploadPage(DTO);
+		model.addAttribute("profDTO", DTO);
 		model.addAttribute("lectureCode", lectureCode);
 		return "prof/lectureBoard/lectureUpload";
 	}
 	
 //	Upload a lecture wiht file processing
 	@RequestMapping("/prof/lectureUploadProc.do")
-	public String lectureUploadProc(HttpServletRequest req, Model model, ProfDTO profDTO) {
+	public String lectureUploadProc(HttpServletRequest req, Model model,  LectureDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
 		model.addAttribute("user_id", req.getParameter("user_id"));
 		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
 		model.addAttribute("board_title", req.getParameter("board_title"));
 		model.addAttribute("board_content", req.getParameter("board_content"));
 		model.addAttribute("category", req.getParameter("category"));
-		dao.insertLectureWithoutFile(profDTO);	// Insert into a Boards table
+		dao.insertLectureWithoutFile(DTO);	// Insert into a Boards table
 		
 		try
 		{
@@ -100,10 +107,10 @@ public class ProfLectureController
 			model.addAttribute("originalFileName", originalFileName);
 			model.addAttribute("savedFileName", savedFileName);			
 			
-			profDTO.setOfile(originalFileName);
-			profDTO.setSfile(savedFileName);
+			DTO.setOfile(originalFileName);
+			DTO.setSfile(savedFileName);
 			
-			dao.insertLectureWithFile(profDTO);
+			dao.insertLectureWithFile(DTO);
 			}
 			
 		} catch (Exception e)
@@ -116,20 +123,20 @@ public class ProfLectureController
 	}
 	
 	@RequestMapping("/prof/lectureView.do")
-	public String lectureView(Model model, ProfDTO profDTO, HttpServletRequest req) {
+	public String lectureView(Model model, LectureDTO DTO, HttpServletRequest req) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
 		// Lecture detail without Files
-		profDTO =  dao.lectureViewWithoutFile(profDTO);	
+		DTO =  dao.lectureViewWithoutFile(DTO);	
 		
 		// Call DAO for uploading Files
-		ArrayList<ProfDTO> myFileLists = dao.lectureViewWithFile(profDTO);
+		ArrayList<LectureDTO> myFileLists = dao.lectureViewWithFile(DTO);
 		System.out.println(myFileLists);
-		profDTO.setBoard_content(profDTO.getBoard_content().replace("\r\n", "<br/>"));
+		DTO.setBoard_content(DTO.getBoard_content().replace("\r\n", "<br/>"));
 		
 		model.addAttribute("myFileLists", myFileLists);
-		model.addAttribute("result", profDTO);
+		model.addAttribute("result", DTO);
 		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/lectureBoard/lectureView";
@@ -137,23 +144,23 @@ public class ProfLectureController
 	
 //	Edit a lecture - Select from DB
 	@RequestMapping("/prof/lectureEdit.do")
-	public String lectureEdit(HttpServletRequest req, Model model, ProfDTO profDTO) {
+	public String lectureEdit(HttpServletRequest req, Model model, LectureDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
 		// 강의 목록 내용
-		profDTO =  dao.lectureViewWithoutFile(profDTO);	
+		DTO =  dao.lectureViewWithoutFile(DTO);	
 		// 파일 보기
-		ArrayList<ProfDTO> myFileLists = dao.lectureViewWithFile(profDTO);
+		ArrayList<LectureDTO> myFileLists = dao.lectureViewWithFile(DTO);
 		model.addAttribute("myFileLists", myFileLists);
-		model.addAttribute("profDTO", profDTO);
+		model.addAttribute("profDTO", DTO);
 		model.addAttribute("lectureCode", lectureCode);
 		return "prof/lectureBoard/lectureEdit";
 	}
 //	Edit a lecture - Processing
 	@PostMapping("/prof/lectureEditProc.do")
-	public String lectureEditPost(Model model, ProfDTO profDTO, HttpServletRequest req) {
-		System.out.println("profDTO=" + profDTO);
+	public String lectureEditPost(Model model, LectureDTO DTO, HttpServletRequest req) {
+		System.out.println("profDTO=" + DTO);
 		
 		model.addAttribute("user_id", req.getParameter("user_id"));
 		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
@@ -162,7 +169,7 @@ public class ProfLectureController
 		model.addAttribute("category", req.getParameter("category"));
 		
 //		Update boards table in Oracle
-		dao.lectureEditBoards(profDTO);
+		dao.lectureEditBoards(DTO);
 //		Delete files in Oracle
 		dao.lectureDeleteFiles(req.getParameter("board_idx"));
 		
@@ -187,11 +194,11 @@ public class ProfLectureController
 			model.addAttribute("originalFileName", originalFileName);
 			model.addAttribute("savedFileName", savedFileName);			
 			
-			profDTO.setOfile(originalFileName);
-			profDTO.setSfile(savedFileName);
+			DTO.setOfile(originalFileName);
+			DTO.setSfile(savedFileName);
 			
 //			Delete from files table then insert data
-			dao.insertLectureWithFile(profDTO);
+			dao.insertLectureWithFile(DTO);
 			}
 			
 		} catch (Exception e)
@@ -200,7 +207,7 @@ public class ProfLectureController
 			e.printStackTrace();
 		}
 		
-		return "redirect:lectureView.do?lectureCode=" + profDTO.getLecture_code()+"&board_idx=" +profDTO.getBoard_idx();
+		return "redirect:lectureView.do?lectureCode=" + DTO.getLecture_code()+"&board_idx=" +DTO.getBoard_idx();
 	}
 //	Delete Lecture
 	@RequestMapping("/prof/lectureDelete.do")

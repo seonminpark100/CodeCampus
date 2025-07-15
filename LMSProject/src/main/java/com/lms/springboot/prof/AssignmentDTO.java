@@ -3,24 +3,24 @@ package com.lms.springboot.prof;
 import lombok.Data;
 
 @Data
-public class ProfDTO
+public class AssignmentDTO
 {
-//	Boards table
-	private String board_idx;
-	private String user_id;
-	private String lecture_code;
-	private String board_title;
-	private String board_content;
-	private java.sql.Date board_postdate;
-	private Object ofile;
-	private String sfile;
-	private int downcount;
-	private int visitcount;
-	private String category;
-	private int bgroup;
-	private int bstep;
-	private int bindent;
-	private int board_like;
+//	Assignment table
+	private String assignment_idx;
+	private String assignment_title;
+	private String assignment_content;
+	private String assignment_code;
+	private java.sql.Date uploaded_date;
+	private java.sql.Date deadline;
+	
+//	Assignment_submit table
+	private String assignment_submit_idx;
+	private String assignment_content_s;
+	private String assignment_comment;
+	private String assignment_ofile;
+	private String assignment_sfile;
+	private String score;
+	private java.sql.Date submitted_date;
 	
 //	USER_INTO table
 	private java.sql.Date joindate;
@@ -31,6 +31,8 @@ public class ProfDTO
 	private String originalfile;
 	private String major_id;
 	private String enable;
+	private String user_id;
+	private String lecture_code;
 	private String user_name;
 	
 //	Lecture table
@@ -39,9 +41,6 @@ public class ProfDTO
 	private String prof_id;
 	private java.sql.Date lecture_start_date;
 	private java.sql.Date lecture_end_date;
-	
-	
-
 	
 	// Search stuff
 	private String searchField;

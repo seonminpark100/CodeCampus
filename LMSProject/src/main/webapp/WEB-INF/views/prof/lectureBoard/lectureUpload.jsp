@@ -5,21 +5,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>대학교 eCampus</title>
-<<<<<<< HEAD
-		<script>
-		function validateForm(writeFrm){
-
-			if(writeFrm.LECTURE_START_DATE.value==''){
-				alert("강의 시작일을 입력해주세요.");
-				writeFrm.LECTURE_START_DATE.focus();
-				return false;
-			}
-			if(writeFrm.LECTURE_END_DATE.value==''){
-				alert("강의 종료일을 입력해주세요.");
-				writeFrm.LECTURE_END_DATE.focus();
-				return false;
-			}
-=======
 		
 		<script>
 		function validateForm(writeFrm){
@@ -39,40 +24,10 @@
 				writeFrm.ofile.focus();
 				return false;
 			} */
->>>>>>> origin/master
 		}
 		</script>
 	</head>
 	<body>
-<<<<<<< HEAD
-		<h2>게시판 작성(Mybatis)</h2>
-		<form name="writeFrm" method="post"
-			action="./lectureUpload.do" onsubmit="return validateForm(this);">
-		<table border="1" width="90%">
-		    <tr>
-		        <td>강의명</td>
-		        <td>
-		            <input type="text" name="LECTURE_NAME" style="width:150px;" value="" readonly="readonly"/>
-		        </td>
-		    </tr>
-		    <tr>
-		        <td>교수명</td>
-		        <td>
-		            <input type="text" name="PROF_NAME" style="width:90%;" value="" readonly="readonly"/>
-		        </td>
-		    </tr>
-		    <tr>
-		        <td>시작일</td>
-		        <td><input type="date" name="LECTURE_START_DATE"> </td>
-		    </tr>
-		    <tr>
-		        <td>종료일</td>
-		        <td><input type="date" name="LECTURE_END_DATE"></td>
-		    </tr>
-		    <tr>
-		        <td>첨부파일</td>
-		        <td><input type="file"> </td>
-=======
 	 <%@ include file = "../sidebars.jsp" %>
 	 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
 		<h2>강의 업로드</h2>
@@ -123,20 +78,13 @@
 		        <td>첨부파일</td>
 		        <td><input type="file" name="ofile" accept=".mov, .jpg, .png, .mp4" multiple> <br/> <span style="font-size: 10pt; color: grey;">* mov, png, jpg, mp4 확장자 업로드 가능</span></td>
 		        
->>>>>>> origin/master
 		    </tr>
 		    
 		    <tr>
 		        <td colspan="2" align="center">
-<<<<<<< HEAD
-		            <button type="submit">작성 완료</button>
-		            <button type="reset">RESET</button>
-		            <button type="button" onclick="location.href='lectureboard.do';">
-=======
 		            <button class="btn btn-dark" type="submit">작성 완료</button>
 		            <button class="btn btn-dark" type="reset">RESET</button>
 		            <button class="btn btn-dark" type="button" onclick="location.href='lectureList.do?lectureCode=${lectureCode}';">
->>>>>>> origin/master
 		                목록 바로가기
 		            </button>
 		        </td>
@@ -144,9 +92,6 @@
 		    
 		</table>    
 		</form>
-<<<<<<< HEAD
-=======
 		</main>
->>>>>>> origin/master
 	</body>
 </html>

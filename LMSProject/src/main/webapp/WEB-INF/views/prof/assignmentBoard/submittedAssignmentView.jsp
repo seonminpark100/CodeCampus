@@ -61,8 +61,8 @@
 				    </tr>
 				    <tr>
 				        <td>첨부파일</td>  
-				         <td><a href="/download.do/${ profDTO.assignment_sfile }">
-							    ${ profDTO.assignment_sfile }
+				         <td><a href="/assignmentFileDownload.do/${ profDTO.assignment_sfile }">
+							    ${ profDTO.assignment_ofile }
 							</a></td> 
 				    </tr>
 				    <tr>

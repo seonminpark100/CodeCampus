@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.lms.springboot.prof.AbsentDTO;
 import com.lms.springboot.prof.ProfDTO;
 
 @Mapper
@@ -16,6 +17,6 @@ public interface IProfAbsentService
 			@Param("_lecture_date") String lecture_date, 
 			@Param("_lectureCode") String lecture_code);
 	
-	public int getStudentTotalCount(ProfDTO profDTO);
-	public ArrayList<ProfDTO> studentBoardListPage(ProfDTO profDTO);
+	public int getStudentTotalCount(AbsentDTO DTO);
+	public ArrayList<ProfDTO> studentBoardListPage(AbsentDTO DTO);
 }

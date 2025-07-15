@@ -51,7 +51,7 @@
 	<select id="viewLecture" resultType="com.lms.springboot.jdbc.LectureBoardDTO"
 		parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
 		SELECT LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID
-		FROM LECTURE WHERE LECTURE_IDX=#{lectureIdx}
+		FROM LECTURE WHERE LECTURE_IDX=#{lecture_idx}
 	</select>
 
 	<update id="updateLecture" parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
@@ -62,7 +62,7 @@
         LECTURE_END_DATE=#{lectureEndDate},
         LECTURE_CODE=#{lectureCode},
         MAJOR_ID=#{majorId}
-		WHERE LECTURE_IDX=#{lectureIdx}
+		WHERE LECTURE_IDX=#{lecture_idx}
 	</update>
 
 	<delete id="deleteLecture">

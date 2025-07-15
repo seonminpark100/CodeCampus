@@ -1,33 +1,21 @@
 package com.lms.springboot.prof;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-=======
-
+import com.lms.springboot.user.jdbc.MyPageDTO;
+import com.lms.springboot.utils.FileUtil;
+import com.lms.springboot.utils.PagingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
->>>>>>> origin/master
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lms.springboot.jdbc.IProfService;
-import com.lms.springboot.jdbc.ProfDTO;
-=======
-
->>>>>>> origin/master
-import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -35,22 +23,6 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ProfController
 {
 	@Autowired
-<<<<<<< HEAD
-	IProfService dao;	
-//	강의 메인 화면
-	@GetMapping("/prof/submain.do")
-	public String profSubMain(@RequestParam("lectureId") String lectureId, Model model) {
-		model.addAttribute("lectureId", lectureId);
-		System.out.println("lectureId: " + lectureId);
-		return "prof/submain";
-	}
-	
-//	수강생 리스트
-	@GetMapping("/prof/studentList.do")
-	public String studentList(@RequestParam("lectureId") String lectureId,HttpServletRequest req, Model model, ProfDTO profDTO) {
-
-		int totalCount = dao.getStudentTotalCount(profDTO, lectureId);
-=======
 	IProfService dao;
 	
 	@RequestMapping("/prof/index.do")
@@ -83,160 +55,19 @@ public class ProfController
 		profDTO.setLecture_code(lectureCode);
 		
 		int totalCount = dao.getStudentTotalCount(profDTO);
->>>>>>> origin/master
 		int pageSize = 10; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-<<<<<<< HEAD
-		//현제 페이지에 출력할 게시물의 구간을 계산한다. 
-		int start = (pageNum-1) * pageSize + 1;
-		int end = pageNum * pageSize;
-		//계산의 결과는 DTO에 저장한다. 
-		profDTO.setStart(start);
-		profDTO.setEnd(end);
-		
-		//View에서 게시물의 가상번호 계산을 위한 값을 Map에 저장 
-		Map<String, Object> maps = new HashMap<String, Object>();
-		maps.put("totalCount", totalCount);
-		maps.put("pageSize", pageSize);
-		maps.put("pageNum", pageNum);
-		model.addAttribute("maps", maps);
-		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
-		ArrayList<ProfDTO> lists = dao.studentBoardListPage(profDTO, lectureId);
-		model.addAttribute("lists", lists);
-		
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
-		String pagingImg =
-			PagingUtil.pagingImg(totalCount, pageSize, 
-				blockPage, pageNum,
-				req.getContextPath()+"/prof/noticeboard.do?");
-		model.addAttribute("pagingImg", pagingImg);
-		model.addAttribute("lectureId", lectureId);
-		return "prof/studentBoard/studentList";
-	}
-	
-//	강의 업로드 관리
-	@GetMapping("/prof/lectureboard.do")
-	public String letureBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) 
-	{
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		String currentPrincipalName = authentication.getName();
-		
-		int totalCount = dao.getLectureTotalCount(profDTO);
-		int pageSize = 10; 
-		int blockPage = 5; 
-		int pageNum = (req.getParameter("pageNum")==null 
-			|| req.getParameter("pageNum").equals("")) 
-			? 1 : Integer.parseInt(req.getParameter("pageNum"));
-		
-		//현제 페이지에 출력할 게시물의 구간을 계산한다. 
-		int start = (pageNum-1) * pageSize + 1;
-		int end = pageNum * pageSize;
-		//계산의 결과는 DTO에 저장한다. 
-		profDTO.setStart(start);
-		profDTO.setEnd(end);
-		
-		//View에서 게시물의 가상번호 계산을 위한 값을 Map에 저장 
-		Map<String, Object> maps = new HashMap<String, Object>();
-		maps.put("totalCount", totalCount);
-		maps.put("pageSize", pageSize);
-		maps.put("pageNum", pageNum);
-		model.addAttribute("maps", maps);
-		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
-		ArrayList<ProfDTO> lists = dao.lectureBoardListPage(profDTO);
-		model.addAttribute("lists", lists);
-		
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
-		String pagingImg =
-			PagingUtil.pagingImg(totalCount, pageSize, 
-				blockPage, pageNum,
-				req.getContextPath()+"/prof/noticeboard.do?");
-		model.addAttribute("pagingImg", pagingImg);
-		
-		
-		return "prof/lectureBoard/lectureBoardList";       
-	}	
-	
-//	공지사항
-	@RequestMapping("/prof/noticeboard.do")
-	public String noticeBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) 
-	{
-		int totalCount = dao.getNoticeBoardTotalCount(profDTO);
-		int pageSize = 10; 
-		int blockPage = 5; 
-		int pageNum = (req.getParameter("pageNum")==null 
-			|| req.getParameter("pageNum").equals("")) 
-			? 1 : Integer.parseInt(req.getParameter("pageNum"));
-		
-		//현제 페이지에 출력할 게시물의 구간을 계산한다. 
-		int start = (pageNum-1) * pageSize + 1;
-		int end = pageNum * pageSize;
-		//계산의 결과는 DTO에 저장한다. 
-		profDTO.setStart(start);
-		profDTO.setEnd(end);
-		
-		//View에서 게시물의 가상번호 계산을 위한 값을 Map에 저장 
-		Map<String, Object> maps = new HashMap<String, Object>();
-		maps.put("totalCount", totalCount);
-		maps.put("pageSize", pageSize);
-		maps.put("pageNum", pageNum);
-		model.addAttribute("maps", maps);
-		
-		//DB에서 인출한 게시물의 목록을 Model에 저장 
-		ArrayList<ProfDTO> lists = dao.noticeBoardListPage(profDTO);
-		model.addAttribute("lists", lists);
-		
-		//게시판 하단에 출력할 페이지번호를 String으로 저장한 후 Model에 저장
-		String pagingImg =
-			PagingUtil.pagingImg(totalCount, pageSize, 
-				blockPage, pageNum,
-				req.getContextPath()+"/prof/noticeboard.do?");
-		model.addAttribute("pagingImg", pagingImg);
-		
-		
-		return "prof/noticeBoard/noticeBoardList";       
-	}
-	
-	
-//	출석
-	@RequestMapping("/prof/absentboard.do")
-	public String absentBoardList(Model model, HttpServletRequest req, ProfDTO profDTO) {
-		
-		int totalCount = dao.getAbsentBoardTotalCount(profDTO);
-		int pageSize = 10; 
-		int blockPage = 5; 
-		int pageNum = (req.getParameter("pageNum")==null 
-			|| req.getParameter("pageNum").equals("")) 
-			? 1 : Integer.parseInt(req.getParameter("pageNum"));
+		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
 		int start = (pageNum-1) * pageSize + 1;
 		int end = pageNum * pageSize;
+		
 		profDTO.setStart(start);
 		profDTO.setEnd(end);
-		
-		Map<String, Object> maps = new HashMap<String, Object>();
-		maps.put("totalCount", totalCount);
-		maps.put("pageSize", pageSize);
-		maps.put("pageNum", pageNum);
-		model.addAttribute("maps", maps);
-		
-		ArrayList<ProfDTO> lists = dao.absentBoardListPage(profDTO);
-		model.addAttribute("lists", lists);
-		
-		String pagingImg =
-			PagingUtil.pagingImg(totalCount, pageSize, 
-				blockPage, pageNum,
-				req.getContextPath()+"/prof/noticeboard.do?");
-		model.addAttribute("pagingImg", pagingImg);
-		
-		return "prof/absentBoard/absentBoardList";
-=======
-		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
 		
 		// Saved DB dates at Model Object
 		ArrayList<ProfDTO> lists = dao.studentBoardListPage(profDTO);
@@ -253,9 +84,43 @@ public class ProfController
 	}
 
 	@RequestMapping("/prof/mypage.do")
-	public String mypage() {
-		return "prof/mypage";
->>>>>>> origin/master
+	public String mypage(Model model, @AuthenticationPrincipal UserDetails ud) {
+		
+		MypageDTO dto = dao.selectOneUser(ud.getUsername());
+		model.addAttribute("dto", dto);
+		System.out.println(dto.getSaveFile());
+		return "prof/myPage/mypage";
 	}
+	
+	@GetMapping("/prof/infoEdit.do")
+	public String infoEdit(Model model, @AuthenticationPrincipal UserDetails ud) {
+		MypageDTO dto = dao.selectOneUser(ud.getUsername());
+		model.addAttribute("dto", dto);
+		return "prof/myPage/infoEdit";
+	}
+	
+	@PostMapping("/prof/infoEdit.do")
+	public String infoEditAction(Model model, MypageDTO dto, HttpServletRequest req) {
+		try {
+			String passwd =	PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(dto.getUser_pw());
+			passwd = passwd.substring(8);
+			dto.setUser_pw(passwd);
+			if(dto.getSaveFile() != null) {
+				FileUtil.deleteOneFile(dto.getSaveFile());
+			}
+			Map<String, String> file = FileUtil.singleFileUpload(req, "profileImg", "User");
+			dto.setOriginalFile(file.get("oFile"));
+			dto.setSaveFile(file.get("sFile"));
+			int result = dao.updateUser(dto);
+			if(result == 1)	System.out.println("성공");
+			else System.out.println("실패");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:mypage.do";
+	}
+	
 
 }

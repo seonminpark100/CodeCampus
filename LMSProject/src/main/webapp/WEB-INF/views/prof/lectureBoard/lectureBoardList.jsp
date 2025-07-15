@@ -5,22 +5,6 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>대학교 eCampus</title>
-<<<<<<< HEAD
-	</head>
-	<body>
-	<%@ include file = "../top.jsp" %>
-		<div class="container">
-		<h2>강의 목록 </h2>
-
-		<!-- 검색 폼 -->
-		<form method="get">
-		<table border="1" width="90%">
-		<tr>
-			<td>
-				<select name="searchField">
-					<option value="lecture_name">강의명</option>
-					<option value="prof_name">교수명</option>
-=======
 		
 	</head>
 	<body>
@@ -37,7 +21,6 @@
 			<td>
 				<select name="searchField">
 					<option value="board_title">강의명</option>
->>>>>>> origin/master
 				</select>
 				<input type="text" name="searchKeyword" />
 				<input type="submit" value="검색하기" />
@@ -47,20 +30,10 @@
 		</form>
 		
 		<!-- 목록 테이블 -->
-<<<<<<< HEAD
-	    <table border="1" width="90%">
-	        <tr>
-	            <th width="10%">번호</th>
-	            <th width="*">강의명</th>
-	            <th width="15%">교수명</th>
-	            <th width="10%">시작일</th>
-	            <th width="15%">종료일</th>
-=======
 	    <table class="table table-hover" border="1" width="90%">
 	        <tr align="ce">
 	            <th width="15%">번호</th>
 	            <th width="*">강의명</th>
->>>>>>> origin/master
 	        </tr>
 	<c:choose>
 	    <c:when test="${ empty lists }"> 
@@ -81,16 +54,8 @@
 	            	${vNum}
 	            </td>
 	            <td align="left"> 
-<<<<<<< HEAD
-	                <a href="./view.do?idx=${row.idx}&vNum=${vNum}">${ row.LECTURE_NAME }</a> 
-	            </td> 
-	            <td>${ row.PROF_NAME }</td> 
-	            <td>${ row.LECTURE_START_DATE }</td> 
-	            <td>${ row.LECTURE_END_DATE }</td> 
-=======
 	                <a href="./lectureView.do?lectureCode=${row.lecture_code}&board_idx=${row.board_idx}">${ row.board_title }</a> 
 	            </td> 
->>>>>>> origin/master
 	        </tr>
 	        </c:forEach>        
 	    </c:otherwise>    
@@ -98,29 +63,17 @@
 	    </table>
 	    
 	    <!-- 하단 메뉴(바로가기, 글쓰기) -->
-<<<<<<< HEAD
-	    <table border="1" width="90%">
-=======
 	    <table class="table table-hover" border="1" width="90%">
->>>>>>> origin/master
 	        <tr align="center">
 	            <td>
 	                ${ pagingImg }
 	            </td>
-<<<<<<< HEAD
-	            <td width="100"><button type="button"
-	                onclick="location.href='lectureUpload.do';">강의 업로드</button>
-=======
 	            <td width="200px"><button type="button" class="btn btn-dark"
 	                onclick="location.href='lectureUpload.do?lectureCode=${ lectureCode }';">강의 업로드</button>
->>>>>>> origin/master
 	            </td>
 	        </tr>
 	    </table>
 		</div>
-<<<<<<< HEAD
-=======
 		</main>
->>>>>>> origin/master
 	</body>
 </html>

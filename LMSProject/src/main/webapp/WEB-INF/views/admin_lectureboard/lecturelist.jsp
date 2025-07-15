@@ -217,7 +217,7 @@
             }
 		</style>
         <script>
-            function confirmDelete(lectureIdx) {
+            function confirmDelete(lecture_idx) {
                 if (confirm("정말로 이 강의를 삭제하시겠습니까?")) {
                     var form = document.createElement('form');
                     form.setAttribute('method', 'post');
@@ -225,8 +225,8 @@
 
                     var hiddenField = document.createElement('input');
                     hiddenField.setAttribute('type', 'hidden');
-                    hiddenField.setAttribute('name', 'lectureIdx');
-                    hiddenField.setAttribute('value', lectureIdx);
+                    hiddenField.setAttribute('name', 'lecture_idx');
+                    hiddenField.setAttribute('value', lecture_idx);
 
                     form.appendChild(hiddenField);
                     document.body.appendChild(form);
@@ -279,17 +279,17 @@
 	            ${vNum}
 	        </td>
 			<td align="left">
-	            <a href="/admin_lectureboard/lectureview.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}">${ row.lectureName }</a>
+	            <a href="/admin_lectureboard/lectureview.do?lecture_idx=${row.lecture_idx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}">${ row.lectureName }</a>
 	        </td>
-			<td>${ row.profId }</td>
-			<td>${ row.lectureCode }</td>
-			<td>${ row.lectureStartDate }</td>
-			<td>${ row.lectureEndDate }</td>
-			<td>${ row.majorId }</td>
+			<td>${ row.prof_Id }</td>
+			<td>${ row.lecture_Code }</td>
+			<td>${ row.lecture_Start_Date }</td>
+			<td>${ row.lecture_End_Date }</td>
+			<td>${ row.major_Id }</td>
 			<td>
                 <div class="table-action-buttons">
-                    <button type="button" class="edit-btn" onclick="location.href='/admin_lectureboard/lectureedit.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}';">수정</button>
-                    <button type="button" class="delete-btn" onclick="confirmDelete('${row.lectureIdx}');">삭제</button>
+                    <button type="button" class="edit-btn" onclick="location.href='/admin_lectureboard/lectureedit.do?lecture_idx=${row.lecture_idx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}';">수정</button>
+                    <button type="button" class="delete-btn" onclick="confirmDelete('${row.lecture_idx}');">삭제</button>
                 </div>
             </td>
            </tr>

@@ -85,7 +85,7 @@ public class UserAssignmentController
 				dto = dao.selectOneAssignment(dto.getAssignment_idx());
 				dto.setAssignment_content(dto.getAssignment_content().replaceAll("\r\n", "<br/>"));
 				model.addAttribute("dto", dto);
-				return "user/assignmentSubmitWrite";	
+				return "user/assignment/assignmentSubmitWrite";	
 			} else {
 				redirectAttributes.addFlashAttribute("message", "강의 제출 기간이 아닙니다.");
 				return "redirect:assignmentList.do";	

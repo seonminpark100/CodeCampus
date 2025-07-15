@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lms.springboot.prof.ProfDTO;
+import com.lms.springboot.prof.AssignmentDTO;
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,20 +33,26 @@ public class ProfAssignmentController
 	
 //	Manage for the list of the submitted assignment by students (Professor view)
 	@GetMapping("/prof/assignmentList.do")
-	public String assignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+	public String assignmentList(HttpServletRequest req, Model model, AssignmentDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		int totalCount = dao.getAssignmentTotalCount(profDTO);
+		int totalCount = dao.getAssignmentTotalCount(DTO);
 		int pageSize = 10; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
-		ArrayList<ProfDTO> lists = dao.assignmentBoardListPage(profDTO);
+		int start = (pageNum-1) * pageSize + 1;
+		int end = pageNum * pageSize;
+		
+		DTO.setStart(start);
+		DTO.setEnd(end);
+		
+		ArrayList<AssignmentDTO> lists = dao.assignmentBoardListPage(DTO);
 		model.addAttribute("lists", lists);
 
 		String pagingImg =
@@ -76,29 +82,29 @@ public class ProfAssignmentController
 	}
 //	Detail view for the uploaded notice assignment
 	@RequestMapping("/prof/assignmentView.do")
-	public String assignmentView(HttpServletRequest req, Model model, ProfDTO profDTO) {
+	public String assignmentView(HttpServletRequest req, Model model, AssignmentDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		profDTO = dao.assignmentView(profDTO);
-		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
-		model.addAttribute("profDTO", profDTO);
+		DTO = dao.assignmentView(DTO);
+		DTO.setAssignment_content(DTO.getAssignment_content().replace("\r\n", "<br/>"));
+		model.addAttribute("profDTO", DTO);
 		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/assignmentBoard/assignmentView";
 	}
 //	Edit noticed assignment - Read
 	@GetMapping("/prof/assignmentEdit.do")
-	public String assignmentEditGet(Model model, ProfDTO profDTO) {
-		profDTO = dao.assignmentView(profDTO);
-		model.addAttribute("profDTO", profDTO);
+	public String assignmentEditGet(Model model, AssignmentDTO DTO) {
+		DTO = dao.assignmentView(DTO);
+		model.addAttribute("profDTO", DTO);
 		return "prof/assignmentBoard/assignmentEdit";
 	}
 //	Edit noticed assignment - Processing
 	@PostMapping("/prof/assignmentEdit.do")
-	public String assignmentEditPost(Model model, ProfDTO profDTO) {
-		dao.assignmentEdit(profDTO);
-		return "redirect:assignmentView.do?lectureCode=" + profDTO.getLecture_code()+"&assignment_idx=" +profDTO.getAssignment_idx();
+	public String assignmentEditPost(Model model, AssignmentDTO DTO) {
+		dao.assignmentEdit(DTO);
+		return "redirect:assignmentView.do?lectureCode=" + DTO.getLecture_code()+"&assignment_idx=" +DTO.getAssignment_idx();
 	}
 //	Delete assignment
 	@PostMapping("/prof/assignmentDelete.do")
@@ -110,20 +116,26 @@ public class ProfAssignmentController
 	
 //	Uploaded Assignment Lists by Students
 	@GetMapping("/prof/submittedAssignmentList.do")
-	public String submittedAssignmentList(HttpServletRequest req, Model model, ProfDTO profDTO) {
+	public String submittedAssignmentList(HttpServletRequest req, Model model, AssignmentDTO DTO) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		int totalCount = dao.getSubmittedAssignmentTotalCount(profDTO);
+		int totalCount = dao.getSubmittedAssignmentTotalCount(DTO);
 		int pageSize = 10; 
 		int blockPage = 5; 
 		int pageNum = (req.getParameter("pageNum")==null 
 			|| req.getParameter("pageNum").equals("")) 
 			? 1 : Integer.parseInt(req.getParameter("pageNum"));
 		
-		PagingUtil.paging(req, profDTO, model, totalCount, pageSize, blockPage, pageNum);
+		PagingUtil.paging(req, model, totalCount, pageSize, blockPage, pageNum);
 		
-		ArrayList<ProfDTO> lists = dao.submittedAssignmentBoardListPage(profDTO);
+		int start = (pageNum-1) * pageSize + 1;
+		int end = pageNum * pageSize;
+		
+		DTO.setStart(start);
+		DTO.setEnd(end);
+		
+		ArrayList<AssignmentDTO> lists = dao.submittedAssignmentBoardListPage(DTO);
 		model.addAttribute("lists", lists);
 		
 		String pagingImg =
@@ -136,15 +148,15 @@ public class ProfAssignmentController
 	}
 	
 	@RequestMapping("/prof/submittedAssignmentView.do")
-	public String submittedAssignmentView(Model model, ProfDTO profDTO, HttpServletRequest req) {
+	public String submittedAssignmentView(Model model, AssignmentDTO DTO, HttpServletRequest req) {
 		String lectureCode = req.getParameter("lectureCode");
-		profDTO.setLecture_code(lectureCode);
+		DTO.setLecture_code(lectureCode);
 		
-		profDTO = dao.submittedAssignmentView(profDTO);
-		profDTO.setAssignment_content(profDTO.getAssignment_content().replace("\r\n", "<br/>"));
+		DTO = dao.submittedAssignmentView(DTO);
+		DTO.setAssignment_content(DTO.getAssignment_content().replace("\r\n", "<br/>"));
 		String assignment_submit_idx = req.getParameter("assignment_submit_idx");
-		profDTO.setAssignment_submit_idx(assignment_submit_idx);
-		model.addAttribute("profDTO", profDTO);
+		DTO.setAssignment_submit_idx(assignment_submit_idx);
+		model.addAttribute("profDTO", DTO);
 		model.addAttribute("lectureCode", lectureCode);
 		
 		return "prof/assignmentBoard/submittedAssignmentView";
@@ -165,7 +177,7 @@ public class ProfAssignmentController
 	@Value("${file.upload-dir}")
 	private String FILE_DIRECTORY;
 	
-	@GetMapping("/download.do/{fileName:.+}")
+	@GetMapping("/assignmentFileDownload.do/{fileName:.+}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String fileName) throws IOException {
         File file = new File(FILE_DIRECTORY + fileName);
 

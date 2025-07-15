@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+
+ 
 <mapper namespace="com.lms.springboot.jdbc.INoticeService">
+
 
     <select id="getTotalNoticeCount" resultType="int" parameterType="com.lms.springboot.jdbc.ParameterDTO2">
         SELECT COUNT(*) FROM BOARDS

@@ -2,7 +2,9 @@ package com.lms.springboot.jdbc;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface QnaboardService {
 
     // --- 기존 공지사항 관련 메소드 ---

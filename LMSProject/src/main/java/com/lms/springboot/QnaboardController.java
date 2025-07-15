@@ -35,7 +35,7 @@ public class QnaboardController {
     private static final String ROLE_PROFESSOR = "PROF";
 
 	 @Autowired
-	 @Qualifier("qnaboardServiceImpl")
+//	 @Qualifier("qnaboardServiceImpl")
 	 private QnaboardService qnaService;
 
     private String getLoggedInUserId() {

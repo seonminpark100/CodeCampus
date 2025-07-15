@@ -306,7 +306,7 @@
             </div>
         </div>
     </div>
- <script>
+ <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const totalStudents = ${totalStudentCount};
 
@@ -337,6 +337,6 @@
                 }
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
