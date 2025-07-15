@@ -4,82 +4,18 @@
 
 <mapper namespace="com.lms.springboot.jdbc.QnaboardDAO">
 
-    <insert id="insertNotice" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        <selectKey keyProperty="board_Idx" resultType="int" order="BEFORE">
-            SELECT BOARDS_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO BOARDS (
-            BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-            BGROUP, BSTEP, BINDENT, BOARD_LIKE
-        ) VALUES (
-            #{board_Idx}, #{user_Id}, #{board_Title}, #{board_Content}, SYSDATE, 0, #{category},
-            0, 0, 0, 0
-        )
-    </insert>
-
-    <select id="getTotalNoticeCount" parameterType="com.lms.springboot.jdbc.ParameterDTO3" resultType="int">
-        SELECT COUNT(*) FROM BOARDS
-        WHERE CATEGORY = 'N' <if test="search_Field != null and search_Keyword != null and search_Keyword != ''">
-            <choose>
-                <when test="search_Field == 'board_title'">
-                    AND BOARD_TITLE LIKE '%' || #{search_Keyword} || '%'
-                </when>
-                <when test="search_Field == 'board_content'">
-                    AND BOARD_CONTENT LIKE '%' || #{search_Keyword} || '%'
-                </when>
-                </choose>
-        </if>
-        </select>
-
-    <select id="listNoticePage" parameterType="com.lms.springboot.jdbc.ParameterDTO3" resultType="com.lms.springboot.jdbc.QnaboardDTO">
-        SELECT * FROM (
-            SELECT T.*, ROWNUM RNUM FROM (
-                SELECT BOARD_IDX, USER_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-                       BGROUP, BSTEP, BINDENT, BOARD_LIKE, LECTURE_CODE FROM BOARDS
-                WHERE CATEGORY = 'N' <if test="search_Field != null and search_Keyword != null and search_Keyword != ''">
-                    <choose>
-                        <when test="search_Field == 'board_title'">
-                            AND BOARD_TITLE LIKE '%' || #{search_Keyword} || '%'
-                        </when>
-                        <when test="search_Field == 'board_content'">
-                            AND BOARD_CONTENT LIKE '%' || #{search_Keyword} || '%'
-                        </when>
-                    </choose>
-                </if>
-                ORDER BY BOARD_POSTDATE DESC
-            ) T
-        ) WHERE RNUM BETWEEN #{start} AND #{end}
-    </select>
-
-    <select id="viewNotice" parameterType="int" resultType="com.lms.springboot.jdbc.QnaboardDTO">
-        SELECT BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-               BGROUP, BSTEP, BINDENT, BOARD_LIKE
-        FROM BOARDS WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'N'
-    </select>
-
-    <update id="updateNotice" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        UPDATE BOARDS SET
-            BOARD_TITLE = #{board_Title},
-            BOARD_CONTENT = #{board_Content},
-            LECTURE_CODE = #{lecture_Code, jdbcType=VARCHAR} WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'N'
-    </update>
-
-    <delete id="deleteNotice" parameterType="int">
-        DELETE FROM BOARDS WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'N'
-    </delete>
-
     <select id="getTotalQnaCount" parameterType="com.lms.springboot.jdbc.ParameterDTO3" resultType="int">
         SELECT COUNT(*) FROM BOARDS
         WHERE CATEGORY = 'Q'
         <if test="search_Field != null and search_Keyword != null and search_Keyword != ''">
             <choose>
-                <when test="search_Field == 'board_title'">
+                <when test="search_Field == 'BOARD_TITLE'">
                     AND BOARD_TITLE LIKE '%' || #{search_Keyword} || '%'
                 </when>
                 <when test="search_Field == 'board_content'">
                     AND BOARD_CONTENT LIKE '%' || #{search_Keyword} || '%'
                 </when>
-                <when test="search_Field == 'user_id'">
+                <when test="search_Field == 'USER_ID'">
                     AND USER_ID LIKE '%' || #{search_Keyword} || '%'
                 </when>
             </choose>
@@ -98,13 +34,13 @@
                 WHERE CATEGORY = 'Q'
                 <if test="search_Field != null and search_Keyword != null and search_Keyword != ''">
                     <choose>
-                        <when test="search_Field == 'board_title'">
+                        <when test="search_Field == 'BOARD_TITLE'">
                             AND BOARD_TITLE LIKE '%' || #{search_Keyword} || '%'
                         </when>
                         <when test="search_Field == 'board_content'">
                             AND BOARD_CONTENT LIKE '%' || #{search_Keyword} || '%'
                         </when>
-                        <when test="search_Field == 'user_id'">
+                        <when test="search_Field == 'USER_ID'">
                             AND USER_ID LIKE '%' || #{search_Keyword} || '%'
                         </when>
                     </choose>
@@ -117,83 +53,4 @@
         ) WHERE RNUM BETWEEN #{start} AND #{end}
     </select>
 
-    <insert id="insertQuestion" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        <selectKey keyProperty="board_Idx" resultType="int" order="BEFORE">
-            SELECT BOARDS_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO BOARDS (
-            BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-            BGROUP, BSTEP, BINDENT, BOARD_LIKE
-        ) VALUES (
-            #{board_Idx},
-            #{user_Id},
-            #{lecture_Code, jdbcType=VARCHAR},
-            #{board_Title},
-            #{board_Content},
-            SYSDATE,
-            0,
-            'Q',
-            #{board_Idx},
-            0,
-            0,
-            0
-        )
-    </insert>
-
-    <update id="updateRestStep" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        UPDATE BOARDS SET BSTEP = BSTEP + 1
-        WHERE BGROUP = #{bgroup} AND BSTEP > #{bstep} AND CATEGORY = #{category}
-    </update>
-
-    <insert id="insertAnswer" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        <selectKey keyProperty="board_Idx" resultType="int" order="BEFORE">
-            SELECT BOARDS_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO BOARDS (
-            BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-            BGROUP, BSTEP, BINDENT, BOARD_LIKE
-        ) VALUES (
-            #{board_Idx},
-            #{user_Id},
-            #{lecture_Code, jdbcType=VARCHAR},
-            #{board_Title},
-            #{board_Content},
-            SYSDATE,
-            0,
-            'Q',
-            #{bgroup},
-            #{bstep},
-            #{bindent},
-            0
-        )
-    </insert>
-
-    <select id="viewQna" parameterType="int" resultType="com.lms.springboot.jdbc.QnaboardDTO">
-        SELECT BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-               BGROUP, BSTEP, BINDENT, BOARD_LIKE
-        FROM BOARDS WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'Q'
-    </select>
-
-    <update id="updateQna" parameterType="com.lms.springboot.jdbc.QnaboardDTO">
-        UPDATE BOARDS SET
-            BOARD_TITLE = #{board_Title},
-            BOARD_CONTENT = #{board_Content},
-            LECTURE_CODE = #{lecture_Code, jdbcType=VARCHAR}
-        WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'Q'
-    </update>
-
-    <delete id="deleteQna" parameterType="int">
-        DELETE FROM BOARDS WHERE BOARD_IDX = #{board_Idx} AND CATEGORY = 'Q'
-    </delete>
-
-    <update id="updateVisitCount" parameterType="int">
-        UPDATE BOARDS SET VISITCOUNT = VISITCOUNT + 1 WHERE BOARD_IDX = #{board_Idx}
-    </update>
-     <select id="listAnswersByBgroup" parameterType="int" resultType="com.lms.springboot.jdbc.QnaboardDTO">
-	        SELECT BOARD_IDX, USER_ID, LECTURE_CODE, BOARD_TITLE, BOARD_CONTENT, BOARD_POSTDATE, VISITCOUNT, CATEGORY,
-	               BGROUP, BSTEP, BINDENT, BOARD_LIKE
-	        FROM BOARDS
-	        WHERE BGROUP = #{bgroup}
-	        ORDER BY BGROUP DESC, BSTEP ASC, BINDENT ASC
-    	</select>
-</mapper>
+    </mapper>
