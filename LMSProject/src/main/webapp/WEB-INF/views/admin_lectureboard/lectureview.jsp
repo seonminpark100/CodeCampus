@@ -122,7 +122,7 @@
             }
         </style>
 		<script>
-		function deletePost(lectureIdx){
+		function deletePost(lecture_Idx){
 			var confirmed = confirm("정말로 삭제하겠습니까?");
 			if(confirmed){
 				var form = document.writeFrm;
@@ -136,7 +136,7 @@
 	<body>
 		<h2>강의 상세 보기</h2>	
 		<form name="writeFrm">
-			<input type="hidden" name="lectureIdx" value="${lectureBoardDTO.lectureIdx }" />
+			<input type="hidden" name="lecture_Idx" value="${lectureBoardDTO.lecture_Idx }" />
 		</form>
 		<table border="1">
 		<colgroup>
@@ -144,27 +144,27 @@
 		<col width="15%"/> <col width="*"/>
 		</colgroup>
 			<tr>
-				<td>강의 번호</td> <td>${ lectureBoardDTO.lectureIdx }</td>
-				<td>강의명</td> <td>${ lectureBoardDTO.lectureName }</td>
+				<td>강의 번호</td> <td>${ lectureBoardDTO.lecture_Idx }</td>
+				<td>강의명</td> <td>${ lectureBoardDTO.lecture_Name }</td>
 			</tr>
 			<tr>
-				<td>교수ID</td> <td>${ lectureBoardDTO.profId }</td>
-				<td>강의 코드</td> <td>${ lectureBoardDTO.lectureCode }</td>
+				<td>교수ID</td> <td>${ lectureBoardDTO.prof_Id }</td>
+				<td>강의 코드</td> <td>${ lectureBoardDTO.lecture_Code }</td>
 			</tr>
             <tr>
-                <td>강의 시작일</td> <td>${ lectureBoardDTO.lectureStartDate }</td> 
-                <td>강의 종료일</td> <td>${ lectureBoardDTO.lectureEndDate }</td>
+                <td>강의 시작일</td> <td>${ lectureBoardDTO.lecture_Start_Date }</td> 
+                <td>강의 종료일</td> <td>${ lectureBoardDTO.lecture_End_Date }</td>
             </tr>
             <tr>
                 <td>전공ID</td>
-                <td colspan="3">${ lectureBoardDTO.majorId }</td>
+                <td colspan="3">${ lectureBoardDTO.major_Id }</td>
             </tr>
             <tr>
             <td colspan="4" align="center">
-		            <button type="button" onclick="location.href='/admin_lectureboard/lectureedit.do?lectureIdx=${ lectureBoardDTO.lectureIdx }';">
+		            <button type="button" onclick="location.href='/admin_lectureboard/lectureedit.do?lecture_Idx=${ lectureBoardDTO.lecture_Idx }';">
 		                수정하기
 		            </button>
-		            <button type="button" onclick="deletePost('${ lectureBoardDTO.lectureIdx }');">
+		            <button type="button" onclick="deletePost('${ lectureBoardDTO.lecture_Idx }');">
 		                삭제하기
 		            </button>
 		            <button type="button" onclick="location.href='/admin_lectureboard/lecturelist.do';">

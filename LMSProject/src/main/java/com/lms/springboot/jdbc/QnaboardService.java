@@ -9,7 +9,7 @@ public interface QnaboardService {
     int getTotalNoticeCount(ParameterDTO3 parameterDTO);
     ArrayList<QnaboardDTO> listNoticePage(ParameterDTO3 parameterDTO);
     int insertNotice(QnaboardDTO dto);
-    QnaboardDTO viewNotice(int boardIdx);
+    QnaboardDTO viewNotice(int board_Idx);
     int updateNotice(QnaboardDTO dto);
     int deleteNotice(int boardIdx);
     void updateVisitCount(int boardIdx); 

@@ -1,12 +1,16 @@
 package com.lms.springboot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
-
-import com.lms.springboot.jdbc.QnaboardService;
-import com.lms.springboot.jdbc.QnaboardDTO;
 import com.lms.springboot.jdbc.ParameterDTO3;
+import com.lms.springboot.jdbc.QnaboardDTO;
+import com.lms.springboot.jdbc.QnaboardService;
 import com.lms.springboot.utils.PagingUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -71,14 +70,14 @@ public class QnaboardController {
     @GetMapping("/qnaboardlist.do") 
     public String qnaList(Model model, HttpServletRequest req, ParameterDTO3 parameterDTO) {
 
-        if (parameterDTO.getSearchField() != null && parameterDTO.getSearchField().isEmpty()) {
-            parameterDTO.setSearchField(null);
+        if (parameterDTO.getSearch_Field() != null && parameterDTO.getSearch_Field().isEmpty()) {
+            parameterDTO.setSearch_Field(null);
         }
-        if (parameterDTO.getSearchKeyword() != null && parameterDTO.getSearchKeyword().isEmpty()) {
-            parameterDTO.setSearchKeyword(null);
+        if (parameterDTO.getSearch_Keyword() != null && parameterDTO.getSearch_Keyword().isEmpty()) {
+            parameterDTO.setSearch_Keyword(null);
         }
-        if (parameterDTO.getLectureCode() != null && parameterDTO.getLectureCode().isEmpty()) {
-            parameterDTO.setLectureCode(null);
+        if (parameterDTO.getLecture_Code() != null && parameterDTO.getLecture_Code().isEmpty()) {
+            parameterDTO.setLecture_Code(null);
         }
 
         parameterDTO.setCategory("Q");
@@ -102,7 +101,9 @@ public class QnaboardController {
         parameterDTO.setEnd(end);
 
         ArrayList<QnaboardDTO> lists = qnaService.listQnaPage(parameterDTO);
-
+        for (QnaboardDTO qnaboardDTO : lists) {
+			System.out.println(qnaboardDTO);
+		}
         Map<String, Object> maps = new HashMap<>();
         maps.put("totalCount", totalCount);
         maps.put("pageSize", pageSize);
@@ -112,14 +113,14 @@ public class QnaboardController {
         // req.getContextPath()는 "/프로젝트명"을 반환하므로, Spring Boot 내장 톰캣의 경우 대개 빈 문자열
         String reqUrl = "/qnaboard/qnaboardlist.do"; 
         StringBuilder paramBuilder = new StringBuilder();
-        if (parameterDTO.getSearchField() != null) {
-            paramBuilder.append("&searchField=").append(parameterDTO.getSearchField());
+        if (parameterDTO.getSearch_Field() != null) {
+            paramBuilder.append("&search_Field=").append(parameterDTO.getSearch_Field());
         }
-        if (parameterDTO.getSearchKeyword() != null) {
-            paramBuilder.append("&searchKeyword=").append(parameterDTO.getSearchKeyword());
+        if (parameterDTO.getSearch_Keyword() != null) {
+            paramBuilder.append("&search_Keyword=").append(parameterDTO.getSearch_Keyword());
         }
-        if (parameterDTO.getLectureCode() != null) {
-            paramBuilder.append("&lectureCode=").append(parameterDTO.getLectureCode());
+        if (parameterDTO.getLecture_Code() != null) {
+            paramBuilder.append("&lecture_Code=").append(parameterDTO.getLecture_Code());
         }
 
         String pagingImg;
@@ -163,7 +164,7 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        qnaboardDTO.setUserId(loggedInUserId);
+        qnaboardDTO.setUser_Id(loggedInUserId);
         qnaboardDTO.setCategory("Q");
 
         int result = qnaService.insertQuestion(qnaboardDTO);
@@ -177,8 +178,8 @@ public class QnaboardController {
 
     // Q&A 게시글 상세 보기
     @GetMapping("/qnaboardview.do") 
-    public String qnaView(Model model, @RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
-    	 System.out.println("qnaView method called for boardIdx: " + boardIdx);
+    public String qnaView(Model model, @RequestParam("board_Idx") int board_Idx, RedirectAttributes redirectAttributes) {
+    	 System.out.println("qnaView method called for boardIdx: " + board_Idx);
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
         
@@ -188,9 +189,9 @@ public class QnaboardController {
         }
 
        
-        qnaService.updateVisitCount(boardIdx); // 이 부분에서 조회수가 증가합니다.
+        qnaService.updateVisitCount(board_Idx); // 이 부분에서 조회수가 증가합니다.
 
-        QnaboardDTO qnaboardDTO = qnaService.viewQna(boardIdx); // 게시글 정보를 가져올 때 이미 조회수가 증가했으므로, 이 메서드 내부에서 또 증가시키지 않도록 Service Impl 확인
+        QnaboardDTO qnaboardDTO = qnaService.viewQna(board_Idx); // 게시글 정보를 가져올 때 이미 조회수가 증가했으므로, 이 메서드 내부에서 또 증가시키지 않도록 Service Impl 확인
 
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 게시글이거나 접근 권한이 없습니다.");
@@ -198,7 +199,7 @@ public class QnaboardController {
         }
 
         boolean isAccessible = false;
-        if (loggedInUserId.equals(qnaboardDTO.getUserId())) {
+        if (loggedInUserId.equals(qnaboardDTO.getUser_Id())) {
             isAccessible = true;
         } else if (ROLE_ADMIN.equals(loggedInUserRole) || ROLE_PROFESSOR.equals(loggedInUserRole)) {
             isAccessible = true;
@@ -217,7 +218,7 @@ public class QnaboardController {
     // Q&A 답변 작성 폼 (GET 요청)
     @GetMapping("/qnanswer.do") 
     public String qnaAnswerGet(Model model,
-                               @RequestParam("boardIdx") int boardIdx,
+                               @RequestParam("board_Idx") int board_Idx,
                                @RequestParam("bgroup") int bgroup,
                                @RequestParam("bstep") int bstep,
                                @RequestParam("bindent") int bindent,
@@ -235,18 +236,18 @@ public class QnaboardController {
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        QnaboardDTO parentBoard = qnaService.viewQna(boardIdx);
+        QnaboardDTO parentBoard = qnaService.viewQna(board_Idx);
         if (parentBoard == null || !"Q".equals(parentBoard.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 원본 게시글입니다.");
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        model.addAttribute("parentBoardIdx", boardIdx);
+        model.addAttribute("parentBoard_Idx", board_Idx);
         model.addAttribute("parentBgroup", bgroup);
         model.addAttribute("parentBstep", bstep);
         model.addAttribute("parentBindent", bindent);
-        model.addAttribute("parentBoardTitle", parentBoard.getBoardTitle());
-        model.addAttribute("parentLectureCode", parentBoard.getLectureCode());
+        model.addAttribute("parentBoardTitle", parentBoard.getBoard_Title());
+        model.addAttribute("parentLectureCode", parentBoard.getLecture_Code());
 
         return "qnaboard/qnaboardanswer";
     }
@@ -254,7 +255,7 @@ public class QnaboardController {
     // Q&A 답변 작성 (POST 요청)
     @PostMapping("/qnanswer.do") 
     public String qnaAnswerPost(QnaboardDTO qnaboardDTO,
-                                @RequestParam("parentBoardIdx") int parentBoardIdx,
+                                @RequestParam("parentBoard_Idx") int parentBoard_Idx,
                                 @RequestParam("parentBgroup") int parentBgroup,
                                 @RequestParam("parentBstep") int parentBstep,
                                 @RequestParam("parentBindent") int parentBindent,
@@ -272,15 +273,15 @@ public class QnaboardController {
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        qnaboardDTO.setUserId(loggedInUserId);
+        qnaboardDTO.setUser_Id(loggedInUserId);
         qnaboardDTO.setCategory("Q");
         qnaboardDTO.setBgroup(parentBgroup);
         qnaboardDTO.setBstep(parentBstep + 1);
         qnaboardDTO.setBindent(parentBindent + 1);
 
-        QnaboardDTO originalParentBoard = qnaService.viewQna(parentBoardIdx);
+        QnaboardDTO originalParentBoard = qnaService.viewQna(parentBoard_Idx);
         if (originalParentBoard != null) {
-            qnaboardDTO.setLectureCode(originalParentBoard.getLectureCode());
+            qnaboardDTO.setLecture_Code(originalParentBoard.getLecture_Code());
         }
 
         qnaService.updateRestStep(qnaboardDTO);
@@ -292,12 +293,12 @@ public class QnaboardController {
             redirectAttributes.addFlashAttribute("errorMessage", "답변 작성에 실패했습니다.");
         }
 
-        return "redirect:/qnaboard/qnaboardview.do?boardIdx=" + parentBoardIdx;
+        return "redirect:/qnaboard/qnaboardview.do?board_Idx=" + parentBoard_Idx;
     }
 
     // Q&A 게시글 수정 폼 (GET 요청)
     @GetMapping("/qnaedit.do") 
-    public String qnaEditGet(Model model, @RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
+    public String qnaEditGet(Model model, @RequestParam("board_Idx") int board_Idx, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
 
@@ -307,7 +308,7 @@ public class QnaboardController {
         }
 
 
-        QnaboardDTO qnaboardDTO = qnaService.viewQna(boardIdx);
+        QnaboardDTO qnaboardDTO = qnaService.viewQna(board_Idx);
 
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 게시글이거나 접근 권한이 없습니다.");
@@ -315,7 +316,7 @@ public class QnaboardController {
         }
 
         boolean canEdit = false;
-        if (loggedInUserId.equals(qnaboardDTO.getUserId())) {
+        if (loggedInUserId.equals(qnaboardDTO.getUser_Id())) {
             canEdit = true;
         } else if (ROLE_ADMIN.equals(loggedInUserRole) || ROLE_PROFESSOR.equals(loggedInUserRole)) {
             canEdit = true;
@@ -323,7 +324,7 @@ public class QnaboardController {
 
         if (!canEdit) {
             redirectAttributes.addFlashAttribute("errorMessage", "해당 게시글은 작성자 또는 관리자/교수만 수정할 수 있습니다.");
-            return "redirect:/qnaboard/qnaboardview.do?boardIdx=" + boardIdx;
+            return "redirect:/qnaboard/qnaboardview.do?board_Idx=" + board_Idx;
         }
 
         model.addAttribute("qnaBoardDTO", qnaboardDTO);
@@ -342,7 +343,7 @@ public class QnaboardController {
         }
 
         // 원본 게시글을 가져올 때 조회수가 또 증가하지 않도록 Service 계층에 별도의 메서드(예: getQnaByIdWithoutCounting)가 필요할 수 있습니다.
-        QnaboardDTO originalBoard = qnaService.viewQna(qnaboardDTO.getBoardIdx());
+        QnaboardDTO originalBoard = qnaService.viewQna(qnaboardDTO.getBoard_Idx());
 
         if (originalBoard == null || !"Q".equals(originalBoard.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 게시글이거나 접근 권한이 없습니다.");
@@ -350,7 +351,7 @@ public class QnaboardController {
         }
 
         boolean canEdit = false;
-        if (loggedInUserId.equals(originalBoard.getUserId())) {
+        if (loggedInUserId.equals(originalBoard.getUser_Id())) {
             canEdit = true;
         } else if (ROLE_ADMIN.equals(loggedInUserRole) || ROLE_PROFESSOR.equals(loggedInUserRole)) {
             canEdit = true;
@@ -358,12 +359,12 @@ public class QnaboardController {
 
         if (!canEdit) {
             redirectAttributes.addFlashAttribute("errorMessage", "해당 게시글은 작성자 또는 관리자/교수만 수정할 수 있습니다.");
-            return "redirect:/qnaboard/qnaboardview.do?boardIdx=" + qnaboardDTO.getBoardIdx();
+            return "redirect:/qnaboard/qnaboardview.do?board_Idx=" + qnaboardDTO.getBoard_Idx();
         }
 
         qnaboardDTO.setCategory("Q");
-        qnaboardDTO.setUserId(originalBoard.getUserId());
-        qnaboardDTO.setBoardPostdate(originalBoard.getBoardPostdate());
+        qnaboardDTO.setUser_Id(originalBoard.getUser_Id());
+        qnaboardDTO.setBoard_Postdate(originalBoard.getBoard_Postdate());
         qnaboardDTO.setVisitcount(originalBoard.getVisitcount());
 
         int result = qnaService.updateQna(qnaboardDTO);
@@ -372,12 +373,12 @@ public class QnaboardController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글 수정에 실패했습니다.");
         }
-        return "redirect:/qnaboard/qnaboardview.do?boardIdx=" + qnaboardDTO.getBoardIdx();
+        return "redirect:/qnaboard/qnaboardview.do?board_Idx=" + qnaboardDTO.getBoard_Idx();
     }
 
     // Q&A 게시글 삭제
     @PostMapping("/qnadelete.do") 
-    public String qnaDeletePost(@RequestParam("boardIdx") int boardIdx, RedirectAttributes redirectAttributes) {
+    public String qnaDeletePost(@RequestParam("board_Idx") int board_Idx, RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
 
@@ -386,14 +387,14 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        QnaboardDTO qnaboardDTO = qnaService.viewQna(boardIdx);
+        QnaboardDTO qnaboardDTO = qnaService.viewQna(board_Idx);
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 게시글이거나 접근 권한이 없습니다.");
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
         boolean canDelete = false;
-        if (loggedInUserId.equals(qnaboardDTO.getUserId())) {
+        if (loggedInUserId.equals(qnaboardDTO.getUser_Id())) {
             canDelete = true;
         } else if (ROLE_ADMIN.equals(loggedInUserRole) || ROLE_PROFESSOR.equals(loggedInUserRole)) {
             canDelete = true;
@@ -401,10 +402,10 @@ public class QnaboardController {
 
         if (!canDelete) {
             redirectAttributes.addFlashAttribute("errorMessage", "해당 게시글은 작성자 또는 관리자/교수만 삭제할 수 있습니다.");
-            return "redirect:/qnaboard/qnaboardview.do?boardIdx=" + boardIdx;
+            return "redirect:/qnaboard/qnaboardview.do?board_Idx=" + board_Idx;
         }
 
-        int result = qnaService.deleteQna(boardIdx);
+        int result = qnaService.deleteQna(board_Idx);
         if (result > 0) {
             redirectAttributes.addFlashAttribute("successMessage", "게시글이 성공적으로 삭제되었습니다.");
         } else {

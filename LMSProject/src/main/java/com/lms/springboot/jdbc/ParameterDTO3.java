@@ -1,15 +1,13 @@
 package com.lms.springboot.jdbc;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ParameterDTO3 {
     // 검색어 관련 멤버변수 
-    private String searchField;
-    private String searchKeyword;
-    private String lectureCode; // 강의 코드를 통한 검색도 가능하도록 추가
+    private String search_Field;
+    private String search_Keyword;
+    private String lecture_Code; // 강의 코드를 통한 검색도 가능하도록 추가
 
     // 게시물의 구간을 표현하는 멤버변수 (페이징)
     private int start;

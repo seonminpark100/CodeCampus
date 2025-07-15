@@ -176,11 +176,11 @@
     <p>회원 목록 크기: ${fn:length(memberList)}</p>
 
     <form action="/admin/accountedit/list.do" method="get" onsubmit="return validateSearch();">
-        <select name="searchField">
+        <select name="search_Field">
     		<option value="userId">아이디</option>
     		<option value="userName">이름</option>
 		</select>
-        <input type="text" name="searchKeyword" id="searchKeyword" placeholder="검색어를 입력하세요.">
+        <input type="text" name="search_Keyword" id="search_Keyword" placeholder="검색어를 입력하세요.">
         <input type="submit" value="검색">
     </form>
 
@@ -242,8 +242,8 @@
     </table>
     <script>
     function validateSearch() {
-        var searchKeyword = document.getElementById("searchKeyword").value;
-        if (searchKeyword.trim() === "") {
+        var search_Keyword = document.getElementById("search_Keyword").value;
+        if (search_Keyword.trim() === "") {
             alert("검색어를 입력하세요.");
             return false;
         }

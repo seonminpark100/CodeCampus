@@ -29,6 +29,6 @@ public class AccountDTO {
     private int enable;
 
     // 검색 필드 및 키워드 (데이터베이스 컬럼과 직접 매핑되지 않음)
-    private String searchField;
-    private String searchKeyword;
+    private String search_Field;
+    private String search_Keyword;
 }

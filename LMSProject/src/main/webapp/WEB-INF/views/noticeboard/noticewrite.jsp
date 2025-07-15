@@ -126,13 +126,13 @@
         </style>
 		<script>
         let validateForm = (frm) => {
-            if(frm.boardTitle.value == ''){
+            if(frm.board_Title.value == ''){
                 alert('제목을 입력하세요.');
                 frm.boardTitle.focus();
                 return false;
             }
 
-            if(frm.boardContent.value == ''){
+            if(frm.board_Content.value == ''){
                 alert('내용을 입력하세요.');
                 frm.boardContent.focus();
                 return false;
@@ -155,20 +155,20 @@
             <tr>
                 <td>제목</td>
                 <td>
-                    <input type="text" name="boardTitle" style="width:90%;" />
+                    <input type="text" name="board_Title" style="width:90%;" />
                 </td>
             </tr>
             <tr>
                 <td>작성자</td>
                 <td>
-                    <input type="hidden" name="userId" value="공지담당자" />
+                    <input type="hidden" name="user_Id" value="공지담당자" />
                     공지담당자
                 </td>
             </tr>
             <tr>
                 <td>내용</td>
                 <td>
-                    <textarea name="boardContent" style="width:90%;height:100px;"></textarea>
+                    <textarea name="board_Content" style="width:90%;height:100px;"></textarea>
                 </td>
             </tr>
             <tr>

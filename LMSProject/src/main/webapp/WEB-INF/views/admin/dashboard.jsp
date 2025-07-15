@@ -261,10 +261,10 @@
                         <tbody>
                         <c:forEach var="lecture" items="${newLectures}">
                             <tr>
-                                <td>${lecture.lectureName}</td>         
-                        		<td>${lecture.profName}</td>             
-                        		<td>${lecture.lectureStartDate}</td>
-                        		<td>${lecture.lectureEndDate}</td>
+                                <td>${lecture.lecture_Name}</td>         
+                        		<td>${lecture.prof_Id}</td>             
+                        		<td>${lecture.lecture_Start_Date}</td>
+                        		<td>${lecture.lecture_End_Date}</td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -288,55 +288,23 @@
                         <tbody>
                         <c:forEach var="board" items="${topVisitedBoards}"> 
                             <tr>
-                                <td title="${board.boardContent}">
-                                    ${board.boardTitle}
+                                <td title="${board.board_Content}">
+                                    ${board.board_Title}
                                 </td>
-                                <td>${board.userId}</td>
-                                <td>${board.boardPostDate}</td>
+                                <td>${board.user_Id}</td>
+                                <td>${board.board_PostDate}</td>
                                 <td><strong>${board.visitCount}</strong></td> 
                             </tr>
                         </c:forEach>
                     </tbody>
                     </table>
                 </c:if>
-                <c:if test="${empty topVisitedBoards}"> <%-- ★★★ 모델 속성 이름 변경 --%>
-                    <p>조회수가 많은 게시글 데이터가 없습니다.</p> <%-- ★★★ 메시지 변경 --%>
+                <c:if test="${empty topVisitedBoards}"> 
+                    <p>조회수가 많은 게시글 데이터가 없습니다.</p> 
                 </c:if>
                 
             </div>
         </div>
     </div>
- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const totalStudents = ${totalStudentCount};
-
-            const ctx = document.getElementById('userRoleChart').getContext('2d');
-            const userRoleChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['학생'],
-                    datasets: [{
-                        label: '학생 수',
-                        data: [totalStudents],
-                        backgroundColor: ['rgba(75, 192, 192, 0.6)'],
-                        borderColor: ['rgba(75, 192, 192, 1)'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: true, text: '총 학생 수' }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { precision: 0 } },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-        });
-    </script>
 </body>
 </html>

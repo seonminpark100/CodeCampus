@@ -49,7 +49,7 @@ public class MyAuthSuccessHandler implements AuthenticationSuccessHandler
         } else if (role.equals("ROLE_PROF")) {
             response.sendRedirect("/prof/index.do");
         } else if (role.equals("ROLE_USER")){
-            response.sendRedirect("/");
+            response.sendRedirect("/user/index.do");
         } else {
             
             response.sendRedirect("/");

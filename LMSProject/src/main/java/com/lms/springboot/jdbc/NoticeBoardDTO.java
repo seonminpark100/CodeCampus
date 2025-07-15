@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class NoticeBoardDTO {
-    private int boardIdx;       
-    private String userId;  
-    private String boardTitle;  
-    private String boardContent; 
-    private Date boardPostdate; 
+    private int board_Idx;       
+    private String user_Id;  
+    private String board_Title;  
+    private String board_Content; 
+    private Date board_Postdate; 
     private int visitcount;    
     private String category;   
 }

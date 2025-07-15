@@ -28,10 +28,10 @@ public class QnaboardServiceImpl implements QnaboardService {
     }
 
     @Override
-    public QnaboardDTO viewNotice(int boardIdx) {
+    public QnaboardDTO viewNotice(int board_Idx) {
         // 조회수 증가 로직은 Controller나 Service에서 처리될 수 있습니다. 여기서는 DAO 호출만 예시
-        updateVisitCount(boardIdx); // 조회수 증가 서비스 메서드 호출 (선택적)
-        return qnaboardDAO.viewNotice(boardIdx);
+        updateVisitCount(board_Idx); // 조회수 증가 서비스 메서드 호출 (선택적)
+        return qnaboardDAO.viewNotice(board_Idx);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class QnaboardServiceImpl implements QnaboardService {
     }
 
     @Override
-    public int deleteNotice(int boardIdx) {
-        return qnaboardDAO.deleteNotice(boardIdx);
+    public int deleteNotice(int board_Idx) {
+        return qnaboardDAO.deleteNotice(board_Idx);
     }
 
     @Override
-    public void updateVisitCount(int boardIdx) {
-        qnaboardDAO.updateVisitCount(boardIdx);
+    public void updateVisitCount(int board_Idx) {
+        qnaboardDAO.updateVisitCount(board_Idx);
     }
 
     // --- Q&A 게시판 관련 메소드 구현 ---
@@ -76,13 +76,13 @@ public class QnaboardServiceImpl implements QnaboardService {
     }
 
     @Override // <--- 여기를 수정합니다.
-    public QnaboardDTO viewQna(int boardIdx) {
+    public QnaboardDTO viewQna(int board_Idx) {
         // 1. 기존 게시글 상세 조회
-        QnaboardDTO qnaBoardDTO = qnaboardDAO.viewQna(boardIdx);
+        QnaboardDTO qnaBoardDTO = qnaboardDAO.viewQna(board_Idx);
 
         if (qnaBoardDTO != null) {
             // 2. 조회수 증가 로직 (기존 위치)
-            updateVisitCount(boardIdx);
+            updateVisitCount(board_Idx);
 
             // 3. 해당 게시글의 bgroup을 이용해 모든 관련 글 (원글 + 답글) 조회
             // 이 메서드를 호출하려면 먼저 QnaboardDAO 인터페이스에 listAnswersByBgroup 메서드가 선언되어 있어야 합니다.
@@ -100,7 +100,7 @@ public class QnaboardServiceImpl implements QnaboardService {
     }
 
     @Override
-    public int deleteQna(int boardIdx) {
-        return qnaboardDAO.deleteQna(boardIdx);
+    public int deleteQna(int board_Idx) {
+        return qnaboardDAO.deleteQna(board_Idx);
     }
 }

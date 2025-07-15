@@ -8,8 +8,8 @@ import lombok.Setter;
 public class ParameterDTO
 {
 	//검색어 관련 멤버변수 
-	private String searchField;
-	private String searchKeyword;
+	private String search_Field;
+	private String search_Keyword;
 	
 	//게시물의 구간을 표현하는 멤버변수 
 	private int start;

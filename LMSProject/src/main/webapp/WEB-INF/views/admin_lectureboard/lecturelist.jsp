@@ -217,7 +217,7 @@
             }
 		</style>
         <script>
-            function confirmDelete(lectureIdx) {
+            function confirmDelete(lecture_Idx) {
                 if (confirm("정말로 이 강의를 삭제하시겠습니까?")) {
                     var form = document.createElement('form');
                     form.setAttribute('method', 'post');
@@ -225,8 +225,8 @@
 
                     var hiddenField = document.createElement('input');
                     hiddenField.setAttribute('type', 'hidden');
-                    hiddenField.setAttribute('name', 'lectureIdx');
-                    hiddenField.setAttribute('value', lectureIdx);
+                    hiddenField.setAttribute('name', 'lecture_Idx');
+                    hiddenField.setAttribute('value', lecture_Idx);
 
                     form.appendChild(hiddenField);
                     document.body.appendChild(form);
@@ -242,11 +242,11 @@
 		<table border="1" width="90%">
 		<tr>
 			<td>
-				<select name="searchField">
-					<option value="LECTURE_NAME" ${param.searchField == 'LECTURE_NAME' ? 'selected' : ''}>강의명</option>
-					<option value="PROF_ID" ${param.searchField == 'PROF_ID' ? 'selected' : ''}>교수ID</option>
+				<select name="search_Field">
+					<option value="LECTURE_NAME" ${param.search_Field == 'LECTURE_NAME' ? 'selected' : ''}>강의명</option>
+					<option value="PROF_ID" ${param.search_Field == 'PROF_ID' ? 'selected' : ''}>교수ID</option>
 					</select>
-				<input type="text" name="searchKeyword" value="${param.searchKeyword}" />
+				<input type="text" name="search_Keyword" value="${param.search_Keyword}" />
 				<input type="submit" value="검색하기" />
 			</td>
 		</tr>
@@ -264,8 +264,7 @@
 			<th width="8%">전공ID</th>
             <th width="15%">관리</th> 
         </tr>
-	<%-- c:choose 태그 내부의 불필요한 공백 및 줄바꿈 제거 --%>
-	<c:choose><c:when test="${ empty lists }">
+		<c:choose><c:when test="${ empty lists }">
 	    <tr>
 			<td colspan="9" align="center">
 	            등록된 강의가 없습니다^^*
@@ -279,17 +278,17 @@
 	            ${vNum}
 	        </td>
 			<td align="left">
-	            <a href="/admin_lectureboard/lectureview.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}">${ row.lectureName }</a>
+	            <a href="/admin_lectureboard/lectureview.do?lecture_Idx=${row.lecture_Idx}&pageNum=${maps.pageNum}&search_Field=${param.search_Field}&search_Keyword=${param.search_Keyword}">${ row.lecture_Name }</a>
 	        </td>
-			<td>${ row.profId }</td>
-			<td>${ row.lectureCode }</td>
-			<td>${ row.lectureStartDate }</td>
-			<td>${ row.lectureEndDate }</td>
-			<td>${ row.majorId }</td>
+			<td>${ row.prof_Id }</td>
+			<td>${ row.lecture_Code }</td>
+			<td>${ row.lecture_Start_Date }</td>
+			<td>${ row.lecture_End_Date }</td>
+			<td>${ row.major_Id }</td>
 			<td>
                 <div class="table-action-buttons">
-                    <button type="button" class="edit-btn" onclick="location.href='/admin_lectureboard/lectureedit.do?lectureIdx=${row.lectureIdx}&pageNum=${maps.pageNum}&searchField=${param.searchField}&searchKeyword=${param.searchKeyword}';">수정</button>
-                    <button type="button" class="delete-btn" onclick="confirmDelete('${row.lectureIdx}');">삭제</button>
+                    <button type="button" class="edit-btn" onclick="location.href='/admin_lectureboard/lectureedit.do?lecture_Idx=${row.lecture_Idx}&pageNum=${maps.pageNum}&search_Field=${param.search_Field}&search_Keyword=${param.search_Keyword}';">수정</button>
+                    <button type="button" class="delete-btn" onclick="confirmDelete(${row.lecture_Idx});">삭제</button>
                 </div>
             </td>
            </tr>

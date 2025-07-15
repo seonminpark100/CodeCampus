@@ -158,14 +158,14 @@
         </style>
 		<script>
         let validateForm = (frm) => {
-            if(frm.boardTitle.value.trim() == ''){
+            if(frm.board_Title.value.trim() == ''){
                 alert('제목을 입력하세요.');
-                frm.boardTitle.focus();
+                frm.board_Title.focus();
                 return false;
             }
             if(frm.boardContent.value.trim() == ''){
                 alert('내용을 입력하세요.');
-                frm.boardContent.focus();
+                frm.board_Content.focus();
                 return false;
             }
             return true;
@@ -183,26 +183,26 @@
                     <tr>
                         <th>제목</th>
                         <td>
-                            <input type="text" name="boardTitle" placeholder="제목을 입력하세요." />
+                            <input type="text" name="board_Title" placeholder="제목을 입력하세요." />
                         </td>
                     </tr>
                     <tr>
                         <th>작성자</th>
                         <td>
                             <sec:authentication property="principal.username" var="loggedInUserId" />
-                            <input type="text" name="userId" value="${loggedInUserId}" readonly="readonly" />
+                            <input type="text" name="user_Id" value="${loggedInUserId}" readonly="readonly" />
                         </td>
                     </tr>
                     <tr>
                         <th>강의 코드 (선택 사항)</th>
                         <td>
-                            <input type="text" name="lectureCode" placeholder="관련 강의 코드를 입력하세요." />
+                            <input type="text" name="lecture_Code" placeholder="관련 강의 코드를 입력하세요." />
                         </td>
                     </tr>
                     <tr>
                         <th>내용</th>
                         <td>
-                            <textarea name="boardContent" placeholder="내용을 입력하세요."></textarea>
+                            <textarea name="board_Content" placeholder="내용을 입력하세요."></textarea>
                         </td>
                     </tr>
                     <tr>

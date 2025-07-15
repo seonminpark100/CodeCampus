@@ -97,12 +97,12 @@ public class LectureBoardController {
 	public String boardEditPost(LectureBoardDTO lectureBoardDTO){
 		int result = dao.updateLecture(lectureBoardDTO); 
 
-		return "redirect:/admin_lectureboard/lectureview.do?lectureIdx="+lectureBoardDTO.getLectureIdx(); 
+		return "redirect:/admin_lectureboard/lectureview.do?lecture_Idx="+lectureBoardDTO.getLecture_Idx(); 
 	}
 
 	@PostMapping("/admin_lectureboard/lecturedelete.do")
-	public String boardDeletePost(@RequestParam("lectureIdx") String lectureIdx) {
-		int result = dao.deleteLecture(lectureIdx); 
+	public String boardDeletePost(@RequestParam("lecture_Idx") String lecture_Idx) {
+		int result = dao.deleteLecture(lecture_Idx); 
 		return "redirect:/admin_lectureboard/lecturelist.do";
 	}
 }

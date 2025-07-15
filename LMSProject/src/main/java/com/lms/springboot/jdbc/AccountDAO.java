@@ -31,12 +31,12 @@ public class AccountDAO implements IAccountService {
 	@Override
 	public List<AccountDTO> select() {
 	    // ★★★ 모든 컬럼에 AS 별칭을 명시적으로 추가하여 DTO의 카멜 케이스 필드명과 매핑합니다 ★★★
-		String sql = "SELECT USER_ID AS userId, USER_PW AS userPw, USER_NAME AS userName, " +
-	             "USER_GENDER AS userGender, USER_EMAIL AS userEmail, " +
-	             "USER_PHONENUM AS userPhonenum, USER_ADDR AS userAddr, " +
-	             "USER_BIRTHDATE AS userBirthdate, JOINDATE AS joindate, " +
-	             "AUTHORITY AS authority, SAVEFILE AS savefile, " +
-	             "ORIGINALFILE AS originalfile, MAJOR_ID AS majorId, ENABLE AS enable " + // ★ MAJOR -> MAJOR_ID로 변경
+		String sql = "SELECT USER_ID, USER_PW, USER_NAME, " +
+	             "USER_GENDER, USER_EMAIL, " +
+	             "USER_PHONENUM, USER_ADDR AS userAddr, " +
+	             "USER_BIRTHDATE, JOINDATE, " +
+	             "AUTHORITY, SAVEFILE, " +
+	             "ORIGINALFILE, MAJOR_ID, ENABLE " + // ★ MAJOR -> MAJOR_ID로 변경
 	             "FROM USER_INFO ORDER BY JOINDATE desc";
 	    return jdbcTemplate.query(sql, new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class));
 	}
@@ -104,12 +104,12 @@ public class AccountDAO implements IAccountService {
 	@Override
 	public AccountDTO selectOne(AccountDTO accountDTO) { // AccountDTO 인자명도 소문자로 변경
 		// ★★★ selectOne 메서드에도 AS 별칭을 추가합니다 ★★★
-		 String sql = "SELECT USER_ID AS userId, USER_PW AS userPw, USER_NAME AS userName, " +
-                 "USER_GENDER AS userGender, USER_EMAIL AS userEmail, " +
-                 "USER_PHONENUM AS userPhonenum, USER_ADDR AS userAddr, " +
-                 "USER_BIRTHDATE AS userBirthdate, JOINDATE AS joindate, " +
-                 "AUTHORITY AS authority, SAVEFILE AS savefile, " +
-                 "ORIGINALFILE AS originalfile, MAJOR_ID AS majorId, ENABLE AS enable " +
+		 String sql = "SELECT USER_ID, USER_PW, USER_NAME, " +
+                 "USER_GENDER, USER_EMAIL, " +
+                 "USER_PHONENUM, USER_ADDR, " +
+                 "USER_BIRTHDATE, JOINDATE, " +
+                 "AUTHORITY, SAVEFILE, " +
+                 "ORIGINALFILE, MAJOR_ID, ENABLE " +
                  "FROM USER_INFO WHERE USER_ID = ?";
 		try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<AccountDTO>(AccountDTO.class),
@@ -180,34 +180,34 @@ public class AccountDAO implements IAccountService {
     public List<AccountDTO> searchMembers(AccountDTO accountDTO) {
         StringBuilder sqlBuilder = new StringBuilder(
            
-            "SELECT USER_ID AS userId, USER_PW AS userPw, USER_NAME AS userName, " +
-            "USER_GENDER AS userGender, USER_EMAIL AS userEmail, " +
-            "USER_PHONENUM AS userPhonenum, " +
-            "USER_ADDR AS userAddr, USER_BIRTHDATE AS userBirthdate, " +
-            "JOINDATE AS joindate, AUTHORITY AS authority, " +
-            "SAVEFILE AS savefile, ORIGINALFILE AS originalfile, " +
-            "MAJOR_ID AS majorId, ENABLE AS enable " + 
+            "SELECT USER_ID, USER_PW, USER_NAME, " +
+            "USER_GENDER, USER_EMAIL, " +
+            "USER_PHONENUM, " +
+            "USER_ADDR, USER_BIRTHDATE, " +
+            "JOINDATE, AUTHORITY, " +
+            "SAVEFILE, ORIGINALFILE, " +
+            "MAJOR_ID, ENABLE " + 
             "FROM USER_INFO");
         List<Object> params = new ArrayList<>();
 
-        String searchField = accountDTO.getSearchField();
-        String searchKeyword = accountDTO.getSearchKeyword();
+        String search_Field = accountDTO.getSearch_Field();
+        String search_Keyword = accountDTO.getSearch_Keyword();
 
-        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+        if (search_Keyword != null && !search_Keyword.trim().isEmpty()) {
             sqlBuilder.append(" WHERE ");
-            switch (searchField) {
+            switch (search_Field) {
             case "userId":
                 sqlBuilder.append("USER_ID LIKE ?");
-                params.add("%" + searchKeyword + "%");
+                params.add("%" + search_Keyword + "%");
                 break;
             case "userName":
                 sqlBuilder.append("USER_NAME LIKE ?");
-                params.add("%" + searchKeyword + "%");
+                params.add("%" + search_Keyword + "%");
                 break;
             default:
                 sqlBuilder.append("USER_ID LIKE ? OR USER_NAME LIKE ?");
-                params.add("%" + searchKeyword + "%");
-                params.add("%" + searchKeyword + "%");
+                params.add("%" + search_Keyword + "%");
+                params.add("%" + search_Keyword + "%");
                 break;
             }
         }
@@ -224,12 +224,9 @@ public class AccountDAO implements IAccountService {
     @Override
     public int updateProfileImage(String userId, String saveFileName, String originalFileName) {
         Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
-        params.put("savefile", saveFileName); // DB 컬럼명 또는 DTO 필드명과 일치
-        params.put("originalfile", originalFileName); // DB 컬럼명 또는 DTO 필드명과 일치
-
-        // MyBatis Mapper XML의 id와 일치해야 합니다.
-        // 예: <update id="updateProfileImage" ...>
-        return sqlSession.update("com.lms.springboot.jdbc.IMemberMapper.updateProfileImage", params);
+        params.put("user_Id", userId);         
+        params.put("savefile", saveFileName);     
+        params.put("originalfile", originalFileName); 
+        return sqlSession.update("com.lms.springboot.jdbc.IAccountService.updateProfileImage", params);
     }
 }

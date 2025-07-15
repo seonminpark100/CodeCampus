@@ -7,37 +7,37 @@
 		<title>강의 등록</title>
 		<script>
 		let validateForm = (frm) => {
-			if(frm.lectureName.value == ''){
+			if(frm.lecture_Name.value == ''){
 				alert('강의명을 입력하세요.');
-				frm.lectureName.focus();
+				frm.lecture_Name.focus();
 				return false;
 			}
-			if(frm.profId.value == ''){
+			if(frm.prof_Id.value == ''){
 				alert('교수ID를 입력하세요.');
-				frm.profId.focus();
+				frm.prof_Id.focus();
 				return false;
 			}
-			if(frm.lectureStartDate.value == ''){
+			if(frm.lecture_Start_Date.value == ''){
 				alert('강의 시작일을 입력하세요.');
-				frm.lectureStartDate.focus();
+				frm.lecture_Start_Date.focus();
 				return false;
 			}
-			if(frm.lectureEndDate.value == ''){
+			if(frm.lecture_End_Date.value == ''){
 				alert('강의 종료일을 입력하세요.');
-				frm.lectureEndDate.focus();
+				frm.lecture_End_Date.focus();
 				return false;
 			}
-			if(frm.lectureCode.value == ''){
+			if(frm.lecture_Code.value == ''){
 				alert('강의 코드를 입력하세요.');
-				frm.lectureCode.focus();
+				frm.lecture_Code.focus();
 				return false;
 			}
-			if(frm.majorId.value == ''){
+			if(frm.major_Id.value == ''){
 				alert('전공ID를 입력하세요.');
-				frm.majorId.focus();
+				frm.major_Id.focus();
 				return false;
 			}
-            return true; // 모든 유효성 검사 통과 시 true 반환
+            return true; 
 		}
 		</script>
 	</head>
@@ -49,37 +49,37 @@
 		<tr>
 				<td>강의명</td>
 				<td>
-		            <input type="text" name="lectureName" style="width:90%;" />
+		            <input type="text" name="lecture_Name" style="width:90%;" />
 		        </td>
 			</tr>
 			<tr>
 				<td>교수ID</td>
 				<td>
-		            <input type="text" name="profId" style="width:150px;" />
+		            <input type="text" name="prof_Id" style="width:150px;" />
 		        </td>
 			</tr>
             <tr>
             	<td>강의 시작일</td>
 			<td>
-		            <input type="date" name="lectureStartDate" style="width:150px;" />
+		            <input type="date" name="lecture_Start_Date" style="width:150px;" />
 			</td>
 			</tr>
             <tr>
             	<td>강의 종료일</td>
 			<td>
-		            <input type="date" name="lectureEndDate" style="width:150px;" />
+		            <input type="date" name="lecture_End_Date" style="width:150px;" />
 		        </td>
 			</tr>
 			<tr>
 				<td>강의 코드</td>
 			<td>
-		            <textarea name="lectureCode" style="width:90%;height:100px;"></textarea>
+		            <textarea name="lecture_Code" style="width:90%;height:100px;"></textarea>
 		        </td>
 			</tr>
             <tr>
             	<td>전공ID</td>
 			<td>
-		            <input type="text" name="majorId" style="width:150px;" />
+		            <input type="text" name="major_Id" style="width:150px;" />
 		        </td>
 			</tr>
 			<tr>

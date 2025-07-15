@@ -126,39 +126,39 @@
 		<script type="text/javascript">
 		function validateForm(form) { 
 		    // 강의명 (lectureName) 입력 확인
-		    if (form.lectureName.value == "") {
+		    if (form.lecture_Name.value == "") {
 		        alert("강의명을 입력하세요.");
-		        form.lectureName.focus();
+		        form.lecture_Name.focus();
 		        return false;
 		    }
 		    // 교수ID (profId) 입력 확인
-		    if (form.profId.value == "") {
+		    if (form.prof_Id.value == "") {
 		        alert("교수ID를 입력하세요.");
-		        form.profId.focus();
+		        form.prof_Id.focus();
 		        return false;
 		    }
 		    // 강의 코드 (lectureCode) 입력 확인
-		    if (form.lectureCode.value == "") {
+		    if (form.lecture_Code.value == "") {
 		        alert("강의 코드를 입력하세요.");
-		        form.lectureCode.focus();
+		        form.lecture_Code.focus();
 		        return false;
 		    }
             // 강의 시작일 (lectureStartDate) 입력 확인
-            if (form.lectureStartDate.value == "") {
+            if (form.lecture_Start_Date.value == "") {
                 alert("강의 시작일을 입력하세요.");
-                form.lectureStartDate.focus();
+                form.lecture_Start_Date.focus();
                 return false;
             }
             // 강의 종료일 (lectureEndDate) 입력 확인
-            if (form.lectureEndDate.value == "") {
+            if (form.lecture_End_Date.value == "") {
                 alert("강의 종료일을 입력하세요.");
-                form.lectureEndDate.focus();
+                form.lecture_End_Date.focus();
                 return false;
             }
             // 전공ID (majorId) 입력 확인
-            if (form.majorId.value == "") {
+            if (form.major_Id.value == "") {
                 alert("전공ID를 입력하세요.");
-                form.majorId.focus();
+                form.major_Id.focus();
                 return false;
             }
 		}
@@ -168,52 +168,52 @@
 		<h2>강의 정보 수정(Mybatis)</h2> 
 		<form name="writeFrm" method="post"
 			action="/admin_lectureboard/lectureedit.do" onsubmit="return validateForm(this);"> 
-		<input type="hidden" name="lectureIdx" value="${lectureBoardDTO.lectureIdx }" /> 
+		<input type="hidden" name="lecture_Idx" value="${lectureBoardDTO.lecture_Idx }" /> 
 		<table border="1" width="90%">
 		    <tr>
 		        <td>강의 번호</td> 
-                <td>${lectureBoardDTO.lectureIdx }</td> 
+                <td>${lectureBoardDTO.lecture_Idx }</td> 
 		    </tr>
             <tr>
                 <td>강의명</td>
                 <td>
-                    <input type="text" name="lectureName" style="width:90%;" 
-                        value="${lectureBoardDTO.lectureName }"/> 
+                    <input type="text" name="lecture_Name" style="width:90%;" 
+                        value="${lectureBoardDTO.lecture_Name }"/> 
                 </td>
             </tr>
 		    <tr>
 		        <td>교수ID</td> 
 		        <td>
-		            <input type="text" name="profId" style="width:150px;" 
-		            	value="${lectureBoardDTO.profId }" /> 
+		            <input type="text" name="prof_Id" style="width:150px;" 
+		            	value="${lectureBoardDTO.prof_Id }" /> 
 		        </td>
 		    </tr>
             <tr>
                 <td>강의 시작일</td>
                 <td>
-                    <input type="date" name="lectureStartDate" style="width:150px;"
-                        value="${lectureBoardDTO.lectureStartDate }" /> 
+                    <input type="date" name="lecture_Start_Date" style="width:150px;"
+                        value="${lectureBoardDTO.lecture_Start_Date }" /> 
                 </td>
             </tr>
             <tr>
                 <td>강의 종료일</td> 
                 <td>
-                    <input type="date" name="lectureEndDate" style="width:150px;"
-                        value="${lectureBoardDTO.lectureEndDate }" /> 
+                    <input type="date" name="lecture_End_Date" style="width:150px;"
+                        value="${lectureBoardDTO.lecture_End_Date }" /> 
                 </td>
             </tr>
 		    <tr>
 		        <td>강의 코드</td> 
 		        <td>
-		            <textarea name="lectureCode" style="width:90%;
-		            	height:100px;">${lectureBoardDTO.lectureCode }</textarea> 
+		            <textarea name="lecture_Code" style="width:90%;
+		            	height:100px;">${lectureBoardDTO.lecture_Code }</textarea> 
 		        </td>
 		    </tr>
             <tr>
                 <td>전공ID</td> 
                 <td>
-                    <input type="text" name="majorId" style="width:150px;"
-                        value="${lectureBoardDTO.majorId }" /> 
+                    <input type="text" name="major_Id" style="width:150px;"
+                        value="${lectureBoardDTO.major_Id }" /> 
                 </td>
             </tr>
 
