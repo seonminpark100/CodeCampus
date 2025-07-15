@@ -214,11 +214,11 @@
             <h2>Q&A 목록(MyBatis)</h2>
 
             <form method="get" action="/qnaboard/qnaboardlist.do" class="search-form-group">
-                <select name="searchField">
-                    <option value="BOARD_TITLE" <c:if test="${param.searchField eq 'BOARD_TITLE'}">selected</c:if>>제목</option>
-                    <option value="USER_ID" <c:if test="${param.searchField eq 'USER_ID'}">selected</c:if>>작성자</option>
+                <select name="search_Field">
+                    <option value="BOARD_TITLE" <c:if test="${param.search_Field eq 'BOARD_TITLE'}">selected</c:if>>제목</option>
+                    <option value="USER_ID" <c:if test="${param.search_Field eq 'USER_ID'}">selected</c:if>>작성자</option>
                 </select>
-                <input type="text" name="searchKeyword" value="${param.searchKeyword}" placeholder="검색어를 입력하세요"/>
+                <input type="text" name="search_Keyword" value="${param.search_Keyword}" placeholder="검색어를 입력하세요"/>
                 <input type="submit" value="검색하기" />
             </form>
 
@@ -253,10 +253,10 @@
                             <c:if test="${row.bindent > 0}">
                                 <img src="/images/re.gif" class="reply-indent-img"/>
                             </c:if>
-                            <a href="/qnaboard/qnaboardview.do?boardIdx=${row.boardIdx}">${ row.boardTitle }</a>
+                            <a href="/qnaboard/qnaboardview.do?board_Idx=${row.board_Idx}">${ row.board_Title }</a>
                         </td>
-                        <td>${ row.userId }</td>
-                        <td>${ row.boardPostdate }</td>
+                        <td>${ row.user_Id }</td>
+                        <td>${ row.board_Postdate }</td>
                         <td>${ row.visitcount }</td>
                     </tr>
                     </c:forEach>

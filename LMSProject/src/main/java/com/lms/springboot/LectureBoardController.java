@@ -2,7 +2,6 @@ package com.lms.springboot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +53,6 @@ public class LectureBoardController {
 
 		//DB에서 인출한 게시물의 목록을 Model에 저장
 		ArrayList<LectureBoardDTO> lists = dao.listLecturePage(parameterDTO);
-		for(LectureBoardDTO test : lists){
-			System.out.println(test);
-		}
-		
 		model.addAttribute("lists", lists);
 
 		String pagingImg =
@@ -102,12 +97,12 @@ public class LectureBoardController {
 	public String boardEditPost(LectureBoardDTO lectureBoardDTO){
 		int result = dao.updateLecture(lectureBoardDTO); 
 
-		return "redirect:/admin_lectureboard/lectureview.do?lectureIdx="+lectureBoardDTO.getLecture_idx(); 
+		return "redirect:/admin_lectureboard/lectureview.do?lecture_Idx="+lectureBoardDTO.getLecture_Idx(); 
 	}
 
 	@PostMapping("/admin_lectureboard/lecturedelete.do")
-	public String boardDeletePost(@RequestParam("lectureIdx") String lectureIdx) {
-		int result = dao.deleteLecture(lectureIdx); 
+	public String boardDeletePost(@RequestParam("lecture_Idx") String lecture_Idx) {
+		int result = dao.deleteLecture(lecture_Idx); 
 		return "redirect:/admin_lectureboard/lecturelist.do";
 	}
 }

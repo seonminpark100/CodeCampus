@@ -28,6 +28,9 @@ public class ProfController
 	@RequestMapping("/prof/index.do")
 	public String welcome2(@AuthenticationPrincipal UserDetails user, Model model, ProfDTO profDTO) {
 		String user_id = user.getUsername();
+		
+		System.out.println("user_id: " + user_id);
+		
 		ArrayList<ProfDTO> lists = dao.userList(profDTO, user_id);
 		model.addAttribute("lists", lists);
 		model.addAttribute("user_id", user_id);

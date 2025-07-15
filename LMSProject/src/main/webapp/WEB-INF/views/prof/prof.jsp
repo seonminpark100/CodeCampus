@@ -20,7 +20,7 @@
 		  
 		    <div class="card">
 		      <h2>내 강의 목록</h2>
-		      <c:choose>
+		     	<c:choose>
 			  	<c:when test="${ empty lists }"> 
 			        <tr>
 			            <td colspan="5" align="center">

@@ -2,16 +2,14 @@ package com.lms.springboot.jdbc;
 
 import java.util.ArrayList;
 
-import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
 public interface QnaboardService {
 
     // --- 기존 공지사항 관련 메소드 ---
     int getTotalNoticeCount(ParameterDTO3 parameterDTO);
     ArrayList<QnaboardDTO> listNoticePage(ParameterDTO3 parameterDTO);
     int insertNotice(QnaboardDTO dto);
-    QnaboardDTO viewNotice(int boardIdx);
+    QnaboardDTO viewNotice(int board_Idx);
     int updateNotice(QnaboardDTO dto);
     int deleteNotice(int boardIdx);
     void updateVisitCount(int boardIdx); 

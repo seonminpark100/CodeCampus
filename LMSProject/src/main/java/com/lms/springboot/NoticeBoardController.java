@@ -65,12 +65,16 @@ public class NoticeBoardController {
     // 공지사항 작성 처리
     @PostMapping("/noticeboard/noticewrite.do")
     public String boardWritePost(NoticeBoardDTO noticeBoardDTO) { // HttpServletRequest 파라미터 제거
-       
-        noticeBoardDTO.setUserId("공지담당자"); // ★★★ 예시: 'guest'로 고정 (DB에 해당 ID가 없어도 가능하도록)
-                                           // 실제 사용 시 '관리자', '공지담당' 등으로 지정 가능
-                                           // DB의 USER_ID 컬럼이 NOT NULL이면 이 부분 필수!
 
-        //noticeBoardDTO.setCategory("N"); // 공지사항 카테고리를 'N'으로 고정
+    	 if (noticeBoardDTO.getBoard_Content() == null) {
+             noticeBoardDTO.setBoard_Content("");
+         }
+    	
+        noticeBoardDTO.setUser_Id("공지담당자"); // ★★★ 예시: 'guest'로 고정 (DB에 해당 ID가 없어도 가능하도록)
+                                           // 실제 사용 시 '관리자', '공지담당' 등으로 지정 가능
+                                     // DB의 USER_ID 컬럼이 NOT NULL이면 이 부분 필수!
+
+        noticeBoardDTO.setCategory("N"); // 공지사항 카테고리를 'N'으로 고정
         System.out.println("등록 요청 DTO: " + noticeBoardDTO); // DTO 값 확인 (userId, boardTitle, boardContent)
         int result = dao.insertNotice(noticeBoardDTO);
         System.out.println("등록 결과 (0=실패, 1=성공): " + result);
@@ -79,17 +83,17 @@ public class NoticeBoardController {
 
     // 공지사항 상세 보기
     @RequestMapping("/noticeboard/noticeview.do")
-    public String boardView(Model model, @RequestParam("boardIdx") int boardIdx) {
-        dao.updateVisitCount(boardIdx);
-        NoticeBoardDTO noticeBoardDTO = dao.viewNotice(boardIdx);
+    public String boardView(Model model, @RequestParam("board_Idx") int board_Idx) {
+        dao.updateVisitCount(board_Idx);
+        NoticeBoardDTO noticeBoardDTO = dao.viewNotice(board_Idx);
         model.addAttribute("noticeBoardDTO", noticeBoardDTO);
         return "noticeboard/noticeview";
     }
 
     // 공지사항 수정 폼
     @GetMapping("/noticeboard/noticeedit.do")
-    public String boardEditGet(Model model, @RequestParam("boardIdx") int boardIdx) {
-        NoticeBoardDTO noticeBoardDTO = dao.viewNotice(boardIdx);
+    public String boardEditGet(Model model, @RequestParam("board_Idx") int board_Idx) {
+        NoticeBoardDTO noticeBoardDTO = dao.viewNotice(board_Idx);
         model.addAttribute("noticeBoardDTO", noticeBoardDTO);
         return "noticeboard/noticeedit";
     }
@@ -98,13 +102,13 @@ public class NoticeBoardController {
     @PostMapping("/noticeboard/noticeedit.do")
     public String boardEditPost(NoticeBoardDTO noticeBoardDTO) {
         int result = dao.updateNotice(noticeBoardDTO);
-        return "redirect:/noticeboard/noticeview.do?boardIdx=" + noticeBoardDTO.getBoardIdx();
+        return "redirect:/noticeboard/noticeview.do?board_Idx=" + noticeBoardDTO.getBoard_Idx();
     }
 
     // 공지사항 삭제 처리
     @PostMapping("/noticeboard/noticedelete.do")
-    public String boardDeletePost(@RequestParam("boardIdx") int boardIdx) {
-        int result = dao.deleteNotice(boardIdx);
+    public String boardDeletePost(@RequestParam("board_Idx") int board_Idx) {
+        int result = dao.deleteNotice(board_Idx);
         return "redirect:/noticeboard/noticelist.do";
     }
 
@@ -112,7 +116,6 @@ public class NoticeBoardController {
     @GetMapping("/noticeboard/api/latestNotices")
     @ResponseBody
     public ArrayList<NoticeBoardDTO> getLatestNotices(ParameterDTO2 parameterDTO) {
-        // 이 부분은 변경 없음
         try {
             parameterDTO.setStart(1);
             parameterDTO.setEnd(5);

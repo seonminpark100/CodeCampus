@@ -196,11 +196,11 @@
         <table border="1" width="90%">
         <tr>
             <td>
-                <select name="searchField">
+                <select name="search_Field">
                     <option value="BOARD_TITLE">제목</option> 
                     <option value="USER_ID">작성자</option> 
                 </select>
-                <input type="text" name="searchKeyword" />
+                <input type="text" name="search_Keyword" />
                 <input type="submit" value="검색하기" />
             </td>
         </tr>
@@ -231,10 +231,10 @@
                         ${vNum}
                     </td>
                     <td align="left">
-                        <a href="/noticeboard/noticeview.do?boardIdx=${row.boardIdx}&vNum=${vNum}">${ row.boardTitle }</a> 
+                        <a href="/noticeboard/noticeview.do?board_Idx=${row.board_Idx}&vNum=${vNum}">${ row.board_Title }</a> 
                     </td>
-                    <td>${ row.userId }</td> 
-                    <td>${ row.boardPostdate }</td> 
+                    <td>${ row.user_Id }</td> 
+                    <td>${ row.board_Postdate }</td> 
                     <td>${ row.visitcount }</td> 
                    
                 </tr>

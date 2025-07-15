@@ -20,5 +20,5 @@ public interface ILectureService
     // 강의 수정
     public int updateLecture(LectureBoardDTO lectureBoardDTO);
     // 강의 삭제
-    public int deleteLecture(String lectureIdx); // 컨트롤러에서 @RequestParam으로 받을 것이므로 String 타입 매개변수
+    public int deleteLecture(String lecture_Idx); // 컨트롤러에서 @RequestParam으로 받을 것이므로 String 타입 매개변수
 }

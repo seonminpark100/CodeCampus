@@ -41,19 +41,19 @@ public class StatsService {
 
     public List<Map<String, Object>> getnewLectures(int limit) {
         System.out.println("DEBUG: StatsService.getnewLectures() 호출됨 (JDBC 방식)");
-        String sql = "SELECT * FROM (SELECT LECTURE_NAME AS lectureName, " +
-                "PROF_ID AS profId, " +
-                "LECTURE_START_DATE AS lectureStartDate, " +
-                "LECTURE_END_DATE AS lectureEndDate " +
+        String sql = "SELECT * FROM (SELECT LECTURE_NAME AS lecture_Name, " +
+                "PROF_ID, " +
+                "LECTURE_START_DATE, " +
+                "LECTURE_END_DATE " +
                 "FROM LECTURE ORDER BY LECTURE_START_DATE DESC) WHERE ROWNUM <= ?";
         
         List<Map<String, Object>> lectures = jdbcTemplate.queryForList(sql, limit);
 
       
         for (Map<String, Object> lecture : lectures) {
-            String profId = (String) lecture.get("profId");
-            String profName = PROF_ID_TO_NAME_MAP.getOrDefault(profId, "알 수 없음"); // 매핑된 이름이 없으면 "알 수 없음"
-            lecture.put("profName", profName); // 새로운 키 'profName'에 이름 추가
+            String prof_Id = (String) lecture.get("prof_Id");
+            String prof_Name = PROF_ID_TO_NAME_MAP.getOrDefault(prof_Id, "알 수 없음"); // 매핑된 이름이 없으면 "알 수 없음"
+            lecture.put("prof_Name", prof_Name); // 새로운 키 'profName'에 이름 추가
         }
         return lectures;
     }
@@ -70,11 +70,11 @@ public class StatsService {
         System.out.println("DEBUG: StatsService.getTopVisitedBoards() 호출됨 (JDBC 방식)");
         // VISITCOUNT를 기준으로 내림차순 정렬하여 상위 N개 게시글을 가져옴
         String sql = "SELECT * FROM (SELECT " +
-                     "BOARD_TITLE AS boardTitle, " +
-                     "USER_ID AS userId, " +
-                     "BOARD_POSTDATE AS boardPostDate, " +
-                     "VISITCOUNT AS visitCount, " + 
-                     "BOARD_CONTENT AS boardContent " +
+                     "BOARD_TITLE, " +
+                     "USER_ID, " +
+                     "BOARD_POSTDATE, " +
+                     "VISITCOUNT, " + 
+                     "BOARD_CONTENT " +
                      "FROM BOARDS " +
                      "ORDER BY VISITCOUNT DESC) " +
                      "WHERE ROWNUM <= ?";

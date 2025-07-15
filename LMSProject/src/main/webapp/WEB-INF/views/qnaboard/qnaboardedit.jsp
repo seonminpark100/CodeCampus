@@ -118,16 +118,16 @@
         </style>
         <script type="text/javascript">
         function validateForm(form) {
-            if (form.boardTitle.value.trim() == "") { // .trim() 추가
+            if (form.board_Title.value.trim() == "") { // .trim() 추가
                 alert("제목을 입력하세요.");
-                form.boardTitle.focus();
+                form.board_Title.focus();
                 return false;
             }
             // userId는 readonly이므로 여기서 검증할 필요 없음 (백엔드에서 처리)
 
-            if (form.boardContent.value.trim() == "") { // .trim() 추가
+            if (form.board_Content.value.trim() == "") { // .trim() 추가
                 alert("내용을 입력하세요.");
-                form.boardContent.focus();
+                form.board_Content.focus();
                 return false;
             }
             return true;
@@ -139,38 +139,38 @@
             <h2>Q&A 수정(Mybatis)</h2>
             <form name="writeFrm" method="post"
                 action="/qnaboard/qnaedit.do" onsubmit="return validateForm(this);">
-            <input type="hidden" name="boardIdx" value="${qnaBoardDTO.boardIdx }" />
+            <input type="hidden" name="board_Idx" value="${qnaBoardDTO.board_Idx }" />
             <table border="1" width="90%">
                 <tr>
                     <th>게시글 번호</th> 
-                    <td>${qnaBoardDTO.boardIdx }</td>
+                    <td>${qnaBoardDTO.board_Idx }</td>
                 </tr>
                 <tr>
                     <th>제목</th>
                     <td>
-                        <input type="text" name="boardTitle" style="width:90%;"
-                            value="${qnaBoardDTO.boardTitle }"/>
+                        <input type="text" name="board_Title" style="width:90%;"
+                            value="${qnaBoardDTO.board_Title }"/>
                     </td>
                 </tr>
                 <tr>
                     <th>작성자</th>
                     <td>
-                        <input type="text" name="userId" style="width:150px;"
-                            value="${qnaBoardDTO.userId }" readonly="readonly" />
+                        <input type="text" name="user_Id" style="width:150px;"
+                            value="${qnaBoardDTO.user_Id }" readonly="readonly" />
                     </td>
                 </tr>
                 <tr>
                     <th>작성일</th>
                     <td>
-                        <input type="date" name="boardPostdate" style="width:150px;"
-                            value="<fmt:formatDate value="${qnaBoardDTO.boardPostdate}" pattern="yyyy-MM-dd"/>" readonly="readonly" />
+                        <input type="date" name="board_Postdate" style="width:150px;"
+                            value="<fmt:formatDate value="${qnaBoardDTO.board_Postdate}" pattern="yyyy-MM-dd"/>" readonly="readonly" />
                     </td>
                 </tr>
                 <tr>
                     <th>내용</th>
                     <td>
-                        <textarea name="boardContent" style="width:90%;
-                            height:100px;">${qnaBoardDTO.boardContent }</textarea>
+                        <textarea name="board_Content" style="width:90%;
+                            height:100px;">${qnaBoardDTO.board_Content }</textarea>
                     </td>
                 </tr>
                 <tr>

@@ -124,14 +124,13 @@
             }
         </style>
 		<script>
-        function deletePost(boardIdx){ // 파라미터명 변경 (boardIdx)
+        function deletePost(board_Idx){ 
             var confirmed = confirm("정말로 삭제하겠습니까?");
             if(confirmed){
                 var form = document.writeFrm;
-                // hidden input 필드에 boardIdx 값을 명시적으로 설정
-                form.elements['boardIdx'].value = boardIdx; // 이 라인을 추가하거나 확인하세요.
-                form.method = "post"; // 컨트롤러의 @PostMapping과 일치
-                form.action = "/noticeboard/noticedelete.do"; // 컨트롤러의 경로와 일치
+                form.elements['board_Idx'].value = board_Idx; 
+                form.method = "post"; 
+                form.action = "/noticeboard/noticedelete.do"; 
                 form.submit();
             }
         }
@@ -139,7 +138,7 @@
 	</head>
 	<body>
 		<h2>공지사항 상세 보기</h2>	
-		<form name="writeFrm" method="post"> <input type="hidden" name="boardIdx" value="${noticeBoardDTO.boardIdx }" /> 
+		<form name="writeFrm" method="post"> <input type="hidden" name="board_Idx" value="${noticeBoardDTO.board_Idx }" /> 
 		</form>
 		<table border="1">
 		<colgroup>
@@ -147,28 +146,28 @@
 		<col width="15%"/> <col width="*"/>
 		</colgroup>
 			<tr>
-				<td>게시물 번호</td> <td>${ noticeBoardDTO.boardIdx }</td> 
-				<td>작성자 ID</td> <td>${ noticeBoardDTO.userId }</td> 
+				<td>게시물 번호</td> <td>${ noticeBoardDTO.board_Idx }</td> 
+				<td>작성자 ID</td> <td>${ noticeBoardDTO.user_Id }</td> 
 			</tr>
 			<tr>
-				<td>제목</td> <td>${ noticeBoardDTO.boardTitle }</td> 
+				<td>제목</td> <td>${ noticeBoardDTO.board_Title }</td> 
 				<td>카테고리</td> <td>${ noticeBoardDTO.category }</td> 
             </tr>
             <tr>
-                <td>작성일</td> <td>${ noticeBoardDTO.boardPostdate }</td> 
+                <td>작성일</td> <td>${ noticeBoardDTO.board_Postdate }</td> 
                 <td>조회수</td> <td>${ noticeBoardDTO.visitcount }</td> 
             </tr>
             <tr>
                 <td>내용</td>
-                <td colspan="3">${ noticeBoardDTO.boardContent }</td> 
+                <td colspan="3">${ noticeBoardDTO.board_Content }</td> 
             </tr>
             <tr>
             <td colspan="4" align="center">
                 <sec:authorize access="hasRole('ADMIN')">
-		            <button type="button" onclick="location.href='<c:url value="/noticeboard/noticeedit.do?boardIdx=${ noticeBoardDTO.boardIdx }"/>';">
+		            <button type="button" onclick="location.href='<c:url value="/noticeboard/noticeedit.do?board_Idx=${ noticeBoardDTO.board_Idx }"/>';">
 		                수정하기
 		            </button>
-		            <button type="button" onclick="deletePost('${ noticeBoardDTO.boardIdx }');">
+		            <button type="button" onclick="deletePost('${ noticeBoardDTO.board_Idx }');">
 		                삭제하기
 		            </button>
                 </sec:authorize>

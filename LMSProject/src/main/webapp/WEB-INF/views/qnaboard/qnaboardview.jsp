@@ -175,7 +175,7 @@
             }
         </style>
         <script>
-        function deletePost(boardIdx){
+        function deletePost(board_Idx){
             var confirmed = confirm("정말로 삭제하시겠습니까?");
             if(confirmed){
                 var form = document.writeFrm;
@@ -196,46 +196,46 @@
         <div class="container">
             <h2>Q&A 상세 보기</h2>
             <form name="writeFrm" method="post">
-                <input type="hidden" name="boardIdx" value="${qnaBoardDTO.boardIdx }" />
+                <input type="hidden" name="board_Idx" value="${qnaBoardDTO.board_Idx }" />
             </form>
             <table border="1">
                 <tr>
-                    <th>게시물 번호</th> <td>${ qnaBoardDTO.boardIdx }</td>
-                    <th>작성자 ID</th> <td>${ qnaBoardDTO.userId }</td>
+                    <th>게시물 번호</th> <td>${ qnaBoardDTO.board_Idx }</td>
+                    <th>작성자 ID</th> <td>${ qnaBoardDTO.user_Id }</td>
                 </tr>
                 <tr>
-                    <th>제목</th> <td>${ qnaBoardDTO.boardTitle }</td>
+                    <th>제목</th> <td>${ qnaBoardDTO.board_Title }</td>
                     <th>카테고리</th> <td>${ qnaBoardDTO.category }</td>
                 </tr>
                 <tr>
-                    <th>작성일</th> <td>${ qnaBoardDTO.boardPostdate }</td>
+                    <th>작성일</th> <td>${ qnaBoardDTO.board_Postdate }</td>
                     <th>조회수</th> <td>${ qnaBoardDTO.visitcount }</td>
                 </tr>
                 <tr>
                     <th>내용</th>
-                    <td colspan="3" style="white-space: pre-wrap;">${ qnaBoardDTO.boardContent }</td>
+                    <td colspan="3" style="white-space: pre-wrap;">${ qnaBoardDTO.board_Content }</td>
                 </tr>
                 <tr>
                      <td colspan="4" style="text-align: center;"> <div class="button-group">  <c:set var="qnaBoard" value="${qnaBoardDTO}" />
                             <c:if test="${qnaBoard != null}">
                                 <sec:authorize access="hasAnyRole('ADMIN', 'PROFESSOR')">
-                                    <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?boardIdx=${ qnaBoard.boardIdx }"/>';">
+                                    <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?board_Idx=${ qnaBoard.board_Idx }"/>';">
                                         수정하기
                                     </button>
-                                    <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.boardIdx }');">
+                                    <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.board_Idx }');">
                                         삭제하기
                                     </button>
-                                    <button type="button" onclick="location.href='<c:url value="/qnaboard/qnanswer.do?boardIdx=${ qnaBoard.boardIdx }&bgroup=${qnaBoard.bgroup}&bstep=${qnaBoard.bstep}&bindent=${qnaBoard.bindent}"/>';">
+                                    <button type="button" onclick="location.href='<c:url value="/qnaboard/qnanswer.do?board_Idx=${ qnaBoard.board_Idx }&bgroup=${qnaBoard.bgroup}&bstep=${qnaBoard.bstep}&bindent=${qnaBoard.bindent}"/>';">
                                         답변하기
                                     </button>
                                 </sec:authorize>
                                 <sec:authorize access="isAuthenticated()">
-                                    <c:if test="${authentication.name eq qnaBoard.userId}">
+                                    <c:if test="${authentication.name eq qnaBoard.user_Id}">
                                         <sec:authorize access="!hasAnyRole('ADMIN', 'PROFESSOR')">
-                                            <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?boardIdx=${ qnaBoard.boardIdx }"/>';">
+                                            <button type="button" onclick="location.href='<c:url value="/qnaboard/qnaedit.do?board_Idx=${ qnaBoard.board_Idx }"/>';">
                                                 수정하기
                                             </button>
-                                            <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.boardIdx }');">
+                                            <button type="button" class="delete-button" onclick="deletePost('${ qnaBoard.board_Idx }');">
                                                 삭제하기
                                             </button>
                                         </sec:authorize>
@@ -254,18 +254,18 @@
                 <c:choose>
                     <c:when test="${not empty qnaBoard.answers}">
                         <c:forEach var="answer" items="${qnaBoard.answers}">
-                            <c:if test="${answer.boardIdx ne qnaBoard.boardIdx}">
+                            <c:if test="${answer.board_Idx ne qnaBoard.board_Idx}">
                                 <div class="answer-item" style="margin-left: ${answer.bindent * 20}px;">
                                     <p>
                                         <strong>
                                             <c:if test="${answer.bindent > 0}">
                                                 RE:
                                             </c:if>
-                                            ${answer.boardTitle}
+                                            ${answer.board_Title}
                                         </strong>
-                                        <small>(작성자: ${answer.userId}, 작성일: ${answer.boardPostdate})</small>
+                                        <small>(작성자: ${answer.user_Id}, 작성일: ${answer.board_Postdate})</small>
                                     </p>
-                                    <p style="white-space: pre-wrap;">${answer.boardContent}</p>
+                                    <p style="white-space: pre-wrap;">${answer.board_Content}</p>
                                 </div>
                             </c:if>
                         </c:forEach>

@@ -1,16 +1,17 @@
 package com.lms.springboot;
 
-import org.mybatis.spring.annotation.MapperScan;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.lms.springboot")
+//@MapperScan(basePackages = "com.lms.springboot.jdbc")
 public class LmsProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LmsProjectApplication.class, args);
-		
-	}
-
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(LmsProjectApplication.class, args);
+    
+    }
 }

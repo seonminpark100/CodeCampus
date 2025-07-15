@@ -15,10 +15,6 @@ import jakarta.servlet.DispatcherType;
 @Configuration
 public class WebSecurityConfig
 {
-	/*
-		인증 핸들러를 제작했다면 사용을 위해 빈을 자동주입 받는다. 
-		그리고 시큐리티 설정 부분의 failureHandler() 메서드에 추가한다. 
-	 */
 	@Autowired
     public MyAuthFailureHandler myAuthFailureHandler;
 	
@@ -26,56 +22,43 @@ public class WebSecurityConfig
 	private MyAuthSuccessHandler myAuthSuccessHandler;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
-	{
-//		http.csrf((csrf)->csrf.disable()) 
-//			.cors((cors)-> cors.disable()) 
-//			.authorizeHttpRequests((request) -> request	// http 요청에 대한 인가 설정 처리
-//				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
-//				.requestMatchers("/").permitAll() 
-//				.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-//				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
-//				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
-//				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
-//				.anyRequest().authenticated() 	// 어떠한 요청이라도 인증 필요
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http.csrf((csrf)->csrf.disable()) 
-		.cors((cors)-> cors.disable()) 
-		.authorizeHttpRequests((request) -> request	// http 요청에 대한 인가 설정 처리
-			.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
-			.requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
-			// GET 요청은 모두 허용합니다. (조회)
-			.requestMatchers(org.springframework.http.HttpMethod.GET, 
-                             "/noticeboard/noticelist.do", 
-                             "/noticeboard/noticeview.do", 
-                             "/noticeboard/api/latestNotices",
-                             "/noticeboard/noticeedit.do", // 수정 폼 접근도 GET이므로 허용 (조회 목적)
-                             "/noticeboard/noticewrite.do" // 작성 폼 접근도 GET이므로 허용
-                            ).permitAll()
-			// POST 요청 (수정, 삭제, 작성)은 ADMIN 권한만 허용합니다.
-			.requestMatchers(org.springframework.http.HttpMethod.POST, 
-                             "/noticeboard/noticeedit.do", 
-                             "/noticeboard/noticedelete.do",
-                             "/noticeboard/noticewrite.do"
-                            ).hasRole("ADMIN") // ADMIN 권한만 허용
-			.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
-			.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
-			.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
-			
-			.requestMatchers("/qnaboard/qnaboardlist.do", "/qnaboard/qnaboardview.do").permitAll() 
-            // Q&A 작성 폼 접근 (GET)은 인증만 되면 허용
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/qnaboard/qnaboardwrite.do").authenticated() 
-            // Q&A 작성 (POST), 수정 (POST), 삭제 (POST)
-            .requestMatchers(org.springframework.http.HttpMethod.POST,
-                             "/qnaboard/qnaboardwrite.do",
-                             "/qnaboard/qnaboardedit.do",
-                             "/qnaboard/qnadelete.do"
-                            ).hasAnyRole("USER", "PROF", "ADMIN") 
-           
-            .requestMatchers("/qnaboard/qnanswer.do").hasAnyRole("PROF", "ADMIN") // 답변은 교수, 관리자만 (GET/POST 모두 적용)
+			.cors((cors)-> cors.disable()) 
+			.authorizeHttpRequests((request) -> request	// http 요청에 대한 인가 설정 처리
+				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll() 
+				.requestMatchers("/", "/css/**", "/js/**", "/images/**").permitAll()
+				// GET 요청은 모두 허용합니다. (조회)
+				.requestMatchers(org.springframework.http.HttpMethod.GET, 
+                                 "/noticeboard/noticelist.do", 
+                                 "/noticeboard/noticeview.do", 
+                                 "/noticeboard/api/latestNotices",
+                                 "/noticeboard/noticeedit.do", // 수정 폼 접근도 GET이므로 허용 (조회 목적)
+                                 "/noticeboard/noticewrite.do" // 작성 폼 접근도 GET이므로 허용
+                                ).permitAll()
+				// POST 요청 (수정, 삭제, 작성)은 ADMIN 권한만 허용합니다.
+				.requestMatchers(org.springframework.http.HttpMethod.POST, 
+                                 "/noticeboard/noticeedit.do", 
+                                 "/noticeboard/noticedelete.do",
+                                 "/noticeboard/noticewrite.do"
+                                ).hasRole("ADMIN") // ADMIN 권한만 허용
+				.requestMatchers("/user/**").hasAnyRole("USER", "PROF", "ADMIN")
+				.requestMatchers("/prof/**").hasAnyRole("PROF", "ADMIN")	 // 두권한 허용
+				.requestMatchers("/admin/**").hasRole("ADMIN")	// ADMIN만 허용
+				
+				.requestMatchers("/qnaboard/qnaboardlist.do", "/qnaboard/qnaboardview.do").permitAll() 
+	            // Q&A 작성 폼 접근 (GET)은 인증만 되면 허용
+	            .requestMatchers(org.springframework.http.HttpMethod.GET, "/qnaboard/qnaboardwrite.do").authenticated() 
+	            // Q&A 작성 (POST), 수정 (POST), 삭제 (POST)
+	            .requestMatchers(org.springframework.http.HttpMethod.POST,
+	                             "/qnaboard/qnaboardwrite.do",
+	                             "/qnaboard/qnaboardedit.do",
+	                             "/qnaboard/qnadelete.do"
+	                            ).hasAnyRole("USER", "PROF", "ADMIN") 
+	           
+	            .requestMatchers("/qnaboard/qnanswer.do").hasAnyRole("PROF", "ADMIN") // 답변은 교수, 관리자만 (GET/POST 모두 적용)
 
-			.anyRequest().authenticated() 
-		
-		
+				.anyRequest().authenticated() 
 			);
 
 		http.formLogin((formLogin) -> formLogin
@@ -109,38 +92,19 @@ public class WebSecurityConfig
 		return http.build();
 	}
 	
-	 /*
-	    2단계(디자인 커스텀)에서 인메모리 방식으로 사용했던 메서드는 이번 단계에서는
-	    사용하지 않으니 삭제처리한다. 
-	 */
-	
-	//DB연결을 위한 데이터소스를 자동주입 받는다.
 	@Autowired
 	private DataSource dataSource;
 	
-	/*
-	    아래 2개의 쿼리문 실행을 통해 사용자의 인증정보와 권한을 인출한다. 
-	    첫번째 쿼리는 사용자의 아이디, 비번 그리고 계정활성화 여부를 확인한다. 
-	    두번째 쿼리는 사용자의 권한(회원등급)을 확인한다. 
-	 */
 	@Autowired
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception
-	{
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 		auth.jdbcAuthentication()
-			// 데이터베이스 접속 정보를 먼저 이용
 			.dataSource(dataSource)
-			// 쿼리로 해당 사용자가 있는지를 먼저 조회한다
 			.usersByUsernameQuery("SELECT user_id, user_pw, enable "
 					+ " FROM USER_INFO WHERE user_id = ?")
-			// 사용자의 역할을 구해온다
 			.authoritiesByUsernameQuery("SELECT user_id, authority "
 					+ " FROM USER_INFO WHERE user_id =?")
-			// 입력한 비밀번호를 암호화해서 데이터베이스의 암호와 비교를 해서 
-			// 올바른 값인지 검증
 			.passwordEncoder(new BCryptPasswordEncoder());
-			// enabled 의 값이 0이면 비활성, 1이면 활성
 	}
-	
 	@Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

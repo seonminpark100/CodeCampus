@@ -6,12 +6,12 @@
 	<select id="getTotalLectureCount" resultType="int"
 		parameterType="com.lms.springboot.jdbc.ParameterDTO">
 		SELECT COUNT(*) FROM LECTURE
-		<if test="searchKeyword!=null and !searchKeyword.equals('')">
+		<if test="search_Keyword!=null and !search_Keyword.equals('')">
 			WHERE
             <choose>
-                <when test="searchField == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</when>
-                <when test="searchField == 'PROF_ID'">PROF_ID LIKE '%'||#{searchKeyword}||'%'</when>
-                <otherwise>LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</otherwise>
+                <when test="search_Field == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{search_Keyword}||'%'</when>
+                <when test="search_Field == 'PROF_ID'">PROF_ID LIKE '%'||#{search_Keyword}||'%'</when>
+                <otherwise>LECTURE_NAME LIKE '%'||#{search_Keyword}||'%'</otherwise>
             </choose>
 		</if>
 	</select>
@@ -22,12 +22,12 @@
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID
 				FROM LECTURE
-				<if test="searchKeyword!=null and !searchKeyword.equals('')">
+				<if test="search_Keyword!=null and !search_Keyword.equals('')">
 					WHERE
                     <choose>
-                        <when test="searchField == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</when>
-                        <when test="searchField == 'PROF_ID'">PROF_ID LIKE '%'||#{searchKeyword}||'%'</when>
-                        <otherwise>LECTURE_NAME LIKE '%'||#{searchKeyword}||'%'</otherwise>
+                        <when test="search_Field == 'LECTURE_NAME'">LECTURE_NAME LIKE '%'||#{search_Keyword}||'%'</when>
+                        <when test="search_Field == 'PROF_ID'">PROF_ID LIKE '%'||#{search_Keyword}||'%'</when>
+                        <otherwise>LECTURE_NAME LIKE '%'||#{search_Keyword}||'%'</otherwise>
                     </choose>
 				</if>
 				ORDER BY LECTURE_IDX DESC
@@ -39,33 +39,35 @@
 	<insert id="insertLecture" parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
 		INSERT INTO LECTURE (LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID)
 		VALUES (
-            (SELECT NVL(MAX(LECTURE_IDX), 0) + 1 FROM LECTURE), #{lectureName},
-            #{profId},
-            #{lectureStartDate},
-            #{lectureEndDate},
-            #{lectureCode},
-            #{majorId}
+            (SELECT NVL(MAX(LECTURE_IDX), 0) + 1 FROM LECTURE),
+            #{lecture_Name},
+            #{prof_Id},
+            #{lecture_Start_Date},
+            #{lecture_End_Date},
+            #{lecture_Code},
+            #{major_Id}
         )
 	</insert>
 
 	<select id="viewLecture" resultType="com.lms.springboot.jdbc.LectureBoardDTO"
 		parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
 		SELECT LECTURE_IDX, LECTURE_NAME, PROF_ID, LECTURE_START_DATE, LECTURE_END_DATE, LECTURE_CODE, MAJOR_ID
-		FROM LECTURE WHERE LECTURE_IDX=#{lecture_idx}
+		FROM LECTURE
+		WHERE LECTURE_IDX = #{lecture_Idx}
 	</select>
 
 	<update id="updateLecture" parameterType="com.lms.springboot.jdbc.LectureBoardDTO">
 		UPDATE LECTURE SET
-		LECTURE_NAME=#{lectureName},
-        PROF_ID=#{profId},
-        LECTURE_START_DATE=#{lectureStartDate},
-        LECTURE_END_DATE=#{lectureEndDate},
-        LECTURE_CODE=#{lectureCode},
-        MAJOR_ID=#{majorId}
-		WHERE LECTURE_IDX=#{lecture_idx}
+		    LECTURE_NAME = #{lecture_Name},
+            PROF_ID = #{prof_Id},
+            LECTURE_START_DATE = #{lecture_Start_Date},
+            LECTURE_END_DATE = #{lecture_End_Date},
+            LECTURE_CODE = #{lecture_Code},
+            MAJOR_ID = #{major_Id}
+		WHERE LECTURE_IDX = #{lecture_Idx}
 	</update>
 
-	<delete id="deleteLecture">
-    	DELETE FROM LECTURE WHERE LECTURE_IDX=#{param1}
+	<delete id="deleteLecture" parameterType="String">
+    	DELETE FROM LECTURE WHERE LECTURE_IDX = #{lecture_Idx} 
     </delete>
 </mapper>

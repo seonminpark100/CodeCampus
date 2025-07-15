@@ -258,10 +258,10 @@
                         <tbody>
 			            <c:forEach var="lecture" items="${newLectures}"> 
 			                <tr>			                    
-			                    <td>${lecture.lectureName}</td>
-			                    <td>${lecture.profName}</td>
-			                    <td>${lecture.lectureStartDate}</td>
-			                    <td>${lecture.lectureEndDate}</td>
+			                    <td>${lecture.lecture_Name}</td>
+			                    <td>${lecture.prof_Id}</td>
+			                    <td>${lecture.lecture_Start_Date}</td>
+			                    <td>${lecture.lecture_End_Date}</td>
 			                </tr>
 			            </c:forEach>
 			        </tbody>

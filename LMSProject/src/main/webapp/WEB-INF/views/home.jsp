@@ -57,8 +57,8 @@
                             var html = '<ul>';
                             $.each(notices, function(index, notice) {
                                 // boardIdx를 사용하여 상세 보기 링크 생성
-                                html += '<li><a href="/noticeboard/noticeview.do?boardIdx=' + notice.boardIdx + '">';
-                                html += '[' + notice.category + '] ' + notice.boardTitle;
+                                html += '<li><a href="/noticeboard/noticeview.do?board_Idx=' + notice.board_Idx + '">';
+                                html += '[' + notice.category + '] ' + notice.board_Title;
                                 html += '</a></li>';
                             });
                             html += '</ul>';

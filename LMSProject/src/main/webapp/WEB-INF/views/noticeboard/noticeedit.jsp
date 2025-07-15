@@ -117,19 +117,19 @@
         </style>
         <script type="text/javascript">
         function validateForm(form) {
-            if (form.boardTitle.value == "") { // boardTitle로 변경
+            if (form.board_Title.value == "") { 
                 alert("제목을 입력하세요.");
-                form.boardTitle.focus();
+                form.board_Title.focus();
                 return false;
             }
-            if (form.userId.value == "") { // userId로 변경
+            if (form.user_Id.value == "") { 
                 alert("작성자를 입력하세요.");
-                form.userId.focus();
+                form.user_Id.focus();
                 return false;
             }
-            if (form.boardContent.value == "") { // boardContent로 변경
+            if (form.board_Content.value == "") { 
                 alert("내용을 입력하세요.");
-                form.boardContent.focus();
+                form.board_Content.focus();
                 return false;
             }
             return true;
@@ -140,38 +140,38 @@
         <h2>공지사항 수정(Mybatis)</h2>
         <form name="writeFrm" method="post"
             action="/noticeboard/noticeedit.do" onsubmit="return validateForm(this);">
-        <input type="hidden" name="boardIdx" value="${noticeBoardDTO.boardIdx }" /> 
+        <input type="hidden" name="board_Idx" value="${noticeBoardDTO.board_Idx }" /> 
         <table border="1" width="90%">
             <tr>
                 <td>게시글 번호</td>
-                <td>${noticeBoardDTO.boardIdx }</td> 
+                <td>${noticeBoardDTO.board_Idx }</td> 
             </tr>
             <tr>
                 <td>제목</td>
                 <td>
-                    <input type="text" name="boardTitle" style="width:90%;"
-                        value="${noticeBoardDTO.boardTitle }"/> 
+                    <input type="text" name="board_Title" style="width:90%;"
+                        value="${noticeBoardDTO.board_Title }"/> 
                 </td>
             </tr>
             <tr>
                 <td>작성자</td>
                 <td>
-                    <input type="text" name="userId" style="width:150px;"
-                        value="${noticeBoardDTO.userId }" readonly="readonly" /> 
+                    <input type="text" name="user_Id" style="width:150px;"
+                        value="${noticeBoardDTO.user_Id }" readonly="readonly" /> 
                 </td>
             </tr>
             <tr>
                 <td>작성일</td>
                 <td>
-                    <input type="date" name="boardPostdate" style="width:150px;"
-                        value="${noticeBoardDTO.boardPostdate }" readonly="readonly" /> 
+                    <input type="date" name="board_Postdate" style="width:150px;"
+                        value="${noticeBoardDTO.board_Postdate }" readonly="readonly" /> 
                 </td>
             </tr>
             <tr>
                 <td>내용</td>
                 <td>
-                    <textarea name="boardContent" style="width:90%;
-                        height:100px;">${noticeBoardDTO.boardContent }</textarea> 
+                    <textarea name="board_Content" style="width:90%;
+                        height:100px;">${noticeBoardDTO.board_Content }</textarea> 
                 </td>
             </tr>
             <tr>
