@@ -245,9 +245,6 @@ public class QnaboardController {
     @GetMapping("/qnanswer.do") 
     public String qnaAnswerGet(Model model,
                                @RequestParam("board_Idx") int board_Idx,
-                               @RequestParam("bgroup") int bgroup,
-                               @RequestParam("bstep") int bstep,
-                               @RequestParam("bindent") int bindent,
                                RedirectAttributes redirectAttributes) {
         String loggedInUserId = getLoggedInUserId();
         String loggedInUserRole = getLoggedInUserRole();
@@ -262,28 +259,24 @@ public class QnaboardController {
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        // ⭐️ 조회수 증가 없는 조회 메서드 사용을 권장합니다.
-        // QnaboardDTO parentBoard = qnaService.viewQna(board_Idx); // 기존
-        QnaboardDTO parentBoard = qnaService.getQnaByIdWithoutCounting(board_Idx); // 수정 (Service에 이 메서드를 추가해야 합니다.)
-        if (parentBoard == null || !"Q".equals(parentBoard.getCategory())) {
+        // ⭐️ 원본 게시글 정보를 조회수 증가 없이 가져와 originalQuestion 모델에 담습니다.
+        QnaboardDTO originalQuestion = qnaService.getQnaByIdWithoutCounting(board_Idx); 
+        if (originalQuestion == null || !"Q".equals(originalQuestion.getCategory())) { 
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 원본 게시글입니다.");
             return "redirect:/qnaboard/qnaboardlist.do";
         }
 
-        model.addAttribute("parentBoard_Idx", board_Idx);
-        model.addAttribute("parentBgroup", bgroup);
-        model.addAttribute("parentBstep", bstep);
-        model.addAttribute("parentBindent", bindent);
-        model.addAttribute("parentBoardTitle", parentBoard.getBoard_Title());
-        model.addAttribute("parentLectureCode", parentBoard.getLecture_Code());
+        model.addAttribute("originalQuestion", originalQuestion); 
+        model.addAttribute("loggedInUserId", loggedInUserId); 
 
-        return "qnaboard/qnaboardanswer";
+        // ⭐️ JSP 파일 이름 (qnaboardanswer.jsp)과 일치하도록 뷰 이름을 변경했습니다.
+        return "qnaboard/qnaboardanswer"; // <-- 이 부분을 다시 수정했습니다.
     }
 
     // Q&A 답변 작성 (POST 요청)
     @PostMapping("/qnanswer.do") 
     public String qnaAnswerPost(QnaboardDTO qnaboardDTO,
-                                @RequestParam("parentBoard_Idx") int parentBoard_Idx,
+    							@RequestParam(value = "parentBoard_Idx", required = false) Integer parentBoard_Idx,
                                 @RequestParam("parentBgroup") int parentBgroup,
                                 @RequestParam("parentBstep") int parentBstep,
                                 @RequestParam("parentBindent") int parentBindent,
@@ -300,6 +293,10 @@ public class QnaboardController {
             redirectAttributes.addFlashAttribute("errorMessage", "답변은 관리자 또는 교수만 작성할 수 있습니다.");
             return "redirect:/qnaboard/qnaboardlist.do";
         }
+        if (parentBoard_Idx == null || parentBoard_Idx <= 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "답변할 원본 게시글 정보를 찾을 수 없습니다. 다시 시도해주세요.");
+            return "redirect:/qnaboard/qnaboardlist.do";
+        }
 
         qnaboardDTO.setUser_Id(loggedInUserId);
         qnaboardDTO.setCategory("Q");
@@ -307,9 +304,7 @@ public class QnaboardController {
         qnaboardDTO.setBstep(parentBstep + 1);
         qnaboardDTO.setBindent(parentBindent + 1);
 
-        // ⭐️ 조회수 증가 없는 조회 메서드 사용을 권장합니다.
-        // QnaboardDTO originalParentBoard = qnaService.viewQna(parentBoard_Idx); // 기존
-        QnaboardDTO originalParentBoard = qnaService.getQnaByIdWithoutCounting(parentBoard_Idx); // 수정 (Service에 이 메서드를 추가해야 합니다.)
+        QnaboardDTO originalParentBoard = qnaService.getQnaByIdWithoutCounting(parentBoard_Idx); 
         if (originalParentBoard != null) {
             qnaboardDTO.setLecture_Code(originalParentBoard.getLecture_Code());
         }
@@ -337,8 +332,6 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        // ⭐️ 조회수 증가 없는 조회 메서드 사용을 권장합니다.
-        // QnaboardDTO qnaboardDTO = qnaService.viewQna(board_Idx); // 기존
         QnaboardDTO qnaboardDTO = qnaService.getQnaByIdWithoutCounting(board_Idx); // 수정 (Service에 이 메서드를 추가해야 합니다.)
 
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
@@ -373,8 +366,6 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        // ⭐️ 조회수 증가 없는 조회 메서드 사용을 권장합니다.
-        // QnaboardDTO originalBoard = qnaService.viewQna(qnaboardDTO.getBoard_Idx()); // 기존
         QnaboardDTO originalBoard = qnaService.getQnaByIdWithoutCounting(qnaboardDTO.getBoard_Idx()); // 수정 (Service에 이 메서드를 추가해야 합니다.)
 
         if (originalBoard == null || !"Q".equals(originalBoard.getCategory())) {
@@ -419,8 +410,6 @@ public class QnaboardController {
             return "redirect:/myLogin.do";
         }
 
-        // ⭐️ 조회수 증가 없는 조회 메서드 사용을 권장합니다.
-        // QnaboardDTO qnaboardDTO = qnaService.viewQna(board_Idx); // 기존
         QnaboardDTO qnaboardDTO = qnaService.getQnaByIdWithoutCounting(board_Idx); // 수정 (Service에 이 메서드를 추가해야 합니다.)
         if (qnaboardDTO == null || !"Q".equals(qnaboardDTO.getCategory())) {
             redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 게시글이거나 접근 권한이 없습니다.");

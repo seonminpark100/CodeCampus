@@ -194,31 +194,26 @@
         <h2>Q&A 답변 작성</h2>
 		
         <div class="original-qna">
-            <h3>원본 질문</h3>
-            <p><strong>제목:</strong> ${parentBoard_Title}</p>
-            <p><strong>강의 코드:</strong> ${parentLecture_Code}</p>
+            <p><strong>원본 제목:</strong> ${parentBoard_Title}</p>
 
             <c:if test="${not empty originalQuestion}">
-                <p><strong>작성자:</strong> ${originalQuestion.user_Id}</p>
-                <p><strong>내용:</strong></p>
-                <div style="white-space: pre-wrap; border: 1px solid #ddd; padding: 10px; background-color: #fff;">${originalQuestion.board_Content}</div>
-            </c:if>
-            <c:if test="${empty originalQuestion}">
-                <p style="color: gray;">원본 질문의 상세 내용은 불러올 수 없습니다. (콘텐츠 표시를 위한 DTO가 모델에 없습니다)</p>
+                  <p><strong>제목:</strong> ${originalQuestion.board_Title}</p>
+                  <p><strong>작성자:</strong> ${originalQuestion.user_Id}</p>
+                <div style="white-space: pre-wrap; border: 1px solid #ddd; padding: 10px; background-color: #fff;"><strong>원본 내용:</strong>${originalQuestion.board_Content}</div>
             </c:if>
         </div>
 
 
         <form action="/qnaboard/qnanswer.do" method="post">
-            <input type="hidden" name="parentBoard_Idx" value="${parentBoard_Idx}">
-            <input type="hidden" name="parentBgroup" value="${parentBgroup}">
-            <input type="hidden" name="parentBstep" value="${parentBstep}">
-            <input type="hidden" name="parentBindent" value="${parentBindent}">
+            <input type="hidden" name="parentBoard_Idx" value="${originalQuestion.board_Idx}">
+            <input type="hidden" name="parentBgroup" value="${originalQuestion.bgroup}">
+            <input type="hidden" name="parentBstep" value="${originalQuestion.bstep}">
+            <input type="hidden" name="parentBindent" value="${originalQuestion.bindent}">
 
-            <label for="boardTitle">답변 제목:</label>
-            <input type="text" id="board_Title" name="board_Title" value="Re: ${parentBoard_Title}" required><br>
+            <label for="board_Title">답변 제목:</label>
+            <input type="text" id="board_Title" name="board_Title" value="Re: ${originalQuestion.board_Title}" required><br>
 
-            <label for="userId">작성자 ID:</label>
+            <label for="user_Id">작성자 ID:</label>
      
             <input type="text" id="user_Id" name="user_Id" value="${loggedInUserId}" readonly required><br>
 

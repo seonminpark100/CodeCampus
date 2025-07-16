@@ -44,7 +44,7 @@ public class AdminController {
 
     @RequestMapping("/accountedit/list.do")
     public String member2(Model model,
-                          @RequestParam(value = "searchField", required = false) String searchField,
+                          @RequestParam(value = "search_Field", required = false) String searchField,
                           @RequestParam(value = "search_Keyword", required = false) String search_Keyword) {
         System.out.println("### DEBUG: AdminController - member2 (accountedit/list.do) 메서드 진입! ###");
         List<AccountDTO> memberList;

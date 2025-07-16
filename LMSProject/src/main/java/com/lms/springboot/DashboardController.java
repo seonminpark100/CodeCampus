@@ -22,7 +22,7 @@ public class DashboardController {
         // 1. 전체 강의 수 가져오기
         int totalLectureCount = statsService.getTotalLectureCount();
         model.addAttribute("totalLectureCount", totalLectureCount);
-        System.out.println("DEBUG: 총 강의 수: " + totalLectureCount);
+       // System.out.println("DEBUG: 총 강의 수: " + totalLectureCount);
 
         // 2. 신규 강의 목록 가져오기 (최신 5개)
         List<Map<String, Object>> newLectures = statsService.getnewLectures(5);
