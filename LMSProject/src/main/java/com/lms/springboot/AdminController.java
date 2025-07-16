@@ -44,7 +44,7 @@ public class AdminController {
 
     @RequestMapping("/accountedit/list.do")
     public String member2(Model model,
-                          @RequestParam(value = "search_Field", required = false) String search_Field,
+                          @RequestParam(value = "search_Field", required = false) String searchField,
                           @RequestParam(value = "search_Keyword", required = false) String search_Keyword) {
         System.out.println("### DEBUG: AdminController - member2 (accountedit/list.do) 메서드 진입! ###");
         List<AccountDTO> memberList;
@@ -52,7 +52,7 @@ public class AdminController {
         // 검색 키워드가 유효할 때만 검색 로직을 수행
         if (search_Keyword != null && !search_Keyword.trim().isEmpty()) {
             AccountDTO searchDTO = new AccountDTO();
-            searchDTO.setSearch_Field(search_Field); // searchField는 null일 수 있으므로 DAO에서 기본값 처리
+            searchDTO.setSearch_Field(searchField); // searchField는 null일 수 있으므로 DAO에서 기본값 처리
             searchDTO.setSearch_Keyword(search_Keyword.trim()); // 공백 제거
             memberList = dao.searchMembers(searchDTO);
         } else {

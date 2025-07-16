@@ -147,8 +147,8 @@
 			<div class="form-group">
 				<label for="userGender">성별:</label>
 				<div class="radio-group">
-					<label><input type="radio" name="userGender" value="남성" required> 남성</label> <%-- ★ '남' -> '남성'으로 변경 --%>
-					<label><input type="radio" name="userGender" value="여성" required> 여성</label> <%-- ★ '여' -> '여성'으로 변경 --%>
+					<label><input type="radio" name="userGender" value="M" required> 남성</label> <%-- ★ '남' -> '남성'으로 변경 --%>
+					<label><input type="radio" name="userGender" value="F" required> 여성</label> <%-- ★ '여' -> '여성'으로 변경 --%>
 				</div>
 			</div>
 			<div class="form-group">

@@ -207,11 +207,11 @@
                     <th>성별</th>
                     <td>
                         <input type="radio" id="genderM" name="userGender" value="남성"
-                                <c:if test="${dto.userGender eq '남성'}">checked</c:if>>
+                                <c:if test="${dto.userGender eq 'M'}">checked</c:if>>
                         <label for="genderM">남성</label>
 
                         <input type="radio" id="genderF" name="userGender" value="여성"
-                                <c:if test="${dto.userGender eq '여성'}">checked</c:if>>
+                                <c:if test="${dto.userGender eq 'F'}">checked</c:if>>
                         <label for="genderF">여성</label>
 
                     </td>
