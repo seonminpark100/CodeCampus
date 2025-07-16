@@ -66,7 +66,15 @@
 							</a></td> 
 				    </tr>
 				    <tr>
-				        <td>점수</td> <td> <input type="number" name="score" value="${profDTO.score}"> </td>
+				        <td>점수</td> 
+				        <c:choose>
+				        	<c:when test="${profDTO.score eq -1}">
+				        		<td> <input type="number" name="score" value="0"> </td>
+				        	</c:when>
+				        	<c:otherwise>
+						        <td> <input type="number" name="score" value="${profDTO.score}"> </td>
+				        	</c:otherwise>
+				        </c:choose>
 				    </tr>
 				    <tr>
 				        <td>피드백</td><td> 
