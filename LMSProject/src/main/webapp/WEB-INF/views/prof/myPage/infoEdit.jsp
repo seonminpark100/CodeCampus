@@ -29,7 +29,14 @@
 			    <h3>정보 수정</h3>	  
 			    <form action="infoEdit.do" method="post" enctype="multipart/form-data"
 			    	onsubmit="return passCheck();">
-			    	<img class="m-1" src="/uploads/${ dto.saveFile }" alt="프로필사진" style="float: left; width: 10%;"/>
+			    	<c:choose>
+	                   <c:when test="${ dto.saveFile != null }">
+	                      <img class="m-1" src="/uploads/${ dto.saveFile }" alt="프로필사진" style="float: left; width: 10%;"/>
+	                   </c:when>
+	                   <c:otherwise>
+	                      <img class="m-1" src="/images/person.png" alt="프로필사진" style="float: left; width: 10%;"/>
+	                   </c:otherwise>
+	                </c:choose>
 			    	<input type="hidden" id="saveFile" name="saveFile" value="${ dto.saveFile }" />
 		    		<div class="input-group w-25" style="margin-top: 2%; margin-left: 38%;">		    			
 						<input type="file" class="form-control" id="profileImg" name="profileImg" accept=".png, .jpg, .gif" value="${ dto.originalFile }" multiple>

@@ -90,7 +90,6 @@ public class UserLMSBoardController
 			else 
 				model.addAttribute("isWriter", false);
 			String files = FileUtil.getFiles(dao.selectFiles(dto.getBoard_idx()));
-			System.out.println("files: " + dao.selectFiles(dto.getBoard_idx()));
 			
 			if(!(files.equals(""))) {	//첨부파일이 있을때
 				model.addAttribute("files", files);
