@@ -148,8 +148,6 @@
             
             <div class="bl-item bluelight">
                 <h2>Quick Menu</h2>
-                <button>개설과목</button>
-                <button>FAQ</button>
                 <a href="/qnaboard/qnaboardlist.do">
                     <button>Q&A 게시판</button>
                 </a>

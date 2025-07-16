@@ -134,7 +134,7 @@
 
             if(frm.board_Content.value == ''){
                 alert('내용을 입력하세요.');
-                frm.boardContent.focus();
+                frm.board_Content.focus();
                 return false;
             }
             // CATEGORY 필드 선택 검증 강화

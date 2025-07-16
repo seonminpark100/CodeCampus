@@ -11,10 +11,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lmsBoardView</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
 	</head>
 	<script>
 		function deleteConfirm(board_idx){
@@ -40,41 +37,37 @@
 		    f.submit();
 		}
 	</script>
-	<body>
-		<div class="container" style="text-align:left; max-width: 100%;">
-			<div class="row">
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-		    	<div class="border border-3 border-primary rounded p-2" style="text-align: left;">
-		    		<div class="border border-3 border-primary rounded" style="height: 12%;">
-		    			<span class="m-2" style="font-size: 1.5em; font-weight: bold;">${ dto.board_title } | ${ dto.user_name } | 조회수 : ${ dto.visitCount }</span>
-		    			<c:if test="${ isWriter eq true }">
-			    			<div class="border border-3 border-primary rounded" style="float: right;">
-			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx(${ dto.board_idx }, 'lmsBoardEdit.do')">수정</button>
-<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="lmsBoardEdit.do?board_idx=${ dto.board_idx }">수정</button> --%>
-<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx('${ dto.board_idx }', 'deleteBoard.do')">삭제</button> --%>
-			    				<button class="btn btn-outline-primary mx-2" onclick="deleteConfirm(${ dto.board_idx });">삭제</button>
-		    				</div>
-	    				</c:if>
-		    			<div class="border border-3 border-primary rounded mx-2" style="float: right;">		    				
-		    				<button class="btn btn-outline-primary mx-2" onclick="location.href='replyWrite.do?board_idx=${ dto.board_idx }'">답글쓰기</button>
-	    				</div>
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="p-3" style="height: 50%;">
+		    	<div>
+	    			<h4>${ dto.board_title }</h4> 
+	    			<h5>작성자 : ${ dto.user_name }</h5>
+	    			<h6>조회수 : ${ dto.visitCount }</h6>
+		    		<hr/>
+		    		<div class="p-2">
+		    			<textarea id="board_content" name="board_content" style="width: 90%; height: 200px;" readonly>${ dto.board_content }</textarea>
 		    		</div>
-		    		<div class="border border-3 border-primary rounded p-2" style="height: 60%; overflow: auto;">
-		    			${ dto.board_content }
-		    		</div>
-		    		<div class="border border-3 border-primary rounded p-2" style="overflow: auto;">
+		    		<div class="p-2">
 		    			${ files }
 		    		</div>
-		    		<div class="border border-3 border-primary rounded" style="height: 10%; text-align: center;">
+		    		<div style="height: 10%; text-align: center;">
+						<c:if test="${ isWriter eq true }">
+			    			<div style="float: right;">
+			    				<button class="btn btn-success mx-2" onclick="sendBoard_idx(${ dto.board_idx }, 'lmsBoardEdit.do')">수정</button>
+	<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="lmsBoardEdit.do?board_idx=${ dto.board_idx }">수정</button> --%>
+	<%-- 			    				<button class="btn btn-outline-primary mx-2" onclick="sendBoard_idx('${ dto.board_idx }', 'deleteBoard.do')">삭제</button> --%>
+			    				<button class="btn btn-success mx-2" onclick="deleteConfirm(${ dto.board_idx });">삭제</button>
+		    				</div>
+	    				</c:if>
+		    			<div class="mx-2" style="float: right;">		    				
+		    				<button class="btn btn-success mx-2" onclick="location.href='replyWrite.do?board_idx=${ dto.board_idx }'">답글쓰기</button>
+	    				</div>
 						<button class="btn btn-primary" onclick="location.href='lmsBoard.do'">목록으로</button>
 			    	</div>
 		    	</div>
-		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+	    	</div>
+		</main>
 	</body>
 </html>

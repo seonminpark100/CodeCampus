@@ -4,9 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>infoEdit</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
 	</head>
 	<script>
 		function passCheck(){
@@ -20,15 +18,14 @@
 			}
 		}
 	</script>
-	<body>
-		<div class="container" style="text-align:left; max-width: 100%;">
-			<div class="row">
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-		    <div class="m-3 p-3 border border-3 border-warning rounded" style="height: 540px; text-align: center;">
-			    <h3>정보 수정</h3>	  
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="p-3" style="height: 50%;">
 			    <form action="infoEdit.do" method="post" enctype="multipart/form-data"
 			    	onsubmit="return passCheck();">
+				    <h3>정보 수정</h3>	  
+				    <hr/>
 			    	<img class="m-1" src="/uploads/${ dto.saveFile }" alt="프로필사진" style="float: left; width: 10%;"/>
 			    	<input type="hidden" id="saveFile" name="saveFile" value="${ dto.saveFile }" />
 		    		<div class="input-group w-25" style="margin-top: 2%; margin-left: 38%;">		    			
@@ -47,12 +44,9 @@
 						<input type="password" class="form-control" id="user_pw_check" name="user_pw_check" placeholder="PASSWORD" value="" required>
 						<label for="passCheck">패스워드 확인</label> 
 			    	</div>
-			    	<button class="btn btn-outline-primary m-3" type="submit">확인</button>
+			    	<button class="btn btn-success m-3" type="submit">확인</button>
 		    	</form>
-		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+	    	</div>
+		</main>
 	</body>
 </html>

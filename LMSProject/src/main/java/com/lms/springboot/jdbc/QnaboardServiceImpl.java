@@ -29,8 +29,8 @@ public class QnaboardServiceImpl implements QnaboardService {
 
     @Override
     public QnaboardDTO viewNotice(int board_Idx) {
-        // 조회수 증가 로직은 Controller나 Service에서 처리될 수 있습니다. 여기서는 DAO 호출만 예시
-        updateVisitCount(board_Idx); // 조회수 증가 서비스 메서드 호출 (선택적)
+        // ⭐️ 수정: viewNotice 내부에서 조회수 증가 로직을 제거합니다.
+        // 조회수 증가 로직은 Controller에서 명시적으로 호출합니다.
         return qnaboardDAO.viewNotice(board_Idx);
     }
 
@@ -75,21 +75,27 @@ public class QnaboardServiceImpl implements QnaboardService {
         return qnaboardDAO.insertAnswer(dto);
     }
 
-    @Override // <--- 여기를 수정합니다.
+    @Override 
     public QnaboardDTO viewQna(int board_Idx) {
-        // 1. 기존 게시글 상세 조회
+        // ⭐️ 수정: viewQna 내부에서 조회수 증가 로직을 제거합니다.
+        // 조회수 증가 로직은 Controller의 qnaView 메서드에서만 명시적으로 호출됩니다.
         QnaboardDTO qnaBoardDTO = qnaboardDAO.viewQna(board_Idx);
 
         if (qnaBoardDTO != null) {
-            // 2. 조회수 증가 로직 (기존 위치)
-            updateVisitCount(board_Idx);
-
-            // 3. 해당 게시글의 bgroup을 이용해 모든 관련 글 (원글 + 답글) 조회
-            // 이 메서드를 호출하려면 먼저 QnaboardDAO 인터페이스에 listAnswersByBgroup 메서드가 선언되어 있어야 합니다.
+            // 해당 게시글의 bgroup을 이용해 모든 관련 글 (원글 + 답글) 조회
             List<QnaboardDTO> relatedPosts = qnaboardDAO.listAnswersByBgroup(qnaBoardDTO.getBgroup());
-
-            // 4. 조회된 답글 목록을 qnaBoardDTO 객체에 설정 (QnaboardDTO에 setAnswers() 메서드가 있어야 합니다.)
             qnaBoardDTO.setAnswers(relatedPosts);
+        }
+        return qnaBoardDTO;
+    }
+
+    // ⭐️ 추가: 조회수 증가 없이 Q&A 게시글 정보를 가져오는 메서드
+    @Override
+    public QnaboardDTO getQnaByIdWithoutCounting(int board_Idx) {
+        QnaboardDTO qnaBoardDTO = qnaboardDAO.viewQna(board_Idx); // DAO의 viewQna는 조회수 증가를 포함하지 않으므로 직접 사용
+        if (qnaBoardDTO != null) {
+            // 이 메서드에서도 관련 답글은 함께 가져와야 하는 경우가 많으므로 추가
+            qnaBoardDTO.setAnswers(qnaboardDAO.listAnswersByBgroup(qnaBoardDTO.getBgroup()));
         }
         return qnaBoardDTO;
     }

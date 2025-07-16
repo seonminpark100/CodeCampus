@@ -4,26 +4,21 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lectureView</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
 	</head>
-	<body>
-		<div class="container" style="text-align:left; max-width: 100%;">
-			<div class="row">
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>${ lecture_name } | ${ user_name }</h3>	    	
-		    	<div class="border border-3 border-primary rounded" style="height: 90%; text-align: left: ;">
-		    		<h3>${ dto.board_title } | ${ dto.board_postdate } | 조회수 : ${ dto.visitCount }</h3>
-<!-- 		    		<button class="btn btn-success w-25 h-25" type="button" onclick="location.href='myLectureList.do'">내 강의 목록</button> -->
-					<div class="border border-3 border-primary rounded" style="height: 80%; position: relative; overflow: auto;">
-						${ dto.board_content } <br/>
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="p-3" style="height: 90%;">
+			    <h3>${ lecture_name } | ${ user_name } 교수</h3>
+			    <hr/>    	
+		    	<div style="height: 90%; text-align: left;">
+		    		<h4>${ dto.board_title } | ${ dto.board_postdate } | 조회수 : ${ dto.visitCount }</h4>
+		    		<div class="p-2">
+						<h5>${ dto.board_content }</h5><br/>
 						${ video }
 					</div>
-					<div class="border border-3 border-primary rounded">
+					<div class="p-2">
 						${ file }
 					</div>
 					<div style="text-align: center;">
@@ -31,9 +26,6 @@
 					</div>
 		    	</div>
 		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+		</main>
 	</body>
 </html>

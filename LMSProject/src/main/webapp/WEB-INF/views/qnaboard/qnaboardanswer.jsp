@@ -195,8 +195,8 @@
 		
         <div class="original-qna">
             <h3>원본 질문</h3>
-            <p><strong>제목:</strong> ${parentBoard_Title}</p>
-            <p><strong>강의 코드:</strong> ${parentLecture_Code}</p>
+            <p><strong>제목:</strong> ${parentBoardTitle}</p>
+            <p><strong>강의 코드:</strong> ${parentLectureCode}</p>
 
             <c:if test="${not empty originalQuestion}">
                 <p><strong>작성자:</strong> ${originalQuestion.user_Id}</p>

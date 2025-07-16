@@ -9,14 +9,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 출석부 -->
 	<select id="getAbsentBoardTotalCount" resultType="int" 
-		parameterType="com.lms.springboot.prof.AbsentDTO">
+		parameterType="com.lms.springboot.prof.absent.AbsentDTO">
 		SELECT COUNT(*) FROM ABSENTS
 		<if test="searchKeyword!=null and !searchKeyword.equals('')">
 			WHERE ${searchField} LIKE '%'||#{searchKeyword}||'%'
 		</if>
 	</select>
-	<select id="absentBoardListPage" resultType="com.lms.springboot.prof.AbsentDTO" 
-		parameterType="com.lms.springboot.prof.AbsentDTO">
+	<select id="absentBoardListPage" resultType="com.lms.springboot.prof.absent.AbsentDTO" 
+		parameterType="com.lms.springboot.prof.absent.AbsentDTO">
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM ABSENTS
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 수강생 리스트 -->
 	<select id="getStudentTotalCount" resultType="int" 
-		parameterType="com.lms.springboot.prof.AbsentDTO">
+		parameterType="com.lms.springboot.prof.absent.AbsentDTO">
 			SELECT COUNT(*) FROM 
 			    user_info u LEFT JOIN enroll e on u.user_id = e.user_id
 			    WHERE e.lecture_code = #{lecture_code} AND authority = 'ROLE_USER'
@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</if>
 
 	</select>
-	<select id="studentBoardListPage" resultType="com.lms.springboot.prof.AbsentDTO" >
+	<select id="studentBoardListPage" resultType="com.lms.springboot.prof.absent.AbsentDTO" >
 			    
 			    SELECT * FROM (
 					SELECT Tb.*, rownum rNum FROM (

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lms.springboot.prof.AssignmentDTO;
 import com.lms.springboot.prof.Paging;
 import com.lms.springboot.utils.PagingUtil;
 

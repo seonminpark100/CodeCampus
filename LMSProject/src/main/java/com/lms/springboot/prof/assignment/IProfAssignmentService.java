@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.lms.springboot.prof.AssignmentDTO;
-
 @Mapper
 public interface IProfAssignmentService
 {

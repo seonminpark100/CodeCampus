@@ -11,44 +11,31 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>assignmentSubmitEdit</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
 	</head>
-	<body>
-		<div class="container" style="text-align:left; max-width: 100%;">
-			<div class="row">
-<%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-			
-		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-			    <h3>${ dto.lecture_name } | ${ dto.user_name }</h3>	    
-			    	
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="p-3" style="height: 90%;">
 			    <form action="assignmentSubmitEditAction.do" method="post" enctype="multipart/form-data">
-			    	<div class="border border-3 border-primary rounded p-2" style="height: 90%; text-align: left;">
-			    		<input type="hidden" id="assignment_sfile" name="assignment_sfile" value="${ dto.assignment_sfile }" />
-			    		<input type="hidden" id="assignment_idx" name="assignment_idx" value="${ dto.assignment_idx }" />
-			    		<div class="border border-3 border-primary rounded" style="height: 10%;">
-			    			${ dto.assignment_title }
-			    		</div>
-			    		<div class="border border-3 border-primary rounded p-2" style="height: 75%; overflow: auto;">
-			    			${ dto.assignment_content }<br/>
-			    			<textarea rows="10" cols="200" id="assignment_content_s" name="assignment_content_s">${ dto.assignment_content_s }</textarea>
-<!-- 			    		파일넣기 나중에 수정해-->
-			    			<input type="file" class="form-control" id="assignmentFile" name="assignmentFile" value="">
-			    		</div>
-			    		<div class="border border-3 border-primary rounded" style="text-align: center;">
-				    		<button type="submit" class="btn btn-primary">수정</button>
-				    		<button type="button" class="btn btn-primary" onclick="location.href='assignmentSubmitView.do?assignment_idx=${ dto.assignment_idx }'">취소</button>
-			    		</div>
-			    	</div>
+			    	<h3>${ dto.lecture_name } | ${ dto.user_name } 교수</h3>
+			    	<hr/>	    
+		    		<input type="hidden" id="assignment_sfile" name="assignment_sfile" value="${ dto.assignment_sfile }" />
+		    		<input type="hidden" id="assignment_idx" name="assignment_idx" value="${ dto.assignment_idx }" />
+		    		<div style="height: 10%;">
+		    			<h4>과제명 : ${ dto.assignment_title }</h4> 
+		    		</div>
+		    		<div class="p-2">
+		    			<h5>${ dto.assignment_content }</h5><br/><br/>
+		    			<textarea id="assignment_content_s" name="assignment_content_s" style="width: 90%; height: 200px;" >${ dto.assignment_content_s }</textarea>
+		    		</div>
+		    		<input type="file" class="form-control" id="assignmentFile" name="assignmentFile" value="" style="width: 90%;"><br/><br/>
+		    		<div style="text-align: center;">
+			    		<button type="submit" class="btn btn-success">수정</button>
+			    		<button type="button" class="btn btn-danger" onclick="location.href='assignmentSubmitView.do?assignment_idx=${ dto.assignment_idx }'">취소</button>
+		    		</div>
 		    	</form>
 		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+		</main>
 	</body>
 </html>

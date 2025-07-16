@@ -83,13 +83,15 @@ public class UserLMSBoardController
 		try {
 			dao.increaseVisitCount(dto.getBoard_idx());
 			dto = dao.selectOneBoard(dto.getBoard_idx());
-			dto.setBoard_content(dto.getBoard_content().replaceAll("\r\n", "<br/>"));
+//			dto.setBoard_content(dto.getBoard_content().replaceAll("\r\n", "<br/>"));
 			model.addAttribute("dto", dto);
 			if(dto.getUser_id().equals(ud.getUsername())) 
 				model.addAttribute("isWriter", true);
 			else 
 				model.addAttribute("isWriter", false);
 			String files = FileUtil.getFiles(dao.selectFiles(dto.getBoard_idx()));
+			System.out.println("files: " + dao.selectFiles(dto.getBoard_idx()));
+			
 			if(!(files.equals(""))) {	//첨부파일이 있을때
 				model.addAttribute("files", files);
 			}

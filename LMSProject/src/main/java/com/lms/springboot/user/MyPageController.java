@@ -29,7 +29,7 @@ public class MyPageController
 	public String myPage(Model model, @AuthenticationPrincipal UserDetails ud) {
 		MyPageDTO dto = dao.selectOneUser(ud.getUsername());
 		model.addAttribute("dto", dto);
-		System.out.println(dto.getSaveFile());
+//		System.out.println(dto.getSaveFile());
 		return "user/myPage/myPage";
 	}
 	

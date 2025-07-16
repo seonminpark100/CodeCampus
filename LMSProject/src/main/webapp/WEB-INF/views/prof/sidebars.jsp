@@ -48,6 +48,7 @@
 		    <s:authorize access="isAuthenticated()"><s:authentication property="name"/>님 반갑습니다.</s:authorize>
 		    	<button class="btn btn-dark" type="button" onclick="location.href='/prof/mypage.do' ">마이페이지</button>
 		    	<button class="btn btn-dark" type="button" onclick="location.href='/myLogout.do' ">로그아웃</button>
+		    	<button class="btn btn-dark" type="button" onclick="location.href='/prof/index.do' ">내 강의실</button>
 		    </c:otherwise>
 	    </c:choose>
 	</div>

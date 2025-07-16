@@ -26,12 +26,12 @@ public class PagingUtil
 			//두번째 페이지 블럭부터 출력됨.
 			pagingStr += ""
 				+ "<a href='"+page+"pageNum=1'>"
-				+ "<img src='./images/paging1.gif'></a>";
+				+ "<img src='/images/paging1.gif'></a>";
 			pagingStr += "&nbsp;";
 			pagingStr += ""
 				+ "<a href='"+page+"pageNum="+
 								(intTemp-blockPage)+"'>"
-				+ "<img src='./images/paging2.gif'></a>";
+				+ "<img src='/images/paging2.gif'></a>";
 		}
 		
 		//페이지표시 제어를 위한 변수
@@ -58,11 +58,11 @@ public class PagingUtil
 		if(intTemp <= totalPage) {
 			pagingStr += "<a href='"+page+"pageNum="+
 											intTemp+"'>"
-				+ "<img src='./images/paging3.gif'></a>";
+				+ "<img src='/images/paging3.gif'></a>";
 			pagingStr += "&nbsp;";
 			pagingStr += "<a href='"+page+"pageNum="+
 											totalPage+"'>"
-				+ "<img src='./images/paging4.gif'></a>";
+				+ "<img src='/images/paging4.gif'></a>";
 		}
 		
 		return pagingStr;

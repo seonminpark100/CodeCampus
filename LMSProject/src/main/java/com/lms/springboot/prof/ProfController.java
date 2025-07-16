@@ -29,7 +29,6 @@ public class ProfController
 	public String welcome2(@AuthenticationPrincipal UserDetails user, Model model, ProfDTO profDTO) {
 		String user_id = user.getUsername();
 		
-		System.out.println("user_id: " + user_id);
 		
 		ArrayList<ProfDTO> lists = dao.userList(profDTO, user_id);
 		model.addAttribute("lists", lists);
@@ -91,7 +90,6 @@ public class ProfController
 		
 		MypageDTO dto = dao.selectOneUser(ud.getUsername());
 		model.addAttribute("dto", dto);
-		System.out.println(dto.getSaveFile());
 		return "prof/myPage/mypage";
 	}
 	
@@ -114,9 +112,7 @@ public class ProfController
 			Map<String, String> file = FileUtil.singleFileUpload(req, "profileImg", "User");
 			dto.setOriginalFile(file.get("oFile"));
 			dto.setSaveFile(file.get("sFile"));
-			int result = dao.updateUser(dto);
-			if(result == 1)	System.out.println("성공");
-			else System.out.println("실패");
+			dao.updateUser(dto);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

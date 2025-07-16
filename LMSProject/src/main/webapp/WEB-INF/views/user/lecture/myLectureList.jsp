@@ -5,30 +5,23 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lectureList</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
+<!-- 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+<!-- 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
 	</head>
-	<body>
-		<div class="container" style="text-align: center; max-width: 100%;">
-			<div class="row">
-<%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="row p-3" style="height: 50%;">
 		    	<div class="row row-cols-3">
-<!-- 					값 받으면 foreach문으로 대체		    	 -->
 					<c:forEach items="${ list }" var="row">						
-		    			<div class="col border border-3 border-primary rounded mx-1" style="width: 200px; height: 100px ">
-							<a href="lectureList.do?lecture_code=${ row.lecture_code }">${ row.lecture_name }</a>
-							<br/>기간 : ${ row.lecture_start_date } ~ ${ row.lecture_end_date }
+		    			<div class="col mx-1" style="width: 30%;">
+		    				<button class="btn btn-outline-success" onclick="location.href='lectureList.do?lecture_code=${ row.lecture_code }'" style="width: 100%; height: 100%; font-size: 1.5em">${ row.lecture_name }<br/><br/>기간 : ${ row.lecture_start_date } ~ ${ row.lecture_end_date }</button>
+<%-- 							<a href="lectureList.do?lecture_code=${ row.lecture_code }">${ row.lecture_name }</a> --%>
 			    		</div>
 		    		</c:forEach>
 		    	</div>
 		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+		</main>
 	</body>
 </html>

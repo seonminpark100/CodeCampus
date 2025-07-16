@@ -186,13 +186,8 @@
                 left: 20px;
             }
 
-            .button-professor {
-                top: 70px; /* 첫 번째 버튼보다 아래에 위치 */
-                left: 20px;
-            }
-
             .button-home {
-                top: 120px; /* 두 번째 버튼보다 아래에 위치 */
+                top: 70px; /* 두 번째 버튼보다 아래에 위치 */
                 left: 20px;
             }
 
@@ -206,7 +201,6 @@
         <%-- 컨테이너 바깥에 버튼 그룹을 배치 --%>
         <div class="fixed-buttons-group">
             <a href="<c:url value='/admin'/>" class="fixed-nav-button button-admin">관리자 페이지로</a>
-            <a href="<c:url value='/prof'/>" class="fixed-nav-button button-professor">교수 페이지로</a>
             <a href="<c:url value='/'/>" class="fixed-nav-button button-home">홈으로</a>
         </div>
 
@@ -251,7 +245,7 @@
                         </td>
                         <td align="left" style="padding-left: ${row.bindent * 20}px;">
                             <c:if test="${row.bindent > 0}">
-                                <img src="/images/re.gif" class="reply-indent-img"/>
+                                <img src="/images/paging3.gif" class="reply-indent-img"/>
                             </c:if>
                             <a href="/qnaboard/qnaboardview.do?board_Idx=${row.board_Idx}">${ row.board_Title }</a>
                         </td>

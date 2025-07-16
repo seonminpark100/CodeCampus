@@ -4,10 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>lecture</title>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>OO대학교 eCampus</title>
 	</head>
 	<script>
 		window.onload = () => {
@@ -17,16 +14,15 @@
 			}
 		}
 	</script>
-	<body>
-		<div class="container" style="text-align:left; max-width: 100%;">
-			<div class="row">
-<%-- 				<%@ include file="navBar/buttonBar.jsp" %> --%>
-				<%@ include file="../navBar/navBar.jsp" %>
-			</div>
-		    <div class="row m-3 p-3 border border-3 border-warning rounded" style="height: 540px">
-		    	<div class="row d-flex justify-content-center border border-3 border-primary rounded" style="height: 90%; text-align: center;">
+	<body class="sb-nav-fixed">
+		<%@ include file = "../sidebars.jsp" %>
+		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 ">
+		    <div id="layoutSidenav_content" class="row p-3" style="height: 50%;">
+		    	<h3>게시판</h3>
+		    	<hr/>
+		    	<div class="row d-flex justify-content-center" style="height: 90%; text-align: center;">
 		    		<form method="get" action="lmsBoard.do?pageNum=1">
-				    	<div class="row-4 input-group border border-3 border-primary rounded w-50" style="height: 50px;">
+				    	<div class="row-4 input-group" style="height: 50px;">
 							<select class="form-select" id="searchField" name="searchField">
 								<option value="board_title" selected>제목</option>
 								<option value="user_name">작성자</option>
@@ -35,8 +31,8 @@
 							<button class="btn btn-primary" type="submit">검색</button>
 						</div>	    	
 					</form>
-			    	<div class="row border border-3 border-primary rounded p-1" style="height: 80%">
-						<table class="table table-striped table-bordered border-3 border-warning rounded p-1">
+			    	<div class="row p-1" style="overflow: auto; height: 80%">
+						<table class="table table-hover table-bordered h-25">
 							<thead>
 								<tr>
 									<th style="width: 60%;">제목</th>
@@ -55,12 +51,11 @@
 								        </tr>
 								    </c:when> 
 								    <c:otherwise>
-	<!-- 			    		실제 값을 받을땐 foreach문을 사용 -->
 										<c:forEach items="${ list }" var="row">																			
 											<tr>
 <%-- 												<td style="width: 60%;"><a href="javascript:sendBoard_idx('${ row.board_idx }')">${ row.board_title }</a></td> --%>
 												<td align="left" style="width: 60%; padding-left: ${ row.BIndent * 20 + 10 }px;">
-													<c:if test="${ row.BIndent > 0 }"><img src="images/paging3.gif" /></c:if>
+													<c:if test="${ row.BIndent > 0 }"><img src="/images/paging3.gif" /></c:if>
 													<a href="lmsBoardView.do?board_idx=${ row.board_idx }">${ row.board_title }</a></td>
 												<td>${ row.user_name }</td>
 												<td>${ row.board_postdate }</td>
@@ -72,19 +67,18 @@
 							</tbody>
 						</table>
 			    	</div>
+			    	<div class="d-flex justify-content-end mb-1">
+			    		<button class="btn btn-primary" onclick="location.href='lmsBoardWrite.do'">글쓰기</button>
+			    	</div>
 				  	<div style="text-align: center;">
 					  	<table border="1">
 							<tr align="center">
 								${ pagingImg }
-								<button class="btn btn-primary" onclick="location.href='lmsBoardWrite.do'">글쓰기</button>
 							</tr>
 						</table>
 					</div>
 		    	</div>
 		  	</div>
-		</div>
-		<footer>
-			<%@ include file="../footer.jsp" %>
-		</footer>
+		</main>
 	</body>
 </html>

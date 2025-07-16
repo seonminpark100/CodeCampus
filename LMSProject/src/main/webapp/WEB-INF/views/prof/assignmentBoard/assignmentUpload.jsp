@@ -7,9 +7,9 @@
 		<title>대학교 eCampus</title>
 		<script>
 		function validateForm(writeFrm){
-			if(writeFrm.title.value==''){
+			if(writeFrm.assignment_title.value==''){
 				alert("제목을 입력해주세요.");
-				writeFrm.title.focus();
+				writeFrm.assignment_title.focus();
 				return false;
 			}
 			if(writeFrm.deadline.value==''){
@@ -17,9 +17,9 @@
 				writeFrm.deadline.focus();
 				return false;
 			}
-			if(writeFrm.content.value==''){
+			if(writeFrm.assignment_content.value==''){
 				alert("내용을 입력해주세요.");
-				writeFrm.content.focus();
+				writeFrm.assignment_content.focus();
 				return false;
 			}
 		}

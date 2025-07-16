@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          <if test="searchKeyword!=null and !searchKeyword.equals('')">
 			AND ${searchField} LIKE '%'||#{searchKeyword}||'%'
 		 </if>
+		 ORDER BY deadline DESC
 	</select>
 	
 	<select id="submitCheck" parameterType="com.lms.springboot.user.jdbc.UserAssignmentDTO"
@@ -64,7 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				assignment_ofile,
 				assignment_sfile,
 				submitted_date,
-				user_id
+				user_id,
+				score
 			)
 			VALUES
 			(
@@ -82,7 +84,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				  	</otherwise>
 		  		</choose>
 				sysdate,
-				#{ user_id }
+				#{ user_id },
+				-1
 			)
 	</insert>
 	
@@ -96,6 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 assignment_title,
 		 assignment_content,
 		 assignment_content_s,
+		 assignment_comment,
 		 assignment_ofile,
 		 assignment_sfile,
 		 score

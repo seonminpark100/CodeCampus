@@ -21,6 +21,7 @@ public interface QnaboardService {
     void updateRestStep(QnaboardDTO dto);
     int insertAnswer(QnaboardDTO dto);
     QnaboardDTO viewQna(int boardIdx);
+    QnaboardDTO getQnaByIdWithoutCounting(int board_Idx);
     int updateQna(QnaboardDTO dto);
     int deleteQna(int boardIdx);
 }

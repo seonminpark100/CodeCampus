@@ -1,4 +1,4 @@
-package com.lms.springboot.prof;
+package com.lms.springboot.prof.lecture;
 
 import lombok.Data;
 

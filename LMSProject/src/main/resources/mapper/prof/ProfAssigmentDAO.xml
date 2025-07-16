@@ -9,12 +9,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 과제(교수) -->
 	<select id="getAssignmentTotalCount" resultType="int" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		SELECT COUNT(*) FROM assignment
 		WHERE lecture_code = #{lecture_code}
 	</select>
-	<select id="assignmentBoardListPage" resultType="com.lms.springboot.prof.AssignmentDTO" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<select id="assignmentBoardListPage" resultType="com.lms.springboot.prof.assignment.AssignmentDTO" 
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		    SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
 				SELECT * FROM 
@@ -30,11 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES
 		(seq_serial_num.nextval, #{_title}, #{_content}, sysdate, #{_deadline} ,#{_lectureCode})
 	</insert>
-	<select id="assignmentView" resultType="com.lms.springboot.prof.AssignmentDTO" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<select id="assignmentView" resultType="com.lms.springboot.prof.assignment.AssignmentDTO" 
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		SELECT * FROM assignment WHERE assignment_idx = #{assignment_idx}
 	</select>
-	<update id="assignmentEdit" parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<update id="assignmentEdit" parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		UPDATE assignment SET
 		assignment_title=#{assignment_title}, assignment_content=#{assignment_content}, deadline=#{deadline}
 		WHERE assignment_idx=#{assignment_idx}
@@ -45,13 +45,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 과제(학생 제출) -->
     <select id="getSubmittedAssignmentTotalCount" resultType="int" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		SELECT COUNT(*) FROM 
         assignment a INNER JOIN assignment_submit aa
         ON a.assignment_idx = aa.assignment_idx WHERE lecture_code = #{lecture_code}
 	</select>
-	<select id="submittedAssignmentBoardListPage" resultType="com.lms.springboot.prof.AssignmentDTO" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<select id="submittedAssignmentBoardListPage" resultType="com.lms.springboot.prof.assignment.AssignmentDTO" 
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		
 		SELECT * FROM (
 			SELECT Tb.*, rownum rNum FROM (
@@ -67,8 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 		WHERE rNum<![CDATA[>=]]>#{start} AND rNum<![CDATA[<=]]>#{end}
 	</select>
-	<select id="submittedAssignmentView" resultType="com.lms.springboot.prof.AssignmentDTO" 
-		parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<select id="submittedAssignmentView" resultType="com.lms.springboot.prof.assignment.AssignmentDTO" 
+		parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 		SELECT * FROM 
 	    assignment a LEFT JOIN lecture l on a.lecture_code = l.lecture_code
 	                 LEFT JOIN assignment_submit aa on a.assignment_idx = aa.assignment_idx
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        
 	        WHERE l.lecture_code = #{lecture_code} AND aa.assignment_submit_idx = #{assignment_submit_idx}
 	</select>
-	<update id="submittedAssignmentGetSocreProc" parameterType="com.lms.springboot.prof.AssignmentDTO">
+	<update id="submittedAssignmentGetSocreProc" parameterType="com.lms.springboot.prof.assignment.AssignmentDTO">
 			UPDATE 
 			    assignment_submit 
 			SET

@@ -12,18 +12,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 
 <style>
+ .img-concert {
+   width: 100px;
+   height: 100px;
+ }
 
  .login {
  	float: right;
  }
 </style>
 
-	<link href="../css/styles.css" rel="stylesheet" />
-    
- 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="#">OO대학교 eCampus</a>
-
+<div class="container" align="center">
 	<div class="login">
 		<c:choose>
 		    <c:when test="${empty principal}">
@@ -32,15 +31,22 @@
 		        </ul>
 		    </c:when>
 		    <c:otherwise>
-		    <s:authorize access="isAuthenticated()"><s:authentication property="name"/>님 반갑습니다.</s:authorize>
-		    	<button class="btn btn-dark" type="button" onclick="location.href='/prof/mypage.do' ">마이페이지</button>
-		    	<button class="btn btn-dark" type="button" onclick="location.href='/myLogout.do' ">로그아웃</button>
-		    	<button class="btn btn-dark" type="button" onclick="location.href='/prof/index.do' ">내 강의실</button>
-		    	<!-- <ul class="navbar-nav">
+		        <ul class="navbar-nav">
+			        <li class="nav-item"><a class="nav-link" href="/prof/mypage.do">마이페이지</a></li>
+		        </ul>
+		        <ul class="navbar-nav">
+		            <li class="nav-item"><a class="nav-link" href="/myLogout.do">로그아웃</a></li>
+		        </ul>
+		         <ul class="navbar-nav">
 			        <li class="nav-item"><a class="nav-link" href="/prof/index.do">내 강의실</a></li>
-		        </ul> -->
+		        </ul>
 		    </c:otherwise>
 	    </c:choose>
 	</div>
-    </nav>
+	<a href="/prof/index.do">
+	 	<img class="img-concert" src="../images/logo.jpeg" />
+	</a>
 	<br/><br/>
+	
+	<br/><br/><br/>
+</div>

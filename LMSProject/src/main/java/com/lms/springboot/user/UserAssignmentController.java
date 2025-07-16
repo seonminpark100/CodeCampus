@@ -76,6 +76,7 @@ public class UserAssignmentController
 		model.addAttribute("pagingImg", pagingImg);
 		model.addAttribute("message", message);
 		
+		
 		return "user/assignment/assignmentList";
 	}
 	
@@ -142,6 +143,7 @@ public class UserAssignmentController
 		dto = dao.selectOneAssignmentSubmit(dto);
 		dto.setAssignment_content(dto.getAssignment_content().replaceAll("\r\n", "<br/>"));
 		dto.setAssignment_content_s(dto.getAssignment_content_s().replaceAll("\r\n", "<br/>"));
+		
 		Date today = Date.valueOf(LocalDate.now());
 		if(dao.selectOneAssignment(dto.getAssignment_idx()).getDeadline().after(today)) {
 			model.addAttribute("canEdit", true);

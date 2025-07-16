@@ -43,13 +43,6 @@ function disableOtherButtons(clickedId) {
 		    </c:otherwise>
 	    </c:choose>
 	</div>
-	<a href="#">
-	 	</a>
 	<br/><br/>
-	<div class="btn-group">
-		   <button class="btn btn-success" id="button1" onclick="disableOtherButtons('button1'); location.href = '#'">교육현황</button>&nbsp;&nbsp;
-		   <button class="btn btn-success" id="button2" onclick="disableOtherButtons('button2'); location.href = '#'">커뮤니티</button>&nbsp;&nbsp;
-		   <button class="btn btn-success" id="button3" onclick="disableOtherButtons('button3'); location.href = '#'">학교소개</button>
-	</div>
 	<br/><br/><br/>
 </div>

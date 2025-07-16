@@ -116,7 +116,7 @@ public class FileUtil
 		try
 		{
 			uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			String path = uploadDir + "\\" +sfileName;
+			String path = uploadDir + "/" +sfileName;
 			File file = new File(path);
 			FileInputStream in = new FileInputStream(path);
 			String fileNameCon = new String(ofileName.getBytes("UTF-8"), "8859_1");
@@ -136,7 +136,7 @@ public class FileUtil
 			in.close();
 		} catch (IOException e)
 		{
-			System.out.println("다운에러");
+//			System.out.println("다운에러");
 			e.printStackTrace();
 		}
 	}
@@ -156,7 +156,7 @@ public class FileUtil
 			}
 		} catch (FileNotFoundException e)
 		{
-			System.out.println("파일 받기 실패");
+//			System.out.println("파일 받기 실패");
 			e.printStackTrace();
 		}
 		
@@ -172,7 +172,7 @@ public class FileUtil
 			result += "<span>" + dto.getOfile() +  "&nbsp;&nbsp;<a href='/user/download.do?fileName=" + dto.getSfile() + "'>Download</a></span> &nbsp;&nbsp;";
 		} catch (FileNotFoundException e)
 		{
-			System.out.println("파일 받기 실패");
+//			System.out.println("파일 받기 실패");
 			e.printStackTrace();
 		}
 		
@@ -191,7 +191,7 @@ public class FileUtil
 			result += "<span>" + ofile +  "&nbsp;&nbsp;<a href='assignDownload.do?fileName=" + sfile + "&assignment_submit_idx=" + submit_idx + "'>Download</a></span> &nbsp;&nbsp;";
 		} catch (FileNotFoundException e)
 		{
-			System.out.println("파일 받기 실패");
+//			System.out.println("파일 받기 실패");
 			e.printStackTrace();
 		}
 		
@@ -206,7 +206,7 @@ public class FileUtil
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
 			for(UserFileDTO dto : list) {
-				Path filePath = Paths.get(uploadDir + "\\" + dto.getSFile());
+				Path filePath = Paths.get(uploadDir + "/" + dto.getSFile());
 				
 				if(Files.exists(filePath)) {
 					Files.delete(filePath);
@@ -228,7 +228,7 @@ public class FileUtil
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			Path filePath = Paths.get(uploadDir + "\\" + sFile);
+			Path filePath = Paths.get(uploadDir + "/" + sFile);
 				
 			if(Files.exists(filePath)) {
 				Files.delete(filePath);
@@ -250,7 +250,7 @@ public class FileUtil
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			Path filePath = Paths.get(uploadDir + "\\" + dto.getAssignment_sfile());
+			Path filePath = Paths.get(uploadDir + "/" + dto.getAssignment_sfile());
 			
 			if(Files.exists(filePath)) {
 				Files.delete(filePath);

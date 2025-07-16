@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lms.springboot.prof.LectureDTO;
 import com.lms.springboot.prof.Paging;
 import com.lms.springboot.prof.ProfDTO;
 import com.lms.springboot.utils.MyFunctions;
@@ -90,14 +89,12 @@ public class ProfLectureController
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			System.out.println("물리적 경로: "+uploadDir);
 			
 			Collection<Part> parts = req.getParts();
 			for(Part part: parts) {
 				if(!part.getName().equals("ofile"))
 					continue;
 				String partHeader = part.getHeader("content-disposition");
-				System.out.println("partHeader= " + partHeader);
 				String[] phArr = partHeader.split("filename=");
 				String originalFileName = phArr[1].trim().replace("\"", "");
 				if(!originalFileName.isEmpty()) {
@@ -116,7 +113,6 @@ public class ProfLectureController
 			
 		} catch (Exception e)
 		{
-			System.out.println("Fail to uploads");
 			e.printStackTrace();
 		}
 		
@@ -133,7 +129,6 @@ public class ProfLectureController
 		
 		// Call DAO for uploading Files
 		ArrayList<LectureDTO> myFileLists = dao.lectureViewWithFile(DTO);
-		System.out.println(myFileLists);
 		DTO.setBoard_content(DTO.getBoard_content().replace("\r\n", "<br/>"));
 		
 		model.addAttribute("myFileLists", myFileLists);
@@ -161,7 +156,6 @@ public class ProfLectureController
 //	Edit a lecture - Processing
 	@PostMapping("/prof/lectureEditProc.do")
 	public String lectureEditPost(Model model, LectureDTO DTO, HttpServletRequest req) {
-		System.out.println("profDTO=" + DTO);
 		
 		model.addAttribute("user_id", req.getParameter("user_id"));
 		model.addAttribute("lectureCode", req.getParameter("lectureCode"));
@@ -177,14 +171,12 @@ public class ProfLectureController
 		try
 		{
 			String uploadDir = ResourceUtils.getFile("classpath:static/uploads/").toPath().toString();
-			System.out.println("물리적 경로: "+uploadDir);
 			
 			Collection<Part> parts = req.getParts();
 			for(Part part: parts) {
 				if(!part.getName().equals("ofile"))
 					continue;
 				String partHeader = part.getHeader("content-disposition");
-				System.out.println("partHeader= " + partHeader);
 				String[] phArr = partHeader.split("filename=");
 				String originalFileName = phArr[1].trim().replace("\"", "");
 				if(!originalFileName.isEmpty()) {
@@ -204,7 +196,6 @@ public class ProfLectureController
 			
 		} catch (Exception e)
 		{
-			System.out.println("fail to upload");
 			e.printStackTrace();
 		}
 		
