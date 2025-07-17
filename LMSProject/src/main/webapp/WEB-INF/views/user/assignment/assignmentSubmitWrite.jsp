@@ -26,7 +26,7 @@
 		    		</div>
 		    		<div class="p-2">
 		    			${ dto.assignment_content }<br/>
-		    			<textarea id="assignment_content_s" name="assignment_content_s" style="width: 90%; height: 200px;"></textarea>
+		    			<textarea id="assignment_content_s" name="assignment_content_s" style="width: 90%; height: 200px;" required="required"></textarea>
 		    		</div>
 		    		<input type="file" class="form-control" id="assignmentFile" name="assignmentFile" value="">
 		    		<div style="text-align: center;">

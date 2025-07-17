@@ -27,7 +27,7 @@
 		    		</div>
 		    		<div class="p-2">
 		    			<h5>${ dto.assignment_content }</h5><br/><br/>
-		    			<textarea id="assignment_content_s" name="assignment_content_s" style="width: 90%; height: 200px;" >${ dto.assignment_content_s }</textarea>
+		    			<textarea id="assignment_content_s" name="assignment_content_s" style="width: 90%; height: 200px;" required="required" >${ dto.assignment_content_s }</textarea>
 		    		</div>
 		    		<input type="file" class="form-control" id="assignmentFile" name="assignmentFile" value="" style="width: 90%;"><br/><br/>
 		    		<div style="text-align: center;">

@@ -14,7 +14,6 @@ public class MyFunctions
 	{
 		String  uuid = UUID.randomUUID().toString();
 		uuid = uuid.replace("-", "");
-		System.out.println("생성된 UUID :" + uuid);
 		return uuid;
 	}
 	
